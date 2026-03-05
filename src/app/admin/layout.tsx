@@ -4,7 +4,8 @@ import { redirect } from "next/navigation"
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
-  if (!session?.user?.email?.endsWith("@cran.ai")) {
+  const email = session?.user?.email || ""
+  if (!email.endsWith("@cran.ai") && !email.endsWith("@cran-us.com")) {
     redirect("/auth/signin?error=AccessDenied")
   }
 
@@ -21,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         
         <div className="flex items-center gap-4">
           <div className="text-[13px] font-medium text-[#1a1a1a]/60">
-            {session.user.email}
+            {email}
           </div>
           <form
             action={async () => {
