@@ -18,13 +18,16 @@ export default function SignIn() {
     try {
       const res = await signIn("resend", { 
         email, 
-        redirect: false 
+        redirect: false
       })
 
       if (res?.error) {
         setStatus("error")
       } else {
         setStatus("success")
+        // NOTE: For Magic Links, NextAuth doesn't automatically log you in right here. 
+        // It just sends the email. So we show the "Check your inbox" screen.
+        // The actual redirect to /admin happens WHEN THEY CLICK THE LINK IN THEIR EMAIL.
       }
     } catch (err) {
       console.error(err)
