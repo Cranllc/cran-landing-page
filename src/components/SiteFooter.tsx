@@ -8,7 +8,7 @@ export default function SiteFooter() {
           
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-block mb-3">
-              <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN.</span>
+              <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
             </Link>
             <p className="text-[13px] text-charcoal/50 leading-relaxed max-w-[200px]">
               The operating system for modern animal shelters.
@@ -43,7 +43,7 @@ export default function SiteFooter() {
         {/* Watermark */}
         <div className="flex justify-center items-center w-full mb-8 select-none pointer-events-none overflow-hidden">
           <span className="text-[clamp(4rem,22vw,18rem)] font-bold leading-none text-charcoal/[0.08]" style={{ letterSpacing: '0.15em', marginRight: '-0.15em' }}>
-            CRAN.
+            CRAN
           </span>
         </div>
         

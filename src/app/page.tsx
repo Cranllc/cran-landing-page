@@ -130,12 +130,12 @@ export default function Home() {
               Intake, kennel management, medical tracking, and adoptions — unified in one mobile-first platform that your team can learn in minutes.
             </p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row pb-12 fade-up-d3">
-              <a href="#waitlist" className="group inline-flex h-12 items-center gap-2 rounded-lg bg-cran px-7 text-sm font-semibold text-white transition-all hover:bg-cran/90 shadow-lg shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5">
+            <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row pb-12 w-full max-w-xs sm:max-w-none fade-up-d3">
+              <a href="#waitlist" className="group flex h-12 items-center justify-center gap-2 rounded-lg bg-cran px-7 text-sm font-semibold text-white transition-all hover:bg-cran/90 shadow-lg shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5">
                 Join Waitlist
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
               </a>
-              <a href="#demo" className="group inline-flex h-12 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-7 text-sm font-medium text-white/70 transition-all hover:border-white/20 hover:text-white hover:bg-white/[0.06]">
+              <a href="#demo" className="group flex h-12 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-7 text-sm font-medium text-white/70 transition-all hover:border-white/20 hover:text-white hover:bg-white/[0.06]">
                 Watch demo
                 <PlayCircle size={15} className="text-white/30" />
               </a>
