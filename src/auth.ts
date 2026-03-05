@@ -4,11 +4,41 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  debug: true,
+  secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
       from: "onboarding@resend.dev", // The verified domain or default from Resend
+      async sendVerificationRequest({ identifier, url, provider }) {
+        try {
+          const res = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${provider.apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: provider.from,
+              to: identifier,
+              subject: "Sign in to Cran CMS",
+              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2>Welcome back to Cran</h2>
+                <p>Click the secure link below to sign in to your CMS dashboard.</p>
+                <a href="${url}" style="background-color: #D64436; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 16px; font-weight: bold;">Sign In Securely</a>
+                <p style="color: #666; margin-top: 24px; font-size: 14px;">If you did not request this email, you can safely ignore it.</p>
+              </div>`,
+            }),
+          })
+          if (!res.ok) {
+            throw new Error("Resend error: " + JSON.stringify(await res.json()))
+          }
+        } catch (error) {
+          console.error("Failed to send verification email:", error)
+          throw new Error("Failed to send verification email.")
+        }
+      },
     }),
   ],
   trustHost: true,
