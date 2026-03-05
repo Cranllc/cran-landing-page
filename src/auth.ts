@@ -53,5 +53,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!user.email) return false
       return user.email.endsWith("@cran.ai") || user.email.endsWith("@cran-us.com")
     },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      // Force all logins to go to the admin dashboard by default
+      return `${baseUrl}/admin`
+    },
   },
 })
