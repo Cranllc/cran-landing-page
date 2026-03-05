@@ -19,8 +19,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      if (user.email === "admin@cran.ai" || user.email === "admin@cran-us.com" || user.email === "tyler@cran-us.com") return true
-      return false
+      if (!user.email) return false
+      return user.email.endsWith("@cran.ai") || user.email.endsWith("@cran-us.com")
     },
   },
 })
