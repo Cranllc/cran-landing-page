@@ -7,6 +7,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Resend({
+      apiKey: process.env.RESEND_API_KEY,
       from: "onboarding@resend.dev", // The verified domain or default from Resend
     }),
   ],
