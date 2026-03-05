@@ -3,7 +3,53 @@ import { prisma } from '@/lib/prisma';
 import ReactMarkdown from 'react-markdown';
 import { notFound } from 'next/navigation';
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+import type { Metadata, ResolvingMetadata } from 'next';
+
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = await prisma.post.findUnique({
+    where: { slug: resolvedParams.slug },
+    include: { author: true }
+  });
+
+  if (!post) {
+    return {
+      title: 'Post Not Found | Cran',
+      description: 'The requested blog post could not be found.',
+    }
+  }
+
+  // Extract a brief excerpt for the description
+  const excerpt = post.content.replace(/[#*`_>]/g, '').substring(0, 160) + '...';
+  const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+
+  return {
+    title: `${post.title} | Cran Blog`,
+    description: excerpt,
+    authors: [{ name: authorName }],
+    openGraph: {
+      title: post.title,
+      description: excerpt,
+      type: 'article',
+      publishedTime: post.createdAt.toISOString(),
+      authors: [authorName],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: excerpt,
+    },
+  }
+}
+
+export default async function BlogPost({ params }: Props) {
   const resolvedParams = await params;
   const post = await prisma.post.findUnique({
     where: { slug: resolvedParams.slug },
