@@ -20,8 +20,8 @@ export default async function WaitlistPage() {
   })
 
   return (
-    <div className="p-8 md:p-12 max-w-6xl mx-auto h-full overflow-y-auto">
-      <div className="mb-10 flex items-center justify-between">
+    <div className="p-4 sm:p-8 md:p-12 max-w-6xl mx-auto h-full overflow-y-auto pb-32">
+      <div className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-[#1a1a1a] mb-2">Waitlist Signups</h1>
           <p className="text-[#1a1a1a]/60 font-medium">
@@ -29,7 +29,9 @@ export default async function WaitlistPage() {
           </p>
         </div>
         
-        <NewsletterModal />
+        <div className="w-full sm:w-auto [&>button]:w-full sm:[&>button]:w-auto">
+          <NewsletterModal />
+        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-[#E5E5E0] overflow-hidden">

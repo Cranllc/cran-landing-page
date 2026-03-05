@@ -17,8 +17,8 @@ export default function EditorForm({ post }: { post: Post }) {
     slug: post.slug,
     content: post.content,
     published: post.published,
-    category: post.category || "",
-    tags: post.tags?.join(", ") || "",
+    category: (post as any).category || "",
+    tags: (post as any).tags?.join(", ") || "",
   })
   
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle")
@@ -149,18 +149,18 @@ export default function EditorForm({ post }: { post: Post }) {
   return (
     <div className="flex flex-col h-full bg-[#FAFAF8]">
       {/* Top action bar */}
-      <div className="h-[60px] border-b border-[#E5E5E0] bg-white flex items-center justify-between px-6 shrink-0">
-        <div className="flex items-center gap-4">
+      <div className="min-h-[60px] py-3 sm:py-0 border-b border-[#E5E5E0] bg-white flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 shrink-0 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="text-lg font-bold text-[#1a1a1a] bg-transparent border-none outline-none focus:ring-0 placeholder-[#1a1a1a]/30 w-[300px]"
+            className="text-lg font-bold text-[#1a1a1a] bg-transparent border-none outline-none focus:ring-0 placeholder-[#1a1a1a]/30 w-full sm:w-[300px]"
             placeholder="Post Title"
           />
-          <div className="h-4 w-px bg-[#E5E5E0]"></div>
-          <div className="flex items-center gap-1.5 text-sm font-medium text-[#1a1a1a]/40 bg-[#FAFAF8] px-2 py-1 rounded-md border border-[#E5E5E0] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+          <div className="hidden sm:block h-4 w-px bg-[#E5E5E0]"></div>
+          <div className="flex items-center gap-1.5 text-sm font-medium text-[#1a1a1a]/40 bg-[#FAFAF8] px-2 py-1 rounded-md border border-[#E5E5E0] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] w-fit mt-1 sm:mt-0">
             <span>/blog/</span>
             <input
               type="text"
@@ -173,10 +173,10 @@ export default function EditorForm({ post }: { post: Post }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={handlePublishToggle}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold tracking-wide uppercase transition-colors border ${
+            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-bold tracking-wide uppercase transition-colors border ${
               formData.published 
                 ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100' 
                 : 'bg-white text-[#1a1a1a]/50 border-[#E5E5E0] hover:bg-[#F0F0ED] hover:text-[#1a1a1a]'
@@ -188,7 +188,7 @@ export default function EditorForm({ post }: { post: Post }) {
           <button
             onClick={handleSave}
             disabled={isPending || saveStatus === "saving"}
-            className="flex items-center gap-2 bg-[#1a1a1a] text-white px-5 py-1.5 rounded-lg text-sm font-semibold hover:bg-black transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px] justify-center"
+            className="flex-1 sm:flex-none flex items-center gap-2 bg-[#1a1a1a] text-white px-5 py-1.5 rounded-lg text-sm font-semibold hover:bg-black transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed sm:min-w-[100px] justify-center"
           >
             {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save Post"}
           </button>
@@ -196,27 +196,27 @@ export default function EditorForm({ post }: { post: Post }) {
       </div>
 
       {/* Metadata bar */}
-      <div className="h-[50px] border-b border-[#E5E5E0] bg-[#FAFAF8] flex items-center px-6 shrink-0 gap-6 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px]">Category</span>
+      <div className="min-h-[50px] py-3 sm:py-0 border-b border-[#E5E5E0] bg-[#FAFAF8] flex flex-col sm:flex-row sm:items-center px-4 sm:px-6 shrink-0 gap-4 sm:gap-6 text-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px] w-full sm:w-auto">Category</span>
           <input
             type="text"
             name="category"
             value={formData.category}
             onChange={handleChange}
             placeholder="e.g. Engineering"
-            className="bg-transparent border border-[#E5E5E0] rounded px-2 py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] w-[160px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
+            className="flex-1 w-full sm:w-[160px] bg-transparent border border-[#E5E5E0] rounded px-2 py-1.5 sm:py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
           />
         </div>
-        <div className="flex items-center gap-2 flex-1">
-          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px]">Tags</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:flex-1">
+          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px] w-full sm:w-auto">Tags</span>
           <input
             type="text"
             name="tags"
             value={formData.tags}
             onChange={handleChange}
-            placeholder="e.g. Next.js, React, Performance (comma separated)"
-            className="bg-transparent border border-[#E5E5E0] rounded px-2 py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] w-full max-w-[400px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
+            placeholder="e.g. React, Performance (comma separated)"
+            className="flex-1 w-full sm:max-w-[400px] bg-transparent border border-[#E5E5E0] rounded px-2 py-1.5 sm:py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
           />
         </div>
       </div>

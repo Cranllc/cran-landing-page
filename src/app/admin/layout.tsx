@@ -1,6 +1,6 @@
 import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
-
+import { LayoutDashboard, ClipboardList } from "lucide-react"
 import Link from "next/link"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -51,9 +51,24 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </header>
 
       {/* Main Content Area */}
-      <main className="mx-auto max-w-5xl py-12 px-6">
+      <main className="mx-auto max-w-5xl pt-8 pb-32 md:py-12 px-6">
         {children}
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E0] z-50 flex items-center justify-around px-2 pb-safe" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <Link href="/admin" className="flex flex-col items-center gap-1.5 p-3 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center">
+          <LayoutDashboard strokeWidth={2.5} size={22} className="opacity-80" />
+          <span className="text-[10px] font-bold tracking-wide uppercase">Posts</span>
+        </Link>
+        <Link href="/admin/waitlist" className="flex flex-col items-center gap-1.5 p-3 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center">
+          <div className="relative">
+            <ClipboardList strokeWidth={2.5} size={22} className="opacity-80" />
+            <div className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-cran shadow-[0_0_8px_rgba(214,68,54,0.6)]"></div>
+          </div>
+          <span className="text-[10px] font-bold tracking-wide uppercase">Waitlist</span>
+        </Link>
+      </nav>
     </div>
   )
 }
