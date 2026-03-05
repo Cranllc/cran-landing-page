@@ -6,27 +6,25 @@ import { useRouter } from "next/navigation"
 import { ArrowRight, Lock } from "lucide-react"
 
 export default function SignIn() {
-  const [password, setPassword] = useState("")
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle")
-  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!password) return
+    if (!email) return
 
     setStatus("loading")
 
     try {
-      const res = await signIn("credentials", { 
-        password, 
+      const res = await signIn("resend", { 
+        email, 
         redirect: false 
       })
 
       if (res?.error) {
         setStatus("error")
       } else {
-        router.push("/admin")
-        router.refresh()
+        setStatus("success")
       }
     } catch (err) {
       console.error(err)
@@ -47,50 +45,67 @@ export default function SignIn() {
         </div>
 
         <h1 className="text-3xl font-bold tracking-tight text-center mb-2 text-[#1a1a1a]">Welcome back.</h1>
-        <p className="text-[#1a1a1a]/50 text-center mb-8 font-medium">Enter your admin password to manage content.</p>
+        <p className="text-[#1a1a1a]/50 text-center mb-8 font-medium">Enter your email to receive a secure login link.</p>
         <div className="w-full bg-white border border-charcoal/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="password" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1a1a1a]/40 mb-2">
-                <Lock size={12} /> Admin Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value)
+          
+          {status === "success" ? (
+            <div className="text-center py-6">
+              <div className="w-16 h-16 bg-cran/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-8 h-8 bg-cran rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Check your inbox</h3>
+              <p className="text-[#1a1a1a]/60 text-sm leading-relaxed">
+                We sent a magic link to <span className="font-semibold text-[#1a1a1a]">{email}</span>. Click it to securely log in to your dashboard.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div>
+                <label htmlFor="email" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1a1a1a]/40 mb-2">
+                  <Lock size={12} /> Admin Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
                   if (status === "error") setStatus("idle")
                 }}
                 disabled={status === "loading"}
-                placeholder="••••••••••••"
-                required
-                autoFocus
-                className="w-full h-12 rounded-xl border border-charcoal/10 bg-[#FAFAF8] px-4 text-[15px] font-medium text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-cran/50 focus:ring-2 focus:ring-cran/20 focus:bg-white transition-all disabled:opacity-50"
-              />
-            </div>
-
-            {status === "error" && (
-              <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">
-                Incorrect password. Please try again.
+                  placeholder="tyler@cran-us.com"
+                  required
+                  autoFocus
+                  className="w-full h-12 rounded-xl border border-charcoal/10 bg-[#FAFAF8] px-4 text-[15px] font-medium text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-cran/50 focus:ring-2 focus:ring-cran/20 focus:bg-white transition-all disabled:opacity-50"
+                />
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={status === "loading" || !password}
-              className="group w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-charcoal px-6 text-[15px] font-bold text-white transition-all hover:bg-black shadow-md shadow-charcoal/10 disabled:opacity-50 mt-2"
-            >
-              {status === "loading" ? (
-                "Verifying..."
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight size={16} className="text-white/60 transition-transform group-hover:translate-x-0.5" />
-                </>
+              {status === "error" && (
+                <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">
+                  There was a problem sending the email. Please try again.
+                </div>
               )}
-            </button>
-          </form>
+
+              <button
+                type="submit"
+                disabled={status === "loading" || !email}
+                className="group w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-charcoal px-6 text-[15px] font-bold text-white transition-all hover:bg-black shadow-md shadow-charcoal/10 disabled:opacity-50 mt-2"
+              >
+                {status === "loading" ? (
+                  "Sending Link..."
+                ) : (
+                  <>
+                    Send Magic Link
+                    <ArrowRight size={16} className="text-white/60 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

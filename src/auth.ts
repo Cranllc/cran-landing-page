@@ -1,28 +1,14 @@
 import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
+import Resend from "next-auth/providers/resend"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
-    Credentials({
-      name: "Password",
-      credentials: {
-        password: { label: "Admin Password", type: "password" }
-      },
-      async authorize(credentials) {
-        // Simple fixed password check for the single admin
-        if (!process.env.ADMIN_PASSWORD) {
-          console.error("ADMIN_PASSWORD is not set in environment variables.")
-          return null
-        }
-        
-        if (credentials?.password === process.env.ADMIN_PASSWORD) {
-          // Return a mock user object representing the single admin
-          return { id: "1", name: "Cran Admin", email: "admin@cran.ai" }
-        }
-        
-        return null // Failed login
-      }
-    })
+    Resend({
+      from: "onboarding@resend.dev", // The verified domain or default from Resend
+    }),
   ],
   trustHost: true,
   pages: {
@@ -33,7 +19,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      if (user.email === "admin@cran.ai" || user.email === "admin@cran-us.com") return true
+      if (user.email === "admin@cran.ai" || user.email === "admin@cran-us.com" || user.email === "tyler@cran-us.com") return true
       return false
     },
   },
