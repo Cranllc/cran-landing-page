@@ -48,7 +48,6 @@ export default function SignIn() {
 
         <h1 className="text-3xl font-bold tracking-tight text-center mb-2 text-[#1a1a1a]">Welcome back.</h1>
         <p className="text-[#1a1a1a]/50 text-center mb-8 font-medium">Enter your admin password to manage content.</p>
-
         <div className="w-full bg-white border border-charcoal/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { updatePost } from "@/actions/blog"
-import type { Post } from "@/generated/prisma/client"
+import type { Post } from "@prisma/client"
 
 export default function EditorForm({ post }: { post: Post }) {
   const [isPending, startTransition] = useTransition()

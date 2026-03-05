@@ -33,7 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      if (user.email === "admin@cran.ai") return true
+      if (user.email === "admin@cran.ai" || user.email === "admin@cran-us.com") return true
       return false
     },
   },
