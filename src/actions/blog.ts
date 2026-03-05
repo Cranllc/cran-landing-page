@@ -7,10 +7,13 @@ import { redirect } from "next/navigation"
 
 async function verifyAdmin() {
   const session = await auth()
-  if (!session?.user?.email?.endsWith("@cran.ai")) {
+  const user = session?.user
+  
+  if (!user || !user.email || (!user.email.endsWith("@cran.ai") && !user.email.endsWith("@cran-us.com"))) {
     throw new Error("Unauthorized")
   }
-  return session.user
+  
+  return user
 }
 
 export async function getPosts() {
