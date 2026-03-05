@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "2.7",
     "@prisma/client": "^5.22.0",
+    "@supabase/supabase-js": "^2.98.0",
     "lucide-react": "^0.576.0",
     "next": "^16.1.6",
     "next-auth": "^5.0.0-beta.30",
@@ -20,6 +21,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^6.9.3"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -37,8 +38,11 @@ export async function generateMetadata(
     openGraph: {
       title: post.title,
       description: excerpt,
+      url: `https://cran.us.com/blog/${post.slug}`,
+      siteName: 'Cran Animal Shelter Software',
       type: 'article',
       publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
       authors: [authorName],
     },
     twitter: {
@@ -46,6 +50,9 @@ export async function generateMetadata(
       title: post.title,
       description: excerpt,
     },
+    alternates: {
+      canonical: `https://cran.us.com/blog/${post.slug}`,
+    }
   }
 }
 
@@ -61,9 +68,29 @@ export default async function BlogPost({ params }: Props) {
   }
 
   const dateString = new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+
+  // 2026 SEO: JSON-LD Structured Data for AI overviews and rich search results
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    author: {
+      '@type': 'Person',
+      name: authorName,
+    },
+    datePublished: post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+  }
 
   return (
     <article className="min-h-screen bg-[#F7F7F4] pt-32 pb-32 font-sans selection:bg-cran selection:text-white">
+      {/* Inject JSON-LD structured data to the DOM safely */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
       <div className="mx-auto max-w-5xl px-6 lg:px-12 relative flex flex-col lg:flex-row gap-12 lg:gap-24">
         
         {/* Left Sidebar / Breadcrumbs (Sticky on Desktop) */}
@@ -79,7 +106,7 @@ export default async function BlogPost({ params }: Props) {
           
           <div className="hidden lg:block text-sm">
             <p className="text-[#26251E]/70 font-medium mb-1">{dateString}</p>
-            <p className="text-[#26251E]/40">by {post.author.name || post.author.email?.split('@')[0]}</p>
+            <p className="text-[#26251E]/40">by {authorName}</p>
           </div>
         </aside>
 
@@ -89,7 +116,7 @@ export default async function BlogPost({ params }: Props) {
           {/* Mobile Metadata */}
           <div className="lg:hidden mb-6 text-sm">
             <p className="text-[#26251E]/70 font-medium inline-block mr-3">{dateString}</p>
-            <p className="text-[#26251E]/40 inline-block">by {post.author.name || post.author.email?.split('@')[0]}</p>
+            <p className="text-[#26251E]/40 inline-block">by {authorName}</p>
           </div>
 
           <header className="mb-12">
@@ -110,13 +137,16 @@ export default async function BlogPost({ params }: Props) {
           </header>
 
           <div className="prose prose-lg prose-neutral max-w-none text-[#26251E] prose-p:text-[#26251E]/90 prose-p:font-medium prose-p:leading-relaxed prose-headings:text-[#26251E] prose-headings:tracking-tight prose-a:text-cran prose-a:no-underline hover:prose-a:underline prose-strong:text-[#26251E]">
-            <ReactMarkdown components={{
-              p: ({...props}) => <p className="text-[17px] leading-relaxed text-[#26251E]/80 mb-6 font-medium" {...props} />,
-              h1: ({...props}) => <h1 className="text-3xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
-              h2: ({...props}) => <h2 className="text-2xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
-              h3: ({...props}) => <h3 className="text-xl font-bold text-[#26251E] tracking-tight mt-12 mb-4" {...props} />,
-              code: ({...props}) => <code className="bg-[#1a1a1a]/5 text-[#B83A2E] px-1.5 py-0.5 rounded font-mono text-[14px]" {...props} />
-            }}>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                p: ({...props}) => <p className="text-[17px] leading-relaxed text-[#26251E]/80 mb-6 font-medium" {...props} />,
+                h1: ({...props}) => <h1 className="text-3xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
+                h2: ({...props}) => <h2 className="text-2xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
+                h3: ({...props}) => <h3 className="text-xl font-bold text-[#26251E] tracking-tight mt-12 mb-4" {...props} />,
+                code: ({...props}) => <code className="bg-[#1a1a1a]/5 text-[#B83A2E] px-1.5 py-0.5 rounded font-mono text-[14px]" {...props} />
+              }}
+            >
               {post.content}
             </ReactMarkdown>
             
