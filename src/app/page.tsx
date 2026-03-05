@@ -142,167 +142,51 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── Product Preview — High-Fidelity Dashboard Mockup ── */}
-          <div className="relative w-full max-w-[1150px] mx-auto px-4 sm:px-6 mt-4 md:mt-8 z-10" style={{ perspective: '1200px' }}>
+          {/* ── Abstract Product Preview ── */}
+          <div className="relative w-full max-w-[1050px] mx-auto px-4 sm:px-6 mt-4 md:mt-12 z-10" style={{ perspective: '1200px' }}>
             {/* Ambient deep red glow */}
             <div className="absolute inset-x-12 inset-y-0 rounded-[3rem] pointer-events-none opacity-40 mix-blend-screen" style={{ background: 'radial-gradient(ellipse at top, rgba(203,74,58,0.5) 0%, transparent 60%)', filter: 'blur(70px)' }} />
             
             <div 
-              className="relative w-full rounded-2xl md:rounded-[24px] overflow-hidden border border-white/[0.12] bg-[#FAFAF8] shadow-[0_0_0_1px_rgba(255,255,255,0.05),_0_60px_160px_-20px_rgba(0,0,0,0.9),_0_0_80px_rgba(203,74,58,0.15)] ring-1 ring-white/10 flex flex-col md:flex-row"
+              className="relative w-full rounded-2xl md:rounded-[24px] overflow-hidden border border-white/[0.08] bg-[#0A0A0B] shadow-[0_0_0_1px_rgba(255,255,255,0.05),_0_60px_160px_-20px_rgba(0,0,0,0.9),_0_0_80px_rgba(203,74,58,0.15)] ring-1 ring-white/10 flex items-center justify-center p-8 md:p-12 mb-12"
               style={{ 
-                transform: 'rotateX(3deg)',
-                height: '580px',
+                transform: 'rotateX(5deg)',
+                height: '420px',
                 transformOrigin: 'top center'
               }}
             >
-              {/* Sidebar (Desktop only) */}
-              <div className="hidden md:flex w-[240px] shrink-0 border-r border-[#E5E5E0] bg-[#FAFAF8] flex-col h-full z-20">
-                <div className="h-[68px] flex items-center justify-start px-6 border-b border-[#E5E5E0]">
-                  <div className="w-7 h-7 bg-cran rounded-lg shadow-sm flex items-center justify-center">
-                    <div className="w-2.5 h-2.5 bg-white rounded-sm"></div>
+              {/* Abstract inner glow */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(203,74,58,0.05)_0%,transparent_70%)] pointer-events-none" />
+              
+              {/* Abstract data lines/nodes to look techy but hide the actual UI */}
+              <div className="relative w-full h-full flex flex-col items-center justify-center opacity-70">
+                <div className="flex items-center gap-6 mb-8">
+                  <div className="w-16 md:w-32 h-[1px] bg-gradient-to-r from-transparent to-cran/50 rounded-full"></div>
+                  <div className="w-12 h-12 rounded-2xl border border-white/10 bg-white/[0.02] flex items-center justify-center shadow-[0_0_30px_rgba(203,74,58,0.2)] glow-pulse">
+                    <div className="w-3 h-3 rounded-full bg-cran shadow-[0_0_15px_rgba(203,74,58,0.8)]"></div>
                   </div>
-                  <span className="ml-3 font-bold text-xl tracking-tight text-[#1a1a1a]">cran.</span>
-                </div>
-                <div className="flex-1 py-5 flex flex-col gap-1.5 px-4">
-                  {/* Nav Item Active */}
-                  <div className="flex items-center gap-3 px-3 py-2.5 bg-cran/10 text-cran rounded-[10px] cursor-default shadow-sm ring-1 ring-cran/10">
-                    <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                    <span className="text-[13px] font-bold tracking-wide">Overview</span>
-                  </div>
-                  {/* Nav Item Inactive */}
-                  {['Intake', 'Animals', 'Medical', 'Adoptions', 'Fosters'].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 px-3 py-2.5 text-[#1a1a1a]/60 hover:bg-[#F0F0ED] hover:text-[#1a1a1a] transition-colors rounded-[10px] cursor-default font-medium">
-                      <div className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#1a1a1a]/20 opacity-80"></div>
-                      <span className="text-[13px] tracking-wide">{item}</span>
-                    </div>
-                  ))}
-                  
-                  <div className="mt-8 mb-2 px-3 text-[10px] font-bold tracking-[0.15em] text-[#1a1a1a]/30 uppercase">System</div>
-                  <div className="flex items-center gap-3 px-3 py-2.5 text-[#1a1a1a]/60 hover:bg-[#F0F0ED] hover:text-[#1a1a1a] transition-colors rounded-[10px] cursor-default font-medium">
-                     <div className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#1a1a1a]/20 opacity-80"></div>
-                     <span className="text-[13px] tracking-wide text-[#1a1a1a]/60">Settings</span>
-                  </div>
-                </div>
-                {/* User Profile */}
-                <div className="p-4 border-t border-[#E5E5E0] bg-white flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#B83A2E] to-cran border-2 border-white shadow-sm shrink-0 flex items-center justify-center text-white text-[10px] font-bold">SJ</div>
-                  <div className="hidden md:block">
-                    <div className="text-[13px] font-bold text-[#1a1a1a] leading-tight">Sarah Jenkins</div>
-                    <div className="text-[11px] font-medium text-[#1a1a1a]/50">Austin Pets Alive!</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Main Area */}
-              <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-white z-10 w-full">
-                {/* Top Header */}
-                <div className="h-[68px] border-b border-[#E5E5E0] bg-white flex items-center justify-between px-6 shrink-0 z-20">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#FAFAF8] border border-[#E5E5E0] text-[#1a1a1a]/40 text-[13px] font-medium w-64 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Search records...
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex px-2.5 py-1 rounded-[6px] bg-[#FEF2F2] border border-[#FEE2E2] text-cran text-[11px] font-bold shadow-sm items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cran animate-pulse"></span>
-                      4 Action Items
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-[#FAFAF8] border border-[#E5E5E0] flex items-center justify-center text-[#1a1a1a]/40 hover:text-[#1a1a1a] hover:bg-[#F0F0ED] transition-colors cursor-pointer shadow-sm">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                    </div>
-                  </div>
+                  <div className="w-16 md:w-32 h-[1px] bg-gradient-to-l from-transparent to-cran/50 rounded-full"></div>
                 </div>
 
-                {/* Scrollable Content Container */}
-                <div className="flex-1 p-6 relative">
-                  {/* The moving content */}
-                  <div className="dashboard-scroll flex flex-col gap-6 w-full">
-                    
-                    {/* Welcome Header */}
-                    <div>
-                      <h2 className="text-[22px] font-bold text-[#1a1a1a] tracking-[-0.01em]">Good morning, Sarah</h2>
-                      <p className="text-[#1a1a1a]/50 text-[14px] font-medium mt-0.5">Here is your shelter overview for today.</p>
-                    </div>
-
-                    {/* KPI Cards */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                      {[
-                        { label: 'Total Animals', value: '412', trend: '+12 this week', align:'text-[#1a1a1a]' },
-                        { label: 'Available', value: '184', trend: '4 adoptions pending', align:'text-[#10B981]' },
-                        { label: 'Medical Review', value: '14', trend: '3 high priority', align:'text-cran' },
-                        { label: 'New Intakes', value: '8', trend: 'Since yesterday', align:'text-[#3B82F6]' },
-                      ].map((stat, i) => (
-                        <div key={i} className="bg-white border border-[#E5E5E0] rounded-[14px] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-                          <div className="text-[11px] font-bold text-[#1a1a1a]/40 uppercase tracking-[0.06em] mb-3">{stat.label}</div>
-                          <div className={`text-[28px] font-extrabold tracking-tight ${stat.align} mb-1 leading-none`}>{stat.value}</div>
-                          <div className="text-[12px] font-semibold text-[#1a1a1a]/40">{stat.trend}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Main Content Split */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      
-                      {/* Recent Activity List */}
-                      <div className="lg:col-span-2 bg-white border border-[#E5E5E0] rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] overflow-hidden">
-                        <div className="px-5 py-3.5 border-b border-[#E5E5E0] flex justify-between items-center bg-[#FAFAF8]">
-                          <h3 className="text-[13px] font-bold text-[#1a1a1a] tracking-wide">Activity Stream</h3>
-                          <span className="text-[12px] font-bold text-cran cursor-pointer hover:text-cran-hover">View All</span>
-                        </div>
-                        <div className="divide-y divide-[#E5E5E0]">
-                          {[
-                            { action: 'Intake Completed', subject: 'Bella (Dog, 2y)', time: '10 mins ago', icon: 'bg-[#EFF6FF] text-[#3B82F6]' },
-                            { action: 'Adoption Finalized', subject: 'Max (Cat, 4mo)', time: '45 mins ago', icon: 'bg-[#ECFDF5] text-[#10B981]' },
-                            { action: 'Medical Alert', subject: 'Charlie Needs Booster', time: '1 hour ago', icon: 'bg-[#FEF2F2] text-[#DC2626]' },
-                            { action: 'Foster Return', subject: 'Luna (Dog, 4y)', time: '2 hours ago', icon: 'bg-[#FFFBEB] text-[#D97706]' },
-                            { action: 'Intake Started', subject: 'Daisy (Dog, 1y)', time: '3 hours ago', icon: 'bg-[#EFF6FF] text-[#3B82F6]' },
-                          ].map((item, i) => (
-                            <div key={i} className="px-5 py-3.5 flex items-center gap-4 hover:bg-[#FAFAF8] transition-colors cursor-default">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${item.icon}`}>
-                                <div className="w-2.5 h-2.5 rounded-full bg-current opacity-80 shadow-sm"></div>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-[13px] font-bold text-[#1a1a1a] truncate">{item.action}</div>
-                                <div className="text-[12px] font-medium text-[#1a1a1a]/50 truncate mt-0.5">{item.subject}</div>
-                              </div>
-                              <div className="text-[11px] font-bold text-[#1a1a1a]/30 whitespace-nowrap bg-[#FAFAF8] px-2 py-1 rounded-md">{item.time}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Quick Actions / Tasks */}
-                      <div className="bg-white border border-[#E5E5E0] rounded-[16px] shadow-[0_2px_12px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
-                        <div className="px-5 py-3.5 border-b border-[#E5E5E0] bg-[#FAFAF8]">
-                          <h3 className="text-[13px] font-bold text-[#1a1a1a] tracking-wide">Daily Tasks</h3>
-                        </div>
-                        <div className="p-2 flex flex-col gap-1">
-                          {[
-                            { task: 'Approve adoption #492', due: 'Urgent' },
-                            { task: 'Order vaccines', due: 'Due Today' },
-                            { task: 'Follow up on foster', due: 'Due Today' },
-                            { task: 'Kennel check building A', due: 'Tomorrow' },
-                          ].map((item, i) => (
-                            <div key={i} className="flex gap-3 px-3 py-2.5 hover:bg-[#FAFAF8] rounded-lg transition-colors cursor-default">
-                              <div className="w-[18px] h-[18px] mt-0.5 rounded-[5px] border-2 border-[#E5E5E0] shrink-0 bg-white"></div>
-                              <div>
-                                <div className="text-[13px] font-semibold text-[#1a1a1a]">{item.task}</div>
-                                <div className={`text-[11px] font-bold mt-1 ${item.due === 'Urgent' ? 'text-cran' : 'text-[#1a1a1a]/40'}`}>{item.due}</div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                    </div>
-                    
-                    {/* Padding at bottom of scroll content to allow smooth looping */}
-                    <div className="h-[200px]"></div>
-
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex w-32 h-12 rounded-xl border border-white/5 bg-white/[0.01] items-center justify-center blur-[1px]">
+                     <div className="w-12 h-1 bg-white/10 rounded-full"></div>
+                  </div>
+                  <div className="w-48 h-12 rounded-xl border border-cran/20 bg-cran/[0.05] flex items-center px-4 gap-3 shadow-[0_0_20px_rgba(203,74,58,0.1)]">
+                    <div className="w-2 h-2 rounded-full bg-cran animate-pulse"></div>
+                    <div className="flex-1 h-1 bg-cran/40 rounded-full"></div>
+                  </div>
+                  <div className="hidden md:flex w-24 h-12 rounded-xl border border-white/5 bg-white/[0.01] items-center justify-center blur-[1px]">
+                     <div className="w-8 h-1 bg-white/10 rounded-full"></div>
                   </div>
                 </div>
-
-                {/* Bottom static gradient to fade out scrolling content smoothly into the white/cream box edge */}
-                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-20" />
+                
+                {/* Connecting vertical lines */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-48 bg-gradient-to-b from-transparent via-white/10 to-transparent -z-10"></div>
+                
+                <div className="mt-10 text-white/30 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase select-none">
+                  Core Management Engine
+                </div>
               </div>
             </div>
           </div>
