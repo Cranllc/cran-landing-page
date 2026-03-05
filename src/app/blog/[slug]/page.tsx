@@ -58,7 +58,7 @@ export async function generateMetadata(
 
 export default async function BlogPost({ params }: Props) {
   const resolvedParams = await params;
-  const post = await prisma.post.findUnique({
+  const post: any = await prisma.post.findUnique({
     where: { slug: resolvedParams.slug },
     include: { author: true }
   });
@@ -104,6 +104,14 @@ export default async function BlogPost({ params }: Props) {
             </Link>
           </nav>
           
+          {post.category && (
+            <div className="mb-8 lg:mb-12 hidden lg:block">
+              <span className="text-[11px] font-bold tracking-wider uppercase text-cran bg-cran/5 px-2.5 py-1 rounded-md border border-cran/10 inline-block">
+                {post.category}
+              </span>
+            </div>
+          )}
+
           <div className="hidden lg:block text-sm">
             <p className="text-[#26251E]/70 font-medium mb-1">{dateString}</p>
             <p className="text-[#26251E]/40">by {authorName}</p>
@@ -114,15 +122,32 @@ export default async function BlogPost({ params }: Props) {
         <div className="flex-1 max-w-[650px] w-full">
           
           {/* Mobile Metadata */}
-          <div className="lg:hidden mb-6 text-sm">
-            <p className="text-[#26251E]/70 font-medium inline-block mr-3">{dateString}</p>
-            <p className="text-[#26251E]/40 inline-block">by {authorName}</p>
+          <div className="lg:hidden mb-6 text-sm flex items-center flex-wrap gap-3">
+            {post.category && (
+              <span className="text-[10px] font-bold tracking-wider uppercase text-cran bg-cran/5 px-2 py-0.5 rounded border border-cran/10">
+                {post.category}
+              </span>
+            )}
+            <div>
+              <p className="text-[#26251E]/70 font-medium inline-block mr-3">{dateString}</p>
+              <p className="text-[#26251E]/40 inline-block">by {authorName}</p>
+            </div>
           </div>
 
           <header className="mb-12">
-            <h1 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-[#26251E] tracking-tight leading-[1.15] mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-[#26251E] tracking-tight leading-[1.15] mb-6">
               {post.title}
             </h1>
+
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {post.tags.map((tag: string) => (
+                  <span key={tag} className="text-[11px] font-bold tracking-wider uppercase text-[#26251E]/60 bg-white border border-[#E5E5E0] px-2.5 py-1 rounded-full shadow-sm">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
             
             {/* Minimalist Hero Graphic */}
             <div className="w-full aspect-[2/1] bg-[#8B939C] rounded-md overflow-hidden relative mb-12 flex items-center justify-center">

@@ -28,6 +28,8 @@ model Post {
   slug      String   @unique
   content   String
   published Boolean  @default(false)
+  category  String?
+  tags      String[] @default([])
   authorId  String
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())

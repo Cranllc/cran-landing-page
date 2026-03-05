@@ -49,12 +49,19 @@ export async function createPost() {
   redirect(`/admin/editor/${newPost.id}`)
 }
 
-export async function updatePost(id: string, data: { title: string, slug: string, content: string, published: boolean }) {
+export async function updatePost(id: string, data: { title: string; slug: string; content: string; published: boolean; category?: string | null; tags?: string[] }) {
   await verifyAdmin()
   
   await prisma.post.update({
     where: { id },
-    data
+    data: {
+      title: data.title,
+      slug: data.slug,
+      content: data.content,
+      published: data.published,
+      category: data.category,
+      tags: data.tags,
+    }
   })
   
   revalidatePath("/admin")

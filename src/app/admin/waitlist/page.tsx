@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
+import NewsletterModal from "./NewsletterModal"
 
 export const metadata = {
   title: "Waitlist Signups | Cran Admin",
@@ -14,7 +15,7 @@ export default async function WaitlistPage() {
     redirect("/auth/signin?error=AccessDenied")
   }
 
-  const signups = await prisma.waitlist.findMany({
+  const signups = await (prisma as any).waitlist.findMany({
     orderBy: { createdAt: "desc" }
   })
 
@@ -27,6 +28,8 @@ export default async function WaitlistPage() {
             {signups.length} total shelters have expressed interest.
           </p>
         </div>
+        
+        <NewsletterModal />
       </div>
 
       <div className="bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-[#E5E5E0] overflow-hidden">

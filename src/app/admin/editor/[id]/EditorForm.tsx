@@ -16,7 +16,9 @@ export default function EditorForm({ post }: { post: Post }) {
     title: post.title,
     slug: post.slug,
     content: post.content,
-    published: post.published
+    published: post.published,
+    category: post.category || "",
+    tags: post.tags?.join(", ") || "",
   })
   
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle")
@@ -37,9 +39,25 @@ export default function EditorForm({ post }: { post: Post }) {
   const handleSave = () => {
     setSaveStatus("saving")
     startTransition(async () => {
-      await updatePost(post.id, formData)
-      setSaveStatus("saved")
-      setTimeout(() => setSaveStatus("idle"), 2000)
+      try {
+        const tagsArray = formData.tags
+          ? formData.tags.split(",").map((t: string) => t.trim()).filter(Boolean)
+          : []
+
+        await updatePost(post.id, {
+          title: formData.title,
+          slug: formData.slug,
+          content: formData.content,
+          published: formData.published,
+          category: formData.category || null,
+          tags: tagsArray
+        })
+        setSaveStatus("saved")
+        setTimeout(() => setSaveStatus("idle"), 2000)
+      } catch (error) {
+        alert("Failed to save post")
+        setSaveStatus("idle")
+      }
     })
   }
 
@@ -174,6 +192,32 @@ export default function EditorForm({ post }: { post: Post }) {
           >
             {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save Post"}
           </button>
+        </div>
+      </div>
+
+      {/* Metadata bar */}
+      <div className="h-[50px] border-b border-[#E5E5E0] bg-[#FAFAF8] flex items-center px-6 shrink-0 gap-6 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px]">Category</span>
+          <input
+            type="text"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            placeholder="e.g. Engineering"
+            className="bg-transparent border border-[#E5E5E0] rounded px-2 py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] w-[160px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
+          />
+        </div>
+        <div className="flex items-center gap-2 flex-1">
+          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px]">Tags</span>
+          <input
+            type="text"
+            name="tags"
+            value={formData.tags}
+            onChange={handleChange}
+            placeholder="e.g. Next.js, React, Performance (comma separated)"
+            className="bg-transparent border border-[#E5E5E0] rounded px-2 py-1 outline-none text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] w-full max-w-[400px] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all"
+          />
         </div>
       </div>
 

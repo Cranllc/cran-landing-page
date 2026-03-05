@@ -39,12 +39,12 @@ export default async function BlogIndex() {
                   {/* Date / Category Sidebar */}
                   <div className="w-full lg:w-36 shrink-0 lg:text-right pt-2 lg:pt-1">
                     <time className="text-sm font-medium text-[#26251E]/50 block mb-1">{dateString}</time>
-                    <span className="text-xs font-semibold tracking-wider uppercase text-[#26251E]/30 hidden lg:block">{"Engineering"}</span>
+                    <span className="text-xs font-semibold tracking-wider uppercase text-[#26251E]/30 hidden lg:block">{post.category || "Uncategorized"}</span>
                   </div>
                   
                   {/* Content (Constrained to ~650px text width) */}
                   <div className="flex-1 max-w-[650px]">
-                    <span className="text-xs font-semibold tracking-wider uppercase text-cran mb-3 block lg:hidden">{"Engineering"}</span>
+                    <span className="text-xs font-semibold tracking-wider uppercase text-cran mb-3 block lg:hidden">{post.category || "Uncategorized"}</span>
                     <Link href={`/blog/${post.slug}`}>
                       <h2 className="text-2xl sm:text-[1.75rem] font-bold text-[#26251E] mb-4 group-hover:text-cran transition-colors leading-tight tracking-tight">
                         {post.title}
