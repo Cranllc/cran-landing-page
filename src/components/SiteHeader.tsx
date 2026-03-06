@@ -22,8 +22,13 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
       <nav className={`fixed inset-x-0 top-0 z-50 h-16 transition-all duration-300 ${isScrolled ? 'border-b border-charcoal/5 bg-white/90 backdrop-blur-xl shadow-sm' : 'border-b border-white/[0.06] bg-[#0F0F10]/80 backdrop-blur-md'}`}>
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-10">
-            <Link href="/" className="flex items-center relative">
-              <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN.</span>
+            <Link href="/" className="flex items-center relative gap-2">
+              <img 
+                src="/cran-logo.svg" 
+                alt="Cran Logo" 
+                className={`h-10 w-auto transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
+              />
+              <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
             </Link>
             <div className="hidden items-center gap-1 md:flex">
               <Link href="/#solutions" className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors ${isScrolled ? 'text-charcoal/50 hover:text-charcoal hover:bg-charcoal/5' : 'text-white/40 hover:text-white hover:bg-white/[0.04]'}`}>Platform</Link>

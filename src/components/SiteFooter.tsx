@@ -7,7 +7,12 @@ export default function SiteFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 max-w-4xl mx-auto">
           
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="inline-block mb-3">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <img 
+                src="/cran-logo.svg" 
+                alt="Cran Logo" 
+                className="h-10 w-auto brightness-0 opacity-80"
+              />
               <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
             </Link>
             <p className="text-[13px] text-charcoal/50 leading-relaxed max-w-[200px]">

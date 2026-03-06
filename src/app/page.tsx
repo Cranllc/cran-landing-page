@@ -118,7 +118,7 @@ export default function Home() {
             {/* Status badge */}
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-cran/20 bg-cran/[0.06] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-cran select-none fade-up">
               <span className="w-1.5 h-1.5 rounded-full bg-cran animate-pulse"></span>
-              Open Beta
+              Cooking up something good 🍳
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-[-0.03em] text-white leading-[0.92] w-full fade-up-d1">
