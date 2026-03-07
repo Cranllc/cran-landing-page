@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SiteHeader({ forceLightMode = false }: { forceLightMode?: boolean }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,9 +24,11 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center relative gap-2">
-              <img 
+              <Image 
                 src="/cran-logo.svg" 
                 alt="Cran Logo" 
+                width={40}
+                height={40}
                 className={`h-10 w-auto transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
               />
               <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>

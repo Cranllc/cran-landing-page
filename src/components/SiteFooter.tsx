@@ -1,16 +1,19 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SiteFooter() {
   return (
     <footer className="relative z-50 border-t border-charcoal/5 bg-white pt-16 pb-8">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16 max-w-5xl mx-auto">
           
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <img 
+              <Image 
                 src="/cran-logo.svg" 
                 alt="Cran Logo" 
+                width={40}
+                height={40}
                 className="h-10 w-auto brightness-0 opacity-80"
               />
               <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
