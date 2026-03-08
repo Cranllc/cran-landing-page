@@ -12,8 +12,8 @@ export default function SiteFooter() {
               <Image 
                 src="/cran-logo.svg" 
                 alt="Cran Logo" 
-                width={40}
-                height={40}
+                width={120}
+                height={120}
                 className="h-10 w-auto brightness-0 opacity-80"
               />
               <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>

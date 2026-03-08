@@ -27,8 +27,8 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
               <Image 
                 src="/cran-logo.svg" 
                 alt="Cran Logo" 
-                width={40}
-                height={40}
+                width={120}
+                height={120}
                 className={`h-10 w-auto transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
               />
               <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
