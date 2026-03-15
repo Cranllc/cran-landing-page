@@ -24,9 +24,11 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center relative gap-2">
               <img 
-                src="/cran-logo.svg" 
+                src="/cran-logo.png" 
                 alt="Cran Logo"
-                style={{ width: '120px', height: 'auto' }}
+                width={512}
+                height={512}
+                style={{ height: '40px', width: 'auto' }}
                 className={`block transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
               />
               <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
