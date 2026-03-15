@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function SiteHeader({ forceLightMode = false }: { forceLightMode?: boolean }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,19 +23,18 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center relative gap-2">
-              <Image 
+              <img 
                 src="/cran-logo.svg" 
-                alt="Cran Logo" 
-                width={120}
-                height={120}
-                className={`h-10 w-auto transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
+                alt="Cran Logo"
+                style={{ width: '120px', height: 'auto' }}
+                className={`block transition-all duration-300 ${isScrolled ? 'brightness-0 opacity-80' : 'brightness-0 invert opacity-100'}`}
               />
               <span className={`text-[15px] font-bold transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`} style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
             </Link>
             <div className="hidden items-center gap-1 md:flex">
               <Link href="/#solutions" className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors ${isScrolled ? 'text-charcoal/50 hover:text-charcoal hover:bg-charcoal/5' : 'text-white/40 hover:text-white hover:bg-white/[0.04]'}`}>Platform</Link>
               <Link href="/blog" className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors ${isScrolled ? 'text-charcoal/50 hover:text-charcoal hover:bg-charcoal/5' : 'text-white/40 hover:text-white hover:bg-white/[0.04]'}`}>Blog</Link>
-              <Link href="https://discord.gg/cran" className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors ${isScrolled ? 'text-charcoal/50 hover:text-charcoal hover:bg-charcoal/5' : 'text-white/40 hover:text-white hover:bg-white/[0.04]'}`}>Support</Link>
+              <Link href="https://discord.gg/5zrEvfpCSw" className={`text-[13px] font-medium px-3 py-1.5 rounded-md transition-colors ${isScrolled ? 'text-charcoal/50 hover:text-charcoal hover:bg-charcoal/5' : 'text-white/40 hover:text-white hover:bg-white/[0.04]'}`}>Support</Link>
             </div>
           </div>
 
@@ -65,12 +63,12 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
           <div className="mx-auto max-w-6xl flex flex-col px-6 py-4 gap-1">
             <Link href="/#solutions" onClick={() => setMobileMenuOpen(false)} className={`text-[15px] font-medium py-2.5 px-3 rounded-md transition-colors ${isScrolled ? 'text-charcoal hover:bg-charcoal/5' : 'text-white hover:bg-white/[0.04]'}`}>Platform</Link>
             <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className={`text-[15px] font-medium py-2.5 px-3 rounded-md transition-colors ${isScrolled ? 'text-charcoal hover:bg-charcoal/5' : 'text-white hover:bg-white/[0.04]'}`}>Blog</Link>
-            <Link href="https://discord.gg/cran" onClick={() => setMobileMenuOpen(false)} className={`text-[15px] font-medium py-2.5 px-3 rounded-md transition-colors flex items-center gap-2 ${isScrolled ? 'text-charcoal hover:bg-charcoal/5' : 'text-white hover:bg-white/[0.04]'}`}>
+            <Link href="https://discord.gg/5zrEvfpCSw" onClick={() => setMobileMenuOpen(false)} className={`text-[15px] font-medium py-2.5 px-3 rounded-md transition-colors flex items-center gap-2 ${isScrolled ? 'text-charcoal hover:bg-charcoal/5' : 'text-white hover:bg-white/[0.04]'}`}>
               <MessageSquare size={16} className="text-[#5865F2]" /> Support
             </Link>
             <div className={`my-2 h-px w-full ${isScrolled ? 'bg-charcoal/5' : 'bg-white/[0.06]'}`}></div>
             <div className="flex gap-3 pt-2 pb-1">
-              <Link href="mailto:support@cran.ai" className={`flex-1 inline-flex h-10 items-center justify-center rounded-lg border text-[14px] font-medium transition-colors ${isScrolled ? 'border-charcoal/10 text-charcoal bg-white' : 'border-white/10 text-white'}`}>Contact</Link>
+              <Link href="mailto:support@gocran.ai" className={`flex-1 inline-flex h-10 items-center justify-center rounded-lg border text-[14px] font-medium transition-colors ${isScrolled ? 'border-charcoal/10 text-charcoal bg-white' : 'border-white/10 text-white'}`}>Contact</Link>
               <Link href="/#waitlist" onClick={() => setMobileMenuOpen(false)} className={`flex-1 inline-flex h-10 items-center justify-center rounded-lg bg-cran text-[14px] font-medium text-white ${isScrolled ? 'shadow-sm' : ''}`}>Join Waitlist</Link>
             </div>
           </div>
