@@ -42,13 +42,13 @@ export const metadata: Metadata = {
     siteName: "Cran",
     title: "Cran | AI-Powered Shelter Management",
     description: "One platform for everything — intake, medical, kennels, adoptions, reporting. Built for shelters.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Cran" }],
+    images: [{ url: "/openGraph.png", width: 1200, height: 630, alt: "Cran" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Cran | AI-Powered Shelter Management",
     description: "One platform for everything — built for shelters.",
-    images: ["/og-image.png"],
+    images: ["/openGraph.png"],
   },
   robots: {
     index: true,
