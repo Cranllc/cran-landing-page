@@ -41,7 +41,7 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link href="mailto:support@cran.ai" className={`inline-flex h-8 items-center justify-center rounded-md border bg-transparent px-3.5 text-[13px] font-medium transition-colors ${isScrolled ? 'border-charcoal/10 text-charcoal/70 hover:text-charcoal hover:border-charcoal/20' : 'border-white/10 text-white/70 hover:text-white hover:border-white/20'}`}>
+            <Link href="mailto:support@gocran.ai" className={`inline-flex h-8 items-center justify-center rounded-md border bg-transparent px-3.5 text-[13px] font-medium transition-colors ${isScrolled ? 'border-charcoal/10 text-charcoal/70 hover:text-charcoal hover:border-charcoal/20' : 'border-white/10 text-white/70 hover:text-white hover:border-white/20'}`}>
               Contact
             </Link>
             <Link href="/#waitlist" className={`inline-flex h-8 items-center justify-center rounded-md bg-cran px-3.5 text-[13px] font-medium text-white transition-all hover:bg-cran/90 ${isScrolled ? 'shadow-sm' : 'shadow-lg shadow-cran/20'}`}>
