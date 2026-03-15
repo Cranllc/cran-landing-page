@@ -10,9 +10,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
-      from: "onboarding@resend.dev", // The verified domain or default from Resend
+      from: "Cran <no-reply@getcran.ai>", // Must use verified domain (matches waitlist)
       async sendVerificationRequest({ identifier, url, provider }) {
         try {
+          if (!provider.apiKey) {
+            console.error("RESEND_API_KEY is not set")
+            throw new Error("Email provider not configured")
+          }
           const res = await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: {
