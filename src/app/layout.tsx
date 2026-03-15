@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import dynamic from "next/dynamic";
 import { Outfit } from "next/font/google";
 import { SITE_URL } from "@/lib/site-config";
-import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
+
+const CookieConsent = dynamic(() => import("@/components/CookieConsent"), { ssr: false });
 
 export const viewport: Viewport = {
   width: "device-width",

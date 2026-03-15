@@ -49,9 +49,15 @@ function grantConsent() {
   });
 }
 
+function getInitialShowBanner() {
+  if (typeof window === "undefined") return true;
+  const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
+  return stored !== "accepted" && stored !== "denied";
+}
+
 export default function CookieConsent() {
   const [status, setStatus] = useState<ConsentStatus>(null);
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(getInitialShowBanner);
 
   useEffect(() => {
     // GA loads on every page with Consent Mode default denied
@@ -61,10 +67,10 @@ export default function CookieConsent() {
     if (stored === "accepted") {
       setStatus("accepted");
       grantConsent();
+      setShowBanner(false);
     } else if (stored === "denied") {
       setStatus("denied");
-    } else {
-      setShowBanner(true);
+      setShowBanner(false);
     }
   }, []);
 
