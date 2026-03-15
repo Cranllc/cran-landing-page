@@ -1,7 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
-import Script from "next/script";
+import { SITE_URL } from "@/lib/site-config";
+import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0A0A0A",
+};
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -26,12 +33,12 @@ export const metadata: Metadata = {
     "foster management",
   ],
   authors: [{ name: "Cran, LLC" }],
-  metadataBase: new URL("https://cran.ai"),
+  metadataBase: new URL(SITE_URL),
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://cran.ai",
+    url: SITE_URL,
     siteName: "Cran",
     title: "Cran | AI-Powered Shelter Management",
     description: "One platform for everything — intake, medical, kennels, adoptions, reporting. Built for shelters.",
@@ -56,7 +63,7 @@ const softwareJsonLd = {
   name: "Cran",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  url: "https://cran.ai",
+  url: `${SITE_URL}`,
   description: "AI-powered shelter management with camera intake, breed detection, medical records, kennel management, task automation, foster management, and SPDA export.",
   featureList: [
     "AI camera intake with breed detection",
@@ -73,10 +80,18 @@ const softwareJsonLd = {
     "SPDA export & automated reports",
     "Petfinder & Adopt-a-Pet sync",
     "Public adopter portal",
-    "Two-way SMS",
     "Inventory tracking with AI predictions",
     "Progressive Web App (offline capable)",
   ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Cran",
+  url: SITE_URL,
+  description: "AI-powered shelter management platform for animal shelters and rescues.",
+  publisher: { "@type": "Organization", name: "Cran, LLC" },
 };
 
 const faqJsonLd = {
@@ -96,21 +111,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <meta name="theme-color" content="#0A0A0A" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       </head>
       <body className={`${outfit.variable} antialiased`}>
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-FD6JVP8ZV5" strategy="afterInteractive" />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-FD6JVP8ZV5');
-          `}
-        </Script>
         {children}
+        <CookieConsent />
       </body>
     </html>
   );

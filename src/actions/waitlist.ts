@@ -28,9 +28,8 @@ export async function joinWaitlist(email: string) {
     })
     return { success: true }
   } catch (error: any) {
-    // P2002 is the Prisma error code for unique constraint violation
     if (error.code === 'P2002') {
-      return { success: true } // If they are already on the waitlist, pretend it succeeded.
+      return { success: true }
     }
     console.error("Waitlist error:", error)
     return { error: "Something went wrong. Please try again later." }
@@ -51,20 +50,20 @@ export async function sendWaitlistBlast(subject: string, message: string) {
     
     // Draft the email batch payload
     const batchList = emails.map((email: string) => ({
-      from: "Cran Updates <tyler@cran-us.com>",
+      from: "Cran Updates <no-reply@getcran.ai>",
       to: [email],
-      replyTo: "tyler@cran-us.com",
+      replyTo: "no-reply@getcran.ai",
       subject: subject,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 32px 24px; color: #1a1a1a; max-width: 600px; margin: 0 auto; line-height: 1.6; background-color: #FAFAF8; border-radius: 12px; border: 1px solid #E5E5E0;">
           <div style="margin-bottom: 32px;">
-            <strong style="font-size: 20px; letter-spacing: -0.5px;">Cran Animal Shelter Software</strong>
+            <strong style="font-size: 20px; letter-spacing: -0.5px;">Cran Animal AI Shelter Software</strong>
           </div>
           <div style="font-size: 16px;">
             ${message.replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>')}
           </div>
           <div style="margin-top: 48px; border-top: 1px solid #E5E5E0; padding-top: 24px; font-size: 13px; color: #8B939C;">
-            You are receiving this update because you joined the Waitlist for Cran.ai.
+            You are receiving this update because you joined the Waitlist for Cran LLC.
           </div>
         </div>
       `

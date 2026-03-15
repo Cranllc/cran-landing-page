@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
+import { SITE_URL } from '@/lib/site-config';
+import { extractFirstImageUrl } from '@/lib/blog';
+import ShareArticle from '@/components/ShareArticle';
 
 import type { Metadata, ResolvingMetadata } from 'next';
 
@@ -38,8 +41,8 @@ export async function generateMetadata(
     openGraph: {
       title: post.title,
       description: excerpt,
-      url: `https://cran.us.com/blog/${post.slug}`,
-      siteName: 'Cran Animal Shelter Software',
+      url: `${SITE_URL}/blog/${post.slug}`,
+      siteName: 'Cran',
       type: 'article',
       publishedTime: post.createdAt.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
@@ -51,7 +54,7 @@ export async function generateMetadata(
       description: excerpt,
     },
     alternates: {
-      canonical: `https://cran.us.com/blog/${post.slug}`,
+      canonical: `${SITE_URL}/blog/${post.slug}`,
     }
   }
 }
@@ -69,6 +72,8 @@ export default async function BlogPost({ params }: Props) {
 
   const dateString = new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+  const heroImageUrl = extractFirstImageUrl(post.content);
+  const hasHeroImage = heroImageUrl && heroImageUrl.startsWith("http");
 
   // 2026 SEO: JSON-LD Structured Data for AI overviews and rich search results
   const jsonLd = {
@@ -116,6 +121,10 @@ export default async function BlogPost({ params }: Props) {
             <p className="text-[#26251E]/70 font-medium mb-1">{dateString}</p>
             <p className="text-[#26251E]/40">by {authorName}</p>
           </div>
+
+          <div className="hidden lg:block mt-8 pt-8 border-t border-[#26251E]/10">
+            <ShareArticle url={`${SITE_URL}/blog/${post.slug}`} title={post.title} stacked />
+          </div>
         </aside>
 
         {/* Main Reading Column */}
@@ -149,15 +158,37 @@ export default async function BlogPost({ params }: Props) {
               </div>
             )}
             
-            {/* Minimalist Hero Graphic */}
-            <div className="w-full aspect-[2/1] bg-[#8B939C] rounded-md overflow-hidden relative mb-12 flex items-center justify-center">
-              {/* Abstract wireframe loops to mimic Cursor's hero */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                <div className="w-[80%] h-[60%] border-t border-b border-white rounded-[100%] absolute mix-blend-overlay"></div>
-                <div className="w-[70%] h-[70%] border-t border-b border-white rounded-[100%] absolute mix-blend-overlay rotate-[15deg]"></div>
-                <div className="w-[70%] h-[70%] border-t border-b border-white rounded-[100%] absolute mix-blend-overlay -rotate-[15deg]"></div>
-                <div className="w-[40%] h-[80%] border-l border-r border-white rounded-[100%] absolute mix-blend-overlay"></div>
-              </div>
+            {/* Hero image or branded placeholder (matches landing page preview) */}
+            <div className="w-full aspect-[2/1] rounded-md overflow-hidden relative mb-12 flex items-center justify-center">
+              {hasHeroImage ? (
+                <img
+                  src={heroImageUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className="absolute inset-0 flex items-center justify-center overflow-hidden"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse 120% 80% at 10% 90%, rgba(214, 68, 54, 0.2) 0%, transparent 55%),
+                      radial-gradient(ellipse 100% 100% at 90% 10%, rgba(214, 68, 54, 0.14) 0%, transparent 50%),
+                      radial-gradient(ellipse 70% 90% at 70% 65%, rgba(208, 196, 184, 0.5) 0%, transparent 55%),
+                      radial-gradient(ellipse 90% 70% at 25% 30%, rgba(250, 250, 248, 0.95) 0%, transparent 50%),
+                      linear-gradient(155deg, #F5EDE8 0%, #FAFAF8 40%, #EFE8E3 75%, #EDE6E1 100%)
+                    `
+                  }}
+                >
+                  <div className="absolute top-[15%] right-[20%] w-20 h-20 rounded-full bg-cran/10 blur-xl" />
+                  <div className="absolute bottom-[25%] left-[15%] w-24 h-24 rounded-full bg-[#D0C4B8]/40 blur-2xl" />
+                  <div className="absolute top-[50%] left-[45%] w-16 h-16 rounded-full bg-cran/8 blur-lg" />
+                  <img
+                    src="/cran-logo.png"
+                    alt=""
+                    className="w-14 h-14 object-contain opacity-30 relative z-10 drop-shadow-sm"
+                  />
+                </div>
+              )}
             </div>
           </header>
 
@@ -181,6 +212,16 @@ export default async function BlogPost({ params }: Props) {
           </div>
 
           <hr className="my-16 border-[#26251E]/10" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <ShareArticle url={`${SITE_URL}/blog/${post.slug}`} title={post.title} />
+            <Link
+              href="/blog"
+              className="text-sm font-semibold text-[#26251E]/70 hover:text-cran transition-colors flex items-center gap-1.5"
+            >
+              <span aria-hidden="true" className="rotate-[225deg] inline-block">&uarr;</span> Back to blog
+            </Link>
+          </div>
 
         </div>
       </div>

@@ -67,6 +67,7 @@ export async function updatePost(id: string, data: { title: string; slug: string
   revalidatePath("/admin")
   revalidatePath("/blog")
   revalidatePath(`/blog/${data.slug}`)
+  revalidatePath("/")
 }
 
 export async function deletePost(id: string) {

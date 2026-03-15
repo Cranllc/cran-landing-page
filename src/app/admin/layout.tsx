@@ -7,7 +7,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth()
 
   const email = session?.user?.email || ""
-  if (!email.endsWith("@cran.ai") && !email.endsWith("@cran-us.com")) {
+  if (!email.endsWith("@getcran.ai") && !email.endsWith("@cran-us.com")) {
     redirect("/auth/signin?error=AccessDenied")
   }
 
@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <div className="w-7 h-7 bg-cran rounded-lg shadow-sm flex items-center justify-center group-hover:bg-[#B83A2E] transition-colors">
               <div className="w-2.5 h-2.5 bg-white rounded-sm"></div>
             </div>
-            <span className="font-bold text-lg tracking-tight">cran CMS</span>
+            <span className="font-bold text-lg tracking-tight">Cran Blog Admin</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

@@ -1,9 +1,18 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { SITE_URL } from '@/lib/site-config';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Blog & Research | Cran',
-  description: 'Research, engineering, and updates from the Cran team.',
+  description: 'Stories, insights, and updates from the Cran team.',
+  alternates: { canonical: `${SITE_URL}/blog` },
+  openGraph: {
+    title: 'Blog | Cran',
+    description: 'Stories, insights, and updates from the Cran team.',
+    url: `${SITE_URL}/blog`,
+    type: 'website',
+  },
 };
 
 export default async function BlogIndex() {
@@ -21,7 +30,7 @@ export default async function BlogIndex() {
         {/* Header Section */}
         <div className="mb-24 lg:ml-48">
           <h1 className="text-4xl font-bold text-[#26251E] tracking-tight mb-4">Blog</h1>
-          <p className="text-[#26251E]/60 text-lg">Research, engineering, and updates from the Cran team.</p>
+          <p className="text-[#26251E]/60 text-lg">Stories, insights, and updates from the Cran team.</p>
         </div>
 
         {/* Post List */}
