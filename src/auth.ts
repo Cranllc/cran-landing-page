@@ -1,7 +1,10 @@
 import NextAuth from "next-auth"
 import Resend from "next-auth/providers/resend"
+import { Resend as ResendSDK } from "resend"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
+
+const resend = new ResendSDK(process.env.RESEND_API_KEY)
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: true,
@@ -10,37 +13,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
-      from: "Cran <no-reply@getcran.ai>", // Must use verified domain (matches waitlist)
-      async sendVerificationRequest({ identifier, url, provider }) {
-        try {
-          if (!provider.apiKey) {
-            console.error("RESEND_API_KEY is not set")
-            throw new Error("Email provider not configured")
-          }
-          const res = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${provider.apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              from: provider.from,
-              to: identifier,
-              subject: "Sign in to Cran CMS",
-              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2>Welcome back to Cran</h2>
-                <p>Click the secure link below to sign in to your CMS dashboard.</p>
-                <a href="${url}" style="background-color: #D64436; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 16px; font-weight: bold;">Sign In Securely</a>
-                <p style="color: #666; margin-top: 24px; font-size: 14px;">If you did not request this email, you can safely ignore it.</p>
-              </div>`,
-            }),
-          })
-          if (!res.ok) {
-            throw new Error("Resend error: " + JSON.stringify(await res.json()))
-          }
-        } catch (error) {
-          console.error("Failed to send verification email:", error)
-          throw new Error("Failed to send verification email.")
+      from: process.env.AUTH_FROM_EMAIL || "Cran <no-reply@cran-us.com>",
+      async sendVerificationRequest({ identifier, url }) {
+        if (!process.env.RESEND_API_KEY) {
+          console.error("[Auth] RESEND_API_KEY is not set")
+          throw new Error("Email provider not configured")
+        }
+        const from = process.env.AUTH_FROM_EMAIL || "Cran <no-reply@cran-us.com>"
+        const { error } = await resend.emails.send({
+          from,
+          to: identifier,
+          subject: "Sign in to Cran CMS",
+          html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2>Welcome back to Cran</h2>
+            <p>Click the secure link below to sign in to your CMS dashboard.</p>
+            <a href="${url}" style="background-color: #D64436; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 16px; font-weight: bold;">Sign In Securely</a>
+            <p style="color: #666; margin-top: 24px; font-size: 14px;">If you did not request this email, you can safely ignore it.</p>
+          </div>`,
+        })
+        if (error) {
+          console.error("[Auth] Resend error:", error)
+          throw new Error("Resend error: " + JSON.stringify(error))
         }
       },
     }),
