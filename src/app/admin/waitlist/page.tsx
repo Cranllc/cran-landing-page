@@ -11,7 +11,7 @@ export default async function WaitlistPage() {
   const session = await auth()
   const email = session?.user?.email || ""
   
-  if (!email.endsWith("@cran.ai") && !email.endsWith("@cran-us.com")) {
+  if (!email.endsWith("@getcran.ai") && !email.endsWith("@cran-us.com")) {
     redirect("/auth/signin?error=AccessDenied")
   }
 

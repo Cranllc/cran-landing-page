@@ -10,7 +10,7 @@ async function verifyAdmin() {
   const session = await auth()
   const user = session?.user
   
-  if (!user || !user.email || (!user.email.endsWith("@cran.ai") && !user.email.endsWith("@cran-us.com"))) {
+  if (!user || !user.email || (!user.email.endsWith("@getcran.ai") && !user.email.endsWith("@cran-us.com"))) {
     throw new Error("Unauthorized")
   }
   

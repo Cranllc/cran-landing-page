@@ -51,7 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false
-      return user.email.endsWith("@cran.ai") || user.email.endsWith("@cran-us.com")
+      return user.email.endsWith("@getcran.ai") || user.email.endsWith("@cran-us.com")
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
