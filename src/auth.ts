@@ -4,8 +4,6 @@ import { Resend as ResendSDK } from "resend"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 
-const resend = new ResendSDK(process.env.RESEND_API_KEY)
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: true,
   secret: process.env.AUTH_SECRET,
@@ -15,11 +13,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       apiKey: process.env.RESEND_API_KEY,
       from: process.env.AUTH_FROM_EMAIL || "Cran <no-reply@cran-us.com>",
       async sendVerificationRequest({ identifier, url }) {
-        if (!process.env.RESEND_API_KEY) {
+        const apiKey = process.env.RESEND_API_KEY
+        if (!apiKey) {
           console.error("[Auth] RESEND_API_KEY is not set")
           throw new Error("Email provider not configured")
         }
         const from = process.env.AUTH_FROM_EMAIL || "Cran <no-reply@cran-us.com>"
+        const resend = new ResendSDK(apiKey)
         const { error } = await resend.emails.send({
           from,
           to: identifier,

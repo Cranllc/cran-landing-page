@@ -8,12 +8,14 @@ import { ArrowRight, Lock } from "lucide-react"
 export default function SignIn() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errorDetail, setErrorDetail] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
 
     setStatus("loading")
+    setErrorDetail(null)
 
     try {
       const res = await signIn("resend", { 
@@ -23,6 +25,7 @@ export default function SignIn() {
 
       if (res?.error) {
         setStatus("error")
+        setErrorDetail(typeof res.error === "string" ? res.error : (res as { error?: string })?.error ?? null)
       } else {
         setStatus("success")
         // NOTE: For Magic Links, NextAuth doesn't automatically log you in right here. 
@@ -32,6 +35,7 @@ export default function SignIn() {
     } catch (err) {
       console.error(err)
       setStatus("error")
+      setErrorDetail(err instanceof Error ? err.message : "Unknown error")
     }
   }
 
@@ -88,8 +92,21 @@ export default function SignIn() {
               </div>
 
               {status === "error" && (
-                <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">
-                  There was a problem sending the email. Please try again.
+                <div className="space-y-2">
+                  <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">
+                    There was a problem sending the email. Please try again.
+                    {errorDetail && (
+                      <p className="mt-2 text-xs font-mono text-red-600/90 break-all">{errorDetail}</p>
+                    )}
+                  </div>
+                  <a
+                    href={`/api/debug-resend?to=${encodeURIComponent(email)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-xs text-charcoal/60 hover:text-cran hover:underline"
+                  >
+                    Open diagnostic (shows Resend error) →
+                  </a>
                 </div>
               )}
 
