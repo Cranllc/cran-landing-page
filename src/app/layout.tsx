@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import dynamic from "next/dynamic";
 import { Outfit } from "next/font/google";
 import { SITE_URL } from "@/lib/site-config";
+import CookieConsentClient from "@/components/CookieConsentClient";
 import "./globals.css";
-
-const CookieConsent = dynamic(() => import("@/components/CookieConsent"), { ssr: false });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -119,7 +117,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className={`${outfit.variable} antialiased`}>
         {children}
-        <CookieConsent />
+        <CookieConsentClient />
       </body>
     </html>
   );
