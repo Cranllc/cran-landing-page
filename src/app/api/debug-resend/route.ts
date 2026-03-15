@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-/** Test Resend delivery. In dev: sends test email & returns any error. In prod: runs locally for diagnosis. */
+/** Test Resend delivery. Sends test email & returns any error. Only allows @getcran.ai / @cran-us.com to prevent abuse. */
 export async function GET(req: Request) {
-  const isDev = process.env.NODE_ENV === "development"
-  if (!isDev) {
-    return NextResponse.json({
-      error: "Run locally (npm run dev) and open this URL to see the Resend error.",
-      hint: "The diagnostic only works in development.",
-    }, { status: 200 })
-  }
   const { searchParams } = new URL(req.url)
-  const to = searchParams.get("to") || "tyler@getcran.ai"
+  const to = searchParams.get("to") || "tyler@cran-us.com"
+  if (!to.endsWith("@getcran.ai") && !to.endsWith("@cran-us.com")) {
+    return NextResponse.json({ error: "Only @getcran.ai or @cran-us.com addresses allowed." }, { status: 403 })
+  }
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
     return NextResponse.json({ error: "RESEND_API_KEY is not set" }, { status: 500 })
