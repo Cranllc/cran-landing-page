@@ -31,9 +31,13 @@ export default function GoogleAnalytics() {
           const gtag = (window as any).gtag;
           const id = (window as any).__cran_ga_id__;
           const key = (window as any).__cran_consent_key__;
+          const debug = typeof window !== "undefined" && window.location.search.includes("debug_ga=1");
           if (!gtag || !id) return;
           gtag("js", new Date());
-          if (typeof localStorage !== "undefined" && localStorage.getItem(key) === "accepted") {
+          const hasConsent = typeof localStorage !== "undefined" && localStorage.getItem(key) === "accepted";
+          if (debug) console.log("[GA Debug] Script onLoad: hasConsent =", hasConsent);
+          if (hasConsent) {
+            if (debug) console.log("[GA Debug] Script onLoad: granting consent + sending page_view");
             gtag("consent", "update", {
               analytics_storage: "granted",
               ad_storage: "granted",
@@ -42,6 +46,7 @@ export default function GoogleAnalytics() {
             });
             gtag("config", id, { send_page_view: true });
           } else {
+            if (debug) console.log("[GA Debug] Script onLoad: no consent yet, config without page_view");
             gtag("config", id);
           }
         }}
