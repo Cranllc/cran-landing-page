@@ -35,18 +35,35 @@ function initGAWithConsent() {
 
   script.onload = () => {
     gtag("js", new Date());
-    gtag("config", GA_ID);
+    if (localStorage.getItem(COOKIE_CONSENT_KEY) === "accepted") {
+      grantConsent();
+    } else {
+      gtag("config", GA_ID);
+    }
   };
 }
 
 function grantConsent() {
-  if (typeof window === "undefined" || !(window as any).gtag) return;
-  (window as any).gtag("consent", "update", {
-    analytics_storage: "granted",
-    ad_storage: "granted",
-    ad_user_data: "granted",
-    ad_personalization: "granted",
-  });
+  if (typeof window === "undefined") return;
+  const apply = () => {
+    if ((window as any).gtag) {
+      (window as any).gtag("consent", "update", {
+        analytics_storage: "granted",
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+      });
+      (window as any).gtag("config", GA_ID, { send_page_view: true });
+      return true;
+    }
+    return false;
+  };
+  if (!apply()) {
+    const id = setInterval(() => {
+      if (apply()) clearInterval(id);
+    }, 100);
+    setTimeout(() => clearInterval(id), 5000);
+  }
 }
 
 function getInitialShowBanner() {

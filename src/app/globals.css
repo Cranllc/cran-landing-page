@@ -23,7 +23,6 @@
 * { box-sizing: border-box; }
 
 html { 
-  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
@@ -212,14 +211,20 @@ details[open] .faq-plus { transform: rotate(45deg); }
   animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Glow pulse */
+/* Glow pulse - opacity only (transform hurts scroll perf) */
 @keyframes glowPulse {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
 }
 
 .glow-pulse {
   animation: glowPulse 6s ease-in-out infinite;
+}
+
+/* Pause hero animations when off-screen to improve scroll performance */
+.hero-section[data-animations-paused] .glow-pulse,
+.hero-section[data-animations-paused] .animate-pulse {
+  animation-play-state: paused;
 }
 
 /* Float */

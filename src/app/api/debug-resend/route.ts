@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
-/** Test Resend delivery. Sends test email & returns any error. Only allows @getcran.ai / @cran-us.com to prevent abuse. */
+/** Test Resend delivery. Dev only — prevents production abuse / extra Resend costs. */
 export async function GET(req: Request) {
+  if (process.env.NODE_ENV !== "development") {
+    return NextResponse.json({
+      error: "Diagnostic only available when running locally (npm run dev).",
+    }, { status: 403 })
+  }
   const { searchParams } = new URL(req.url)
   const to = searchParams.get("to") || "tyler@cran-us.com"
   if (!to.endsWith("@getcran.ai") && !to.endsWith("@cran-us.com")) {

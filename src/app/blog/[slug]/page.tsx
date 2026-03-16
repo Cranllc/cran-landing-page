@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import { getPostBySlug } from '@/lib/blog-cache';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/site-config';
 import { extractFirstImageUrl } from '@/lib/blog';
-import ShareArticle from '@/components/ShareArticle';
+import ShareArticleClient from '@/components/ShareArticleClient';
+import Image from 'next/image';
 
 import type { Metadata, ResolvingMetadata } from 'next';
 
@@ -18,10 +19,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedParams = await params;
-  const post = await prisma.post.findUnique({
-    where: { slug: resolvedParams.slug },
-    include: { author: true }
-  });
+  const post = await getPostBySlug(resolvedParams.slug);
 
   if (!post) {
     return {
@@ -61,10 +59,7 @@ export async function generateMetadata(
 
 export default async function BlogPost({ params }: Props) {
   const resolvedParams = await params;
-  const post: any = await prisma.post.findUnique({
-    where: { slug: resolvedParams.slug },
-    include: { author: true }
-  });
+  const post: any = await getPostBySlug(resolvedParams.slug);
 
   if (!post || !post.published) {
     notFound();
@@ -123,7 +118,7 @@ export default async function BlogPost({ params }: Props) {
           </div>
 
           <div className="hidden lg:block mt-8 pt-8 border-t border-[#26251E]/10">
-            <ShareArticle url={`${SITE_URL}/blog/${post.slug}`} title={post.title} stacked />
+            <ShareArticleClient url={`${SITE_URL}/blog/${post.slug}`} title={post.title} stacked />
           </div>
         </aside>
 
@@ -165,6 +160,8 @@ export default async function BlogPost({ params }: Props) {
                   src={heroImageUrl}
                   alt=""
                   className="w-full h-full object-cover"
+                  fetchPriority="high"
+                  decoding="async"
                 />
               ) : (
                 <div
@@ -182,9 +179,11 @@ export default async function BlogPost({ params }: Props) {
                   <div className="absolute top-[15%] right-[20%] w-20 h-20 rounded-full bg-cran/10 blur-xl" />
                   <div className="absolute bottom-[25%] left-[15%] w-24 h-24 rounded-full bg-[#D0C4B8]/40 blur-2xl" />
                   <div className="absolute top-[50%] left-[45%] w-16 h-16 rounded-full bg-cran/8 blur-lg" />
-                  <img
+                  <Image
                     src="/cran-logo.png"
                     alt=""
+                    width={56}
+                    height={56}
                     className="w-14 h-14 object-contain opacity-30 relative z-10 drop-shadow-sm"
                   />
                 </div>
@@ -214,7 +213,7 @@ export default async function BlogPost({ params }: Props) {
           <hr className="my-16 border-[#26251E]/10" />
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <ShareArticle url={`${SITE_URL}/blog/${post.slug}`} title={post.title} />
+            <ShareArticleClient url={`${SITE_URL}/blog/${post.slug}`} title={post.title} />
             <Link
               href="/blog"
               className="text-sm font-semibold text-[#26251E]/70 hover:text-cran transition-colors flex items-center gap-1.5"

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { SHOW_COOKIE_PREFERENCES_EVENT } from "./CookieConsent";
 
 export default function SiteFooter() {
@@ -11,41 +12,33 @@ export default function SiteFooter() {
           
           <div className="text-center md:text-left col-span-2 md:col-span-1 md:min-w-[180px]">
             <Link href="/" className="inline-flex items-center gap-2 mb-4 md:justify-start justify-center">
-              <img 
+              <Image 
                 src="/cran-logo.png" 
                 alt="Cran Logo" 
-                width={512}
-                height={512}
-                style={{ height: '40px', width: 'auto' }}
+                width={40}
+                height={40}
                 className="h-10 w-auto brightness-0 opacity-80"
+                loading="lazy"
               />
               <span className="text-[15px] font-bold text-charcoal" style={{ letterSpacing: '0.25em', marginRight: '-0.25em' }}>CRAN</span>
             </Link>
-            <p className="text-[13px] text-charcoal/50 leading-relaxed max-w-[200px] mx-auto md:mx-0">
+            <p className="text-[13px] text-charcoal/65 leading-relaxed max-w-[200px] mx-auto md:mx-0">
               The operating system for modern animal shelters.
             </p>
           </div>
           
           <div className="text-center md:text-left md:min-w-[100px]">
-            <h4 className="text-[13px] font-semibold text-charcoal mb-3">Product</h4>
-            <ul className="space-y-2 text-[13px] text-charcoal/50">
-              <li><Link href="/#solutions" className="hover:text-charcoal transition-colors">Platform</Link></li>
-              <li><Link href="#" className="hover:text-charcoal transition-colors">Security</Link></li>
-            </ul>
-          </div>
-          
-          <div className="text-center md:text-left md:min-w-[100px]">
             <h4 className="text-[13px] font-semibold text-charcoal mb-3">Resources</h4>
-            <ul className="space-y-2 text-[13px] text-charcoal/50">
+            <ul className="space-y-2 text-[13px] text-charcoal/65">
               <li><Link href="/blog" className="hover:text-charcoal transition-colors">Blog</Link></li>
-              <li><Link href="#" className="hover:text-charcoal transition-colors">Help Center</Link></li>
+              <li><Link href="/support" className="hover:text-charcoal transition-colors">Support</Link></li>
             </ul>
           </div>
           
           <div className="text-center md:text-left md:min-w-[100px]">
             <h4 className="text-[13px] font-semibold text-charcoal mb-3">Company</h4>
-            <ul className="space-y-2 text-[13px] text-charcoal/50">
-              <li><Link href="mailto:support@cran.ai" className="hover:text-charcoal transition-colors">Email</Link></li>
+            <ul className="space-y-2 text-[13px] text-charcoal/65">
+              <li><Link href="/support" className="hover:text-charcoal transition-colors">Contact</Link></li>
               <li><Link href="https://discord.gg/5zrEvfpCSw" className="hover:text-charcoal transition-colors">Discord</Link></li>
             </ul>
           </div>
@@ -59,8 +52,8 @@ export default function SiteFooter() {
         </div>
         
         <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left border-t border-charcoal/[0.06]">
-          <p className="text-[12px] text-charcoal/40">&copy; {new Date().getFullYear()} Cran, LLC. All rights reserved.</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-[12px] text-charcoal/40">
+          <p className="text-[12px] text-charcoal/60">&copy; {new Date().getFullYear()} Cran, LLC. All rights reserved.</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-[12px] text-charcoal/60">
             <Link href="/accessibility" className="hover:text-charcoal transition-colors">Accessibility</Link>
             <Link href="/legal/privacy-policy" className="hover:text-charcoal transition-colors">Privacy Policy</Link>
             <Link href="/legal/terms-of-service" className="hover:text-charcoal transition-colors">Terms of Service</Link>
