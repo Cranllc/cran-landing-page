@@ -53,7 +53,7 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/#waitlist" className={`inline-flex h-8 items-center justify-center rounded-md bg-cran px-3.5 text-[13px] font-medium text-white transition-all hover:bg-cran/90 focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 ${isScrolled ? 'shadow-sm focus:ring-offset-white' : 'shadow-lg shadow-cran/20 focus:ring-offset-[#0F0F10]'}`}>
+            <Link href="/#waitlist" className={`inline-flex h-8 items-center justify-center rounded-md bg-cran-hover px-3.5 text-[13px] font-medium text-white transition-all hover:bg-[#9A3228] focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 ${isScrolled ? 'shadow-sm focus:ring-offset-white' : 'shadow-lg shadow-cran/20 focus:ring-offset-[#0F0F10]'}`}>
               Join Waitlist
             </Link>
           </div>
@@ -79,7 +79,7 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
             <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className={`text-[15px] font-medium py-2.5 px-3 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-cran/50 focus:ring-inset ${isScrolled ? 'text-charcoal hover:bg-charcoal/5' : 'text-white hover:bg-white/[0.04]'}`}>Blog</Link>
             <div className={`my-2 h-px w-full ${isScrolled ? 'bg-charcoal/5' : 'bg-white/[0.06]'}`}></div>
             <div className="pt-2 pb-1">
-              <Link href="/#waitlist" onClick={() => setMobileMenuOpen(false)} className={`block w-full inline-flex h-10 items-center justify-center rounded-lg bg-cran text-[14px] font-medium text-white focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-inset ${isScrolled ? 'shadow-sm focus:ring-offset-white' : 'focus:ring-offset-[#0F0F10]'}`}>Join Waitlist</Link>
+              <Link href="/#waitlist" onClick={() => setMobileMenuOpen(false)} className={`block w-full inline-flex h-10 items-center justify-center rounded-lg bg-cran-hover text-[14px] font-medium text-white focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-inset ${isScrolled ? 'shadow-sm focus:ring-offset-white' : 'focus:ring-offset-[#0F0F10]'}`}>Join Waitlist</Link>
             </div>
           </div>
         </div>

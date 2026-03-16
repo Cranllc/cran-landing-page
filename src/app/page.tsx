@@ -7,6 +7,11 @@ export default async function Home() {
   const serializedPosts = posts.map((p) => ({
     ...p,
     createdAt: p.createdAt.toISOString(),
+    dateString: p.createdAt.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }),
     imageUrl: p.imageUrl,
   }));
 

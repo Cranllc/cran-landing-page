@@ -68,7 +68,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
             </p>
 
             <div className="mt-10 flex flex-col items-stretch justify-center gap-2 sm:flex-row pb-12 w-full max-w-xs sm:max-w-none fade-up-d3">
-              <a href="#waitlist" className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran px-5 text-sm font-semibold text-white transition-all hover:bg-cran/90 shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]">
+              <a href="#waitlist" className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]">
                 Join Waitlist
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
               </a>

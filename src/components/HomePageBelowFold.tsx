@@ -8,7 +8,7 @@ import { joinWaitlist } from "@/actions/waitlist";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
 
-type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string };
+type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
 const FAQ_ITEMS = [
   { q: "What is Cran?", a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork." },
@@ -43,16 +43,16 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       <section id="learn-more" className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
-            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/60 mb-6">
+            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-6">
               Piloting with forward-thinking shelters
             </h2>
             <div className="text-3xl md:text-4xl font-black text-charcoal tracking-tighter opacity-80">Safe Harbor Animal Sanctuary</div>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 pt-8 border-t border-charcoal/10">
-              <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/50 hover:text-charcoal/70 transition-colors">▲ Vercel</div>
-              <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/50 hover:text-charcoal/70 transition-colors">Stripe</div>
-              <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/50 hover:text-charcoal/70 transition-colors">AWS</div>
-              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/50 hover:text-charcoal/70 transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor" aria-hidden /> OpenAI</div>
+              <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors">▲ Vercel</div>
+              <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/75 hover:text-charcoal transition-colors">Stripe</div>
+              <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/75 hover:text-charcoal transition-colors">AWS</div>
+              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor" aria-hidden /> OpenAI</div>
           </div>
         </div>
       </section>
@@ -61,10 +61,10 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       <section className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
-            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/60 mb-4">
+            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
               Built for
             </h2>
-            <p className="text-xl text-charcoal/60 font-medium max-w-xl mx-auto">
+            <p className="text-xl text-charcoal/75 font-medium max-w-xl mx-auto">
               Everyone who keeps a shelter running.
             </p>
           </div>
@@ -76,8 +76,8 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               { label: "Medical & volunteers", desc: "Vaccinations, treatments, and notes where you need them." },
             ].map((item, i) => (
               <div key={i} className="text-center p-6 rounded-2xl border border-charcoal/5 bg-[#FAFAF8]/80">
-                <h4 className="text-lg font-bold text-charcoal mb-2">{item.label}</h4>
-                <p className="text-base text-charcoal/65 leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-bold text-charcoal mb-2">{item.label}</h3>
+                <p className="text-base text-charcoal/75 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -87,7 +87,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       {/* WHY WE&apos;RE BUILDING */}
       <section className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_250px]">
         <div className="mx-auto max-w-3xl px-6">
-          <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/60 mb-8 text-center">
+          <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-8 text-center">
             Why we&apos;re building
           </h2>
           <blockquote className="relative text-center pt-4 pb-8">
@@ -105,21 +105,17 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
         <section className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_500px]">
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-12">
-              <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/60 mb-4">
+              <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
                 Latest from the blog
               </h2>
-              <p className="text-xl text-charcoal/60 font-medium max-w-lg mx-auto">
+              <p className="text-xl text-charcoal/75 font-medium max-w-lg mx-auto">
                 Stories, insights, and updates from the Cran team.
               </p>
             </div>
             <div className="grid gap-8 md:grid-cols-3">
               {blogPosts.map((post) => {
                 const excerpt = post.content.replace(/[#*`_>]/g, "").substring(0, 120).trim() + "...";
-                const dateString = new Date(post.createdAt).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                });
+                const dateString = post.dateString ?? new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
                 const hasImage = post.imageUrl && post.imageUrl.startsWith("http");
                 return (
                   <Link
@@ -162,16 +158,16 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                       )}
                     </div>
                     <div className="flex flex-col p-5">
-                      <time className="text-[15px] font-semibold uppercase tracking-wider text-charcoal/60 mb-2">
+                      <time className="text-[15px] font-semibold uppercase tracking-wider text-charcoal/75 mb-2">
                         {dateString}
                       </time>
                       <h3 className="text-xl font-bold text-charcoal mb-2 group-hover:text-cran transition-colors leading-snug">
                         {post.title}
                       </h3>
-                      <p className="text-lg text-charcoal/65 leading-relaxed flex-1 line-clamp-2">
+                      <p className="text-lg text-charcoal/75 leading-relaxed flex-1 line-clamp-2">
                         {excerpt}
                       </p>
-                      <span className="mt-4 text-base font-semibold text-charcoal/60 group-hover:text-cran inline-flex items-center gap-1.5 transition-colors">
+                      <span className="mt-4 text-base font-semibold text-charcoal/75 group-hover:text-cran inline-flex items-center gap-1.5 transition-colors">
                         Read article
                         <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
                       </span>
@@ -183,7 +179,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             <div className="mt-10 text-center">
               <Link
                 href="/blog"
-                className="text-base font-semibold tracking-[0.08em] uppercase text-charcoal/65 hover:text-cran transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded"
+                className="text-base font-semibold tracking-[0.08em] uppercase text-charcoal/75 hover:text-cran transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded"
               >
                 View all posts
               </Link>
@@ -195,7 +191,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       {/* FAQ */}
       <section className="py-16 md:py-20 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]" id="faq">
         <div className="mx-auto max-w-2xl px-6">
-          <h2 className="text-lg font-semibold tracking-[0.15em] uppercase text-charcoal/60 mb-8 text-center">
+          <h2 className="text-lg font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-8 text-center">
             FAQ
           </h2>
           <div className="space-y-1">
@@ -212,10 +208,10 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                   id={`faq-question-${i}`}
                   className="w-full flex items-center justify-between gap-4 px-5 py-5 text-left hover:bg-charcoal/[0.02] transition-colors"
                 >
-                  <h4 className="text-xl font-bold text-charcoal">{item.q}</h4>
+                  <h3 className="text-xl font-bold text-charcoal">{item.q}</h3>
                   <ChevronDown
                     size={24}
-                    className={`text-charcoal/60 shrink-0 transition-transform duration-200 ${faqOpen === i ? "rotate-180" : ""}`}
+                    className={`text-charcoal/75 shrink-0 transition-transform duration-200 ${faqOpen === i ? "rotate-180" : ""}`}
                     aria-hidden
                   />
                 </button>
@@ -226,7 +222,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                   className={`grid transition-[grid-template-rows] duration-200 ease-out ${faqOpen === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
                 >
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-xl text-charcoal/70 leading-relaxed">{item.a}</p>
+                    <p className="px-5 pb-5 text-xl text-charcoal/75 leading-relaxed">{item.a}</p>
                   </div>
                 </div>
               </div>
@@ -238,14 +234,14 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       {/* WAITLIST */}
       <section className="py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]" id="waitlist">
         <div className="relative mx-auto max-w-2xl px-6 text-center z-10">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-cran/20 bg-white px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-cran mb-4 shadow-sm">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-cran/30 bg-white px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#9A3228] mb-4 shadow-sm">
             <Mail size={10} strokeWidth={1.5} aria-hidden /> Early Access
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
             Ready to upgrade?
           </h2>
-          <p className="text-lg md:text-xl text-charcoal/60 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
+          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
             We're building Cran. Join the waitlist for early access and for updates.
           </p>
 
@@ -272,7 +268,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               className={`w-full sm:w-auto h-11 rounded-lg px-6 text-[15px] font-bold text-white transition-all shadow-md shrink-0 disabled:opacity-90 disabled:cursor-not-allowed ${
                 status === "success"
                   ? "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20"
-                  : "bg-cran hover:bg-cran-hover shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5"
+                  : "bg-cran-hover hover:bg-[#9A3228] shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5"
               }`}
             >
               {status === "loading" ? "Joining..." : status === "success" ? "You're on the list!" : "Join Waitlist"}
@@ -285,7 +281,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             </div>
           )}
 
-          <p className="mt-6 text-base text-charcoal/60 font-medium">
+          <p className="mt-6 text-base text-charcoal/75 font-medium">
             Or email <a href="mailto:support@getcran.ai" className="text-charcoal/75 underline underline-offset-4 hover:text-charcoal transition-colors">support@getcran.ai</a>
           </p>
         </div>

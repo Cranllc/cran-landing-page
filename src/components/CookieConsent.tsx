@@ -90,7 +90,7 @@ export default function CookieConsent() {
               <h3 className="text-[13px] font-semibold text-charcoal mb-0.5">Cookie preferences</h3>
               <p className="text-[12px] text-charcoal/70 leading-relaxed font-sans">
                 We use cookies for analytics. See our{" "}
-                <Link href="/legal/privacy-policy" className="text-cran font-medium hover:underline">Privacy Policy</Link>.
+                <Link href="/legal/privacy-policy" className="text-[#9A3228] font-medium hover:underline">Privacy Policy</Link>.
               </p>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default function CookieConsent() {
             <button
               type="button"
               onClick={accept}
-              className="flex-1 rounded-lg bg-cran px-3 py-2 text-[12px] font-semibold text-white transition-all hover:bg-cran-hover shadow-md shadow-cran/20 font-sans focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-white"
+              className="flex-1 rounded-lg bg-cran-hover px-3 py-2 text-[12px] font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/20 font-sans focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-white"
             >
               Accept All
             </button>
