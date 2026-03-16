@@ -23,16 +23,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         const from = process.env.AUTH_FROM_EMAIL || "Cran <no-reply@cran-us.com>"
         const resend = new ResendSDK(apiKey)
-        const callbackUrl = new URL(url)
-        const params = new URLSearchParams(callbackUrl.search)
-        const cb = params.get("callbackUrl")
-        if (cb) {
-          try {
-            const cbUrl = new URL(cb)
-            params.set("callbackUrl", `${baseUrl}${cbUrl.pathname}${cbUrl.search}`)
-          } catch {}
-        }
-        const magicLink = `${baseUrl}${callbackUrl.pathname}?${params.toString()}`
+        const parsed = new URL(url)
+        const params = new URLSearchParams(parsed.search)
+        // Strip callbackUrl from link — nested URLs can trigger Chrome's phishing heuristics.
+        // Redirect callback below defaults to /admin for magic-link sign-ins.
+        params.delete("callbackUrl")
+        const magicLink = `${baseUrl}${parsed.pathname}?${params.toString()}`
         const { error } = await resend.emails.send({
           from,
           to: identifier,
