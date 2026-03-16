@@ -5,16 +5,11 @@ import { useState, useEffect } from "react";
 
 const CookieConsent = dynamic(() => import("@/components/CookieConsent"), { ssr: false });
 
-/** Load CookieConsent + GA soon so consent and tracking work reliably */
+/** Mount CookieConsent after hydration so GA (in head) is ready */
 export default function CookieConsentClient() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    const cb = () => setMounted(true);
-    if (typeof requestIdleCallback !== "undefined") {
-      requestIdleCallback(cb, { timeout: 300 });
-    } else {
-      setTimeout(cb, 100);
-    }
+    setMounted(true);
   }, []);
   return mounted ? <CookieConsent /> : null;
 }

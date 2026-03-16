@@ -6,7 +6,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
   return (
     <>
       <SiteHeader forceLightMode={true} />
-      <div className="min-h-screen bg-[#F7F7F4] pt-32 pb-24 font-sans selection:bg-cran selection:text-white">
+      <main id="main-content" className="min-h-screen bg-[#F7F7F4] pt-32 pb-24 font-sans selection:bg-cran selection:text-white">
         <div className="mx-auto max-w-3xl px-6 lg:px-12">
           <nav className="mb-8 text-sm text-[#26251E]/60">
             <Link href="/" className="hover:text-[#26251E] transition-colors">Home</Link>
@@ -15,7 +15,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
           </nav>
           {children}
         </div>
-      </div>
+      </main>
       <SiteFooter />
     </>
   );

@@ -30,16 +30,16 @@ export default function SiteFooter() {
           <div className="text-center md:text-left md:min-w-[100px]">
             <h4 className="text-[13px] font-semibold text-charcoal mb-3">Resources</h4>
             <ul className="space-y-2 text-[13px] text-charcoal/65">
-              <li><Link href="/blog" className="hover:text-charcoal transition-colors">Blog</Link></li>
-              <li><Link href="/support" className="hover:text-charcoal transition-colors">Support</Link></li>
+              <li><Link href="/blog" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Blog</Link></li>
+              <li><Link href="/support" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Support</Link></li>
             </ul>
           </div>
           
           <div className="text-center md:text-left md:min-w-[100px]">
             <h4 className="text-[13px] font-semibold text-charcoal mb-3">Company</h4>
             <ul className="space-y-2 text-[13px] text-charcoal/65">
-              <li><Link href="/support" className="hover:text-charcoal transition-colors">Contact</Link></li>
-              <li><Link href="https://discord.gg/5zrEvfpCSw" className="hover:text-charcoal transition-colors">Discord</Link></li>
+              <li><Link href="/support" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Contact</Link></li>
+              <li><Link href="https://discord.gg/5zrEvfpCSw" target="_blank" rel="noopener noreferrer" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Discord <span className="sr-only">(opens in new window)</span></Link></li>
             </ul>
           </div>
         </div>
@@ -54,16 +54,18 @@ export default function SiteFooter() {
         <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left border-t border-charcoal/[0.06]">
           <p className="text-[12px] text-charcoal/60">&copy; {new Date().getFullYear()} Cran, LLC. All rights reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-[12px] text-charcoal/60">
-            <Link href="/accessibility" className="hover:text-charcoal transition-colors">Accessibility</Link>
-            <Link href="/legal/privacy-policy" className="hover:text-charcoal transition-colors">Privacy Policy</Link>
-            <Link href="/legal/terms-of-service" className="hover:text-charcoal transition-colors">Terms of Service</Link>
+            <Link href="/accessibility" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Accessibility</Link>
+            <Link href="/legal/privacy-policy" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Privacy Policy</Link>
+            <Link href="/legal/terms-of-service" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Terms of Service</Link>
             <button
+              type="button"
               onClick={() => window.dispatchEvent(new CustomEvent(SHOW_COOKIE_PREFERENCES_EVENT))}
-              className="hover:text-charcoal transition-colors"
+              className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded"
+              aria-label="Open cookie preferences"
             >
               Manage Cookies
             </button>
-            <Link href="/sitemap.xml" className="hover:text-charcoal transition-colors">Sitemap</Link>
+            <Link href="/sitemap.xml" className="hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Sitemap</Link>
           </div>
         </div>
       </div>

@@ -8,18 +8,29 @@ export const metadata: Metadata = {
   title: "Accessibility | Cran",
   description: "Cran's commitment to digital accessibility and how we work to make our website and platform accessible to everyone.",
   alternates: { canonical: `${SITE_URL}/accessibility` },
+  openGraph: {
+    title: "Accessibility | Cran",
+    description: "Cran's commitment to digital accessibility and how we work to make our website and platform accessible to everyone.",
+    url: `${SITE_URL}/accessibility`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Accessibility | Cran",
+    description: "Cran's commitment to digital accessibility.",
+  },
 };
 
 export default function AccessibilityPage() {
   return (
     <>
       <SiteHeader forceLightMode={true} />
-      <main className="min-h-screen bg-[#F7F7F4] pt-32 pb-24 font-sans selection:bg-cran selection:text-white">
+      <main id="main-content" className="min-h-screen bg-[#F7F7F4] pt-32 pb-24 font-sans selection:bg-cran selection:text-white">
         <div className="mx-auto max-w-3xl px-6 lg:px-12">
-          <nav className="mb-8 text-sm text-[#26251E]/60">
-            <Link href="/" className="hover:text-[#26251E] transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <span className="text-[#26251E]/60">Accessibility</span>
+          <nav aria-label="Breadcrumb" className="mb-8 text-sm text-[#26251E]/60">
+            <Link href="/" className="hover:text-[#26251E] transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Home</Link>
+            <span className="mx-2" aria-hidden>/</span>
+            <span className="text-[#26251E]/60" aria-current="page">Accessibility</span>
           </nav>
 
           <article className="prose prose-lg max-w-none">

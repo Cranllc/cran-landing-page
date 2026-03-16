@@ -49,7 +49,7 @@ export default function ShareArticle({ url, title, className = "", stacked = fal
         title="Copy link"
         aria-label="Copy link"
       >
-        {copied ? <Check size={16} className="text-cran" /> : <Link2 size={16} />}
+        {copied ? <Check size={16} className="text-cran" aria-hidden /> : <Link2 size={16} aria-hidden />}
       </button>
       <a
         href={twitterUrl}
@@ -71,7 +71,7 @@ export default function ShareArticle({ url, title, className = "", stacked = fal
         title="Share on LinkedIn"
         aria-label="Share on LinkedIn"
       >
-        <Linkedin size={16} />
+        <Linkedin size={16} aria-hidden />
       </a>
       </div>
     </div>

@@ -11,9 +11,9 @@ import type { PostPreview } from "@/lib/blog";
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string };
 
 const FAQ_ITEMS = [
-  { q: "What is Cran?", a: "A shelter management platform — intake, medical, adoptions, all in one." },
+  { q: "What is Cran?", a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork." },
   { q: "Who is it for?", a: "Shelters and rescues of any size." },
-  { q: "How do I get started?", a: "Schedule a demo. We'll walk you through and get you set up." },
+  { q: "How do I get early access?", a: "Join the waitlist. We'll reach out when we're ready to onboard early partners." },
 ];
 
 export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: BlogPostForClient[] }) {
@@ -52,7 +52,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/50 hover:text-charcoal/70 transition-colors">▲ Vercel</div>
               <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/50 hover:text-charcoal/70 transition-colors">Stripe</div>
               <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/50 hover:text-charcoal/70 transition-colors">AWS</div>
-              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/50 hover:text-charcoal/70 transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor"/> OpenAI</div>
+              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/50 hover:text-charcoal/70 transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor" aria-hidden /> OpenAI</div>
           </div>
         </div>
       </section>
@@ -131,7 +131,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                       {hasImage ? (
                         <img
                           src={post.imageUrl!}
-                          alt=""
+                          alt={`Cover image for ${post.title}`}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                           loading="lazy"
                         />
@@ -173,7 +173,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                       </p>
                       <span className="mt-4 text-base font-semibold text-charcoal/60 group-hover:text-cran inline-flex items-center gap-1.5 transition-colors">
                         Read article
-                        <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" />
+                        <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
                       </span>
                     </div>
                   </Link>
@@ -183,7 +183,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             <div className="mt-10 text-center">
               <Link
                 href="/blog"
-                className="text-base font-semibold tracking-[0.08em] uppercase text-charcoal/65 hover:text-cran transition-colors"
+                className="text-base font-semibold tracking-[0.08em] uppercase text-charcoal/65 hover:text-cran transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded"
               >
                 View all posts
               </Link>
@@ -207,15 +207,22 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                 <button
                   type="button"
                   onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                  aria-expanded={faqOpen === i}
+                  aria-controls={`faq-answer-${i}`}
+                  id={`faq-question-${i}`}
                   className="w-full flex items-center justify-between gap-4 px-5 py-5 text-left hover:bg-charcoal/[0.02] transition-colors"
                 >
                   <h4 className="text-xl font-bold text-charcoal">{item.q}</h4>
                   <ChevronDown
                     size={24}
                     className={`text-charcoal/60 shrink-0 transition-transform duration-200 ${faqOpen === i ? "rotate-180" : ""}`}
+                    aria-hidden
                   />
                 </button>
                 <div
+                  id={`faq-answer-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${i}`}
                   className={`grid transition-[grid-template-rows] duration-200 ease-out ${faqOpen === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
                 >
                   <div className="overflow-hidden">
@@ -232,7 +239,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       <section className="py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]" id="waitlist">
         <div className="relative mx-auto max-w-2xl px-6 text-center z-10">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-cran/20 bg-white px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-cran mb-4 shadow-sm">
-            <Mail size={10} strokeWidth={1.5} /> Early Access
+            <Mail size={10} strokeWidth={1.5} aria-hidden /> Early Access
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
@@ -243,7 +250,11 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           </p>
 
           <form onSubmit={handleJoinWaitlist} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6">
+            <label htmlFor="waitlist-email" className="sr-only">
+              Email for early access waitlist
+            </label>
             <input
+              id="waitlist-email"
               type="email"
               value={email}
               onChange={(e) => {
@@ -252,6 +263,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               }}
               disabled={status === "loading" || status === "success"}
               placeholder="you@shelter.org"
+              autoComplete="email"
               className="w-full min-w-0 h-11 rounded-lg border border-charcoal/10 bg-white px-4 text-[15px] text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-cran/50 focus:ring-2 focus:ring-cran/20 shadow-sm transition-all disabled:opacity-50"
             />
             <button
@@ -268,7 +280,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           </form>
 
           {status === "error" && (
-            <div className="text-cran text-sm font-medium mb-6 max-w-md mx-auto text-center">
+            <div role="alert" className="text-cran text-sm font-medium mb-6 max-w-md mx-auto text-center">
               {errorMessage}
             </div>
           )}

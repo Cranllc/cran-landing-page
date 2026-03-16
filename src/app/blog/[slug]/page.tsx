@@ -31,6 +31,8 @@ export async function generateMetadata(
   // Extract a brief excerpt for the description
   const excerpt = post.content.replace(/[#*`_>]/g, '').substring(0, 160) + '...';
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+  const heroImageUrl = extractFirstImageUrl(post.content);
+  const hasHeroImage = heroImageUrl && heroImageUrl.startsWith("http");
 
   return {
     title: `${post.title} | Cran Blog`,
@@ -45,11 +47,15 @@ export async function generateMetadata(
       publishedTime: post.createdAt.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: [authorName],
+      ...(hasHeroImage && {
+        images: [{ url: heroImageUrl, alt: post.title, width: 1200, height: 630 }],
+      }),
     },
     twitter: {
-      card: 'summary_large_image',
+      card: hasHeroImage ? 'summary_large_image' : 'summary',
       title: post.title,
       description: excerpt,
+      ...(hasHeroImage && { images: [heroImageUrl] }),
     },
     alternates: {
       canonical: `${SITE_URL}/blog/${post.slug}`,
@@ -84,7 +90,7 @@ export default async function BlogPost({ params }: Props) {
   }
 
   return (
-    <article className="min-h-screen bg-[#F7F7F4] pt-32 pb-32 font-sans selection:bg-cran selection:text-white">
+    <article id="main-content" className="min-h-screen bg-[#F7F7F4] pt-32 pb-32 font-sans selection:bg-cran selection:text-white">
       {/* Inject JSON-LD structured data to the DOM safely */}
       <script
         type="application/ld+json"
@@ -158,7 +164,7 @@ export default async function BlogPost({ params }: Props) {
               {hasHeroImage ? (
                 <img
                   src={heroImageUrl}
-                  alt=""
+                  alt={`Hero image for ${post.title}`}
                   className="w-full h-full object-cover"
                   fetchPriority="high"
                   decoding="async"

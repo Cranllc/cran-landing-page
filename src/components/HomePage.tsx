@@ -33,7 +33,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
 
       <SiteHeader />
 
-      <main className="relative z-10 bg-[#FAFAF8]">
+      <main id="main-content" className="relative z-10 bg-[#FAFAF8]">
 
         {/* HERO — DARK (above fold, minimal deps) */}
         <section
@@ -52,21 +52,27 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               Coming soon
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-[-0.03em] text-white leading-[0.92] w-full fade-up-d1">
+            <h1
+              className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-[-0.03em] text-white leading-[0.92] w-full fade-up-d1"
+              suppressHydrationWarning
+            >
               Save time. <br className="hidden md:block"/>
               <span className="bg-gradient-to-r from-cran via-[#E8614F] to-[#D4523F] bg-clip-text text-transparent">Save more animals.</span>
             </h1>
 
-            <p className="mt-8 text-lg lg:text-xl leading-relaxed text-white/70 font-normal max-w-2xl [text-wrap:balance] fade-up-d2">
+            <p
+              className="mt-8 text-lg lg:text-xl leading-relaxed text-white/70 font-normal max-w-2xl [text-wrap:balance] fade-up-d2"
+              suppressHydrationWarning
+            >
               Animal shelters deserve better. Equip your staff with tools that put the animals first.
             </p>
 
             <div className="mt-10 flex flex-col items-stretch justify-center gap-2 sm:flex-row pb-12 w-full max-w-xs sm:max-w-none fade-up-d3">
-              <a href="#waitlist" className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran px-5 text-sm font-semibold text-white transition-all hover:bg-cran/90 shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5">
+              <a href="#waitlist" className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran px-5 text-sm font-semibold text-white transition-all hover:bg-cran/90 shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]">
                 Join Waitlist
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
               </a>
-              <a href="#learn-more" className="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 text-sm font-medium text-white/85 transition-colors hover:border-white/30 hover:text-white hover:bg-white/10">
+              <a href="#learn-more" className="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 text-sm font-medium text-white/85 transition-colors hover:border-white/30 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#08080A]">
                 Learn more
               </a>
             </div>
