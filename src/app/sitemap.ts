@@ -2,8 +2,10 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { SITE_URL } from "@/lib/site-config";
 
+const DEFAULT_BASE = "https://getcran.ai";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = SITE_URL;
+  const baseUrl = (SITE_URL || DEFAULT_BASE).replace(/\/$/, "");
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -58,8 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
   } catch {
-    // DB unavailable (e.g. build) – sitemap still works with static pages
+    // DB unavailable – return static pages only
   }
-
   return [...staticPages, ...blogPosts];
 }
