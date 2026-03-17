@@ -4,6 +4,23 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
+  async redirects() {
+    return [
+      // Canonical: redirect getcran.ai → www.getcran.ai to avoid Search Console redirect errors
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "getcran.ai" }],
+        destination: "https://www.getcran.ai/:path*",
+        permanent: true,
+      },
+      // Strip trailing slash from sitemap (GSC may submit sitemap.xml/ which causes issues)
+      {
+        source: "/sitemap.xml/",
+        destination: "/sitemap.xml",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

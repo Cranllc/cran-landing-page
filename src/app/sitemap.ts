@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { SITE_URL } from "@/lib/site-config";
 
-const DEFAULT_BASE = "https://getcran.ai";
+const DEFAULT_BASE = "https://www.getcran.ai";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = (SITE_URL || DEFAULT_BASE).replace(/\/$/, "");
