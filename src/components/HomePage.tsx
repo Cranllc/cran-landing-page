@@ -57,7 +57,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               suppressHydrationWarning
             >
               Save time. <br className="hidden md:block"/>
-              <span className="bg-gradient-to-r from-cran via-[#E8614F] to-[#D4523F] bg-clip-text text-transparent">Save more animals.</span>
+              <span className="bg-gradient-to-r from-cran via-[#E8614F] to-[#D4523F] bg-clip-text text-transparent">Put animals first.</span>
             </h1>
 
             <p
