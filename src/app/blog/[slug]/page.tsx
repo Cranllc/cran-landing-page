@@ -119,7 +119,7 @@ export default async function BlogPost({ params }: Props) {
           )}
 
           <div className="hidden lg:block text-sm">
-            <p className="text-[#26251E]/70 font-medium mb-1">{dateString}</p>
+            <time className="text-[#26251E]/70 font-medium mb-1 block" suppressHydrationWarning dateTime={new Date(post.createdAt).toISOString().split("T")[0]}>{dateString}</time>
             <p className="text-[#26251E]/40">by {authorName}</p>
           </div>
 
@@ -139,7 +139,7 @@ export default async function BlogPost({ params }: Props) {
               </span>
             )}
             <div>
-              <p className="text-[#26251E]/70 font-medium inline-block mr-3">{dateString}</p>
+              <time className="text-[#26251E]/70 font-medium inline-block mr-3" suppressHydrationWarning dateTime={new Date(post.createdAt).toISOString().split("T")[0]}>{dateString}</time>
               <p className="text-[#26251E]/40 inline-block">by {authorName}</p>
             </div>
           </div>

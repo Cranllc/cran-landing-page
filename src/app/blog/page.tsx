@@ -47,7 +47,7 @@ export default async function BlogIndex() {
                <article key={post.slug} className="group relative flex flex-col lg:flex-row gap-4 lg:gap-12 lg:items-baseline">
                   {/* Date / Category Sidebar */}
                   <div className="w-full lg:w-36 shrink-0 lg:text-right pt-2 lg:pt-1">
-                    <time className="text-sm font-medium text-[#26251E]/50 block mb-1">{dateString}</time>
+                    <time className="text-sm font-medium text-[#26251E]/50 block mb-1" suppressHydrationWarning dateTime={new Date(post.createdAt).toISOString().split("T")[0]}>{dateString}</time>
                     <span className="text-xs font-semibold tracking-wider uppercase text-[#26251E]/30 hidden lg:block">{post.category || "Uncategorized"}</span>
                   </div>
                   

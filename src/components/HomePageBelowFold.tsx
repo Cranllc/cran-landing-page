@@ -158,7 +158,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                       )}
                     </div>
                     <div className="flex flex-col p-5">
-                      <time className="text-[15px] font-semibold uppercase tracking-wider text-charcoal/75 mb-2">
+                      <time className="text-[15px] font-semibold uppercase tracking-wider text-charcoal/75 mb-2" suppressHydrationWarning dateTime={post.createdAt}>
                         {dateString}
                       </time>
                       <h3 className="text-xl font-bold text-charcoal mb-2 group-hover:text-cran transition-colors leading-snug">
