@@ -4,6 +4,9 @@ import { SITE_URL } from "@/lib/site-config";
 
 const DEFAULT_BASE = "https://www.getcran.ai";
 
+/** Prisma requires Node.js runtime; edge would cause 500 */
+export const runtime = "nodejs";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = (SITE_URL || DEFAULT_BASE).replace(/\/$/, "");
 
