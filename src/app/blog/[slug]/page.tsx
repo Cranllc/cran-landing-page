@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/site-config';
-import { extractFirstImageUrl } from '@/lib/blog';
+import { getPostShareImageUrl } from '@/lib/markdown-images';
 import ShareArticleClient from '@/components/ShareArticleClient';
 import Image from 'next/image';
 
@@ -28,35 +28,46 @@ export async function generateMetadata(
     }
   }
 
-  // Extract a brief excerpt for the description
-  const excerpt = post.content.replace(/[#*`_>]/g, '').substring(0, 160) + '...';
+  const metaDescription = (() => {
+    const custom = post.seoDescription?.trim();
+    if (custom) return custom.slice(0, 320);
+    const stripped = post.content.replace(/[#*`_>]/g, "").trim();
+    const excerpt = stripped.slice(0, 157);
+    return excerpt + (stripped.length > 157 ? "..." : "");
+  })();
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
-  const heroImageUrl = extractFirstImageUrl(post.content);
-  const hasHeroImage = heroImageUrl && heroImageUrl.startsWith("http");
+  const heroImageUrl = getPostShareImageUrl(post);
+  const shareImage =
+    heroImageUrl && (heroImageUrl.startsWith("https://") || heroImageUrl.startsWith("http://"))
+      ? heroImageUrl
+      : null;
+  const hasShareImage = Boolean(shareImage);
 
-  const pageTitle = `Cran | ${post.title}`;
+  const titleSegment = post.seoTitle?.trim() || post.title;
+  const pageTitle = `Cran | ${titleSegment}`;
   return {
     title: pageTitle,
-    description: excerpt,
+    description: metaDescription,
     authors: [{ name: authorName }],
     openGraph: {
       title: pageTitle,
-      description: excerpt,
+      description: metaDescription,
       url: `${SITE_URL}/blog/${post.slug}`,
       siteName: 'Cran',
       type: 'article',
       publishedTime: post.createdAt.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: [authorName],
-      ...(hasHeroImage && {
-        images: [{ url: heroImageUrl, alt: post.title, width: 1200, height: 630 }],
-      }),
+      ...(hasShareImage &&
+        shareImage && {
+          images: [{ url: shareImage, alt: post.title, width: 1200, height: 630 }],
+        }),
     },
     twitter: {
-      card: hasHeroImage ? 'summary_large_image' : 'summary',
+      card: hasShareImage ? 'summary_large_image' : 'summary',
       title: pageTitle,
-      description: excerpt,
-      ...(hasHeroImage && { images: [heroImageUrl] }),
+      description: metaDescription,
+      ...(hasShareImage && shareImage && { images: [shareImage] }),
     },
     alternates: {
       canonical: `${SITE_URL}/blog/${post.slug}`,
@@ -74,28 +85,58 @@ export default async function BlogPost({ params }: Props) {
 
   const dateString = new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
-  const heroImageUrl = extractFirstImageUrl(post.content);
-  const hasHeroImage = heroImageUrl && heroImageUrl.startsWith("http");
+  const heroImageUrl = getPostShareImageUrl(post);
+  const hasHeroImage = Boolean(
+    heroImageUrl && (heroImageUrl.startsWith("https://") || heroImageUrl.startsWith("http://"))
+  );
+  const base = SITE_URL.replace(/\/$/, "");
+  const canonicalUrl = `${base}/blog/${post.slug}`;
+  const ogImageUrl = `${base}/openGraph.png`;
 
-  // 2026 SEO: JSON-LD Structured Data for AI overviews and rich search results
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLdArticle = {
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: post.title,
+    ...(hasHeroImage && heroImageUrl ? { image: [heroImageUrl] } : {}),
     author: {
-      '@type': 'Person',
+      "@type": "Person",
       name: authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Cran, LLC",
+      logo: {
+        "@type": "ImageObject",
+        url: ogImageUrl,
+      },
     },
     datePublished: post.createdAt.toISOString(),
     dateModified: post.updatedAt.toISOString(),
-  }
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+  };
+
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: base },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${base}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: canonicalUrl },
+    ],
+  };
 
   return (
     <article id="main-content" className="min-h-screen bg-[#F7F7F4] pt-32 pb-32 font-sans selection:bg-cran selection:text-white">
-      {/* Inject JSON-LD structured data to the DOM safely */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
       />
       
       <div className="mx-auto max-w-5xl px-6 lg:px-12 relative flex flex-col lg:flex-row gap-12 lg:gap-24">
@@ -162,7 +203,7 @@ export default async function BlogPost({ params }: Props) {
             
             {/* Hero image or branded placeholder (matches landing page preview) */}
             <div className="w-full aspect-[2/1] rounded-md overflow-hidden relative mb-12 flex items-center justify-center">
-              {hasHeroImage ? (
+              {hasHeroImage && heroImageUrl ? (
                 <img
                   src={heroImageUrl}
                   alt={`Hero image for ${post.title}`}

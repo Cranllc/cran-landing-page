@@ -1,14 +1,30 @@
 "use client"
 
-import { useState, useTransition, useRef } from "react"
+import { useState, useTransition, useRef, useMemo } from "react"
 import { updatePost } from "@/actions/blog"
 import { uploadBlogImage } from "@/actions/storage"
+import { parseMarkdownImages, replaceMarkdownImageAlt } from "@/lib/markdown-images"
 import type { Post } from "@prisma/client"
-import { 
-  ImageIcon, Loader2, Bold, Italic, 
-  Heading1, Heading2, Quote, List, 
-  ListOrdered, Link as LinkIcon, Code
+import {
+  ImageIcon,
+  Loader2,
+  Bold,
+  Italic,
+  Heading1,
+  Heading2,
+  Quote,
+  List,
+  ListOrdered,
+  Link as LinkIcon,
+  Code,
+  FileText,
+  Images,
+  Star,
+  Copy,
+  Check,
 } from "lucide-react"
+
+type EditorTab = "write" | "assets"
 
 export default function EditorForm({ post }: { post: Post }) {
   const [isPending, startTransition] = useTransition()
@@ -19,14 +35,22 @@ export default function EditorForm({ post }: { post: Post }) {
     published: post.published,
     category: (post as any).category || "",
     tags: (post as any).tags?.join(", ") || "",
+    seoTitle: post.seoTitle || "",
+    seoDescription: post.seoDescription || "",
+    featuredImageUrl: post.featuredImageUrl || "",
   })
   
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle")
   
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const featuredFileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [editorTab, setEditorTab] = useState<EditorTab>("write")
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null)
+
+  const contentImages = useMemo(() => parseMarkdownImages(formData.content), [formData.content])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -50,7 +74,10 @@ export default function EditorForm({ post }: { post: Post }) {
           content: formData.content,
           published: formData.published,
           category: formData.category || null,
-          tags: tagsArray
+          tags: tagsArray,
+          seoTitle: formData.seoTitle.trim() || null,
+          seoDescription: formData.seoDescription.trim() || null,
+          featuredImageUrl: formData.featuredImageUrl.trim() || null,
         })
         setSaveStatus("saved")
         setTimeout(() => setSaveStatus("idle"), 2000)
@@ -126,6 +153,24 @@ export default function EditorForm({ post }: { post: Post }) {
     }
   }
 
+  const handleFeaturedImageUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) return
+    setIsUploading(true)
+    const uploadData = new FormData()
+    uploadData.append("file", file)
+    try {
+      const res = await uploadBlogImage(uploadData)
+      if (res.error) throw new Error(res.error)
+      setFormData((prev) => ({ ...prev, featuredImageUrl: res.url ?? "" }))
+    } catch (err) {
+      console.error(err)
+      alert("Failed to upload featured image")
+    } finally {
+      setIsUploading(false)
+      if (featuredFileInputRef.current) featuredFileInputRef.current.value = ""
+    }
+  }
+
   const handlePaste = (e: React.ClipboardEvent) => {
     const items = e.clipboardData.items
     for (let i = 0; i < items.length; i++) {
@@ -145,6 +190,26 @@ export default function EditorForm({ post }: { post: Post }) {
       handleImageUpload(file)
     }
   }
+
+  const updateImageAlt = (imageIndex: number, newAlt: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: replaceMarkdownImageAlt(prev.content, imageIndex, newAlt),
+    }))
+  }
+
+  const copyToClipboard = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopiedUrl(url)
+      setTimeout(() => setCopiedUrl(null), 2000)
+    } catch {
+      alert("Could not copy to clipboard")
+    }
+  }
+
+  const isHttpImage = (url: string) =>
+    url.startsWith("https://") || url.startsWith("http://")
 
   return (
     <div className="flex flex-col h-full bg-[#FAFAF8]">
@@ -221,9 +286,211 @@ export default function EditorForm({ post }: { post: Post }) {
         </div>
       </div>
 
+      {/* Write | Assets */}
+      <div className="border-b border-[#E5E5E0] bg-white px-4 sm:px-6 shrink-0 flex gap-1">
+        <button
+          type="button"
+          onClick={() => setEditorTab("write")}
+          className={`flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-t-lg border-b-2 -mb-px transition-colors ${
+            editorTab === "write"
+              ? "border-cran text-[#1a1a1a] bg-[#FAFAF8]"
+              : "border-transparent text-[#1a1a1a]/45 hover:text-[#1a1a1a]/70"
+          }`}
+        >
+          <FileText size={16} aria-hidden />
+          Write
+        </button>
+        <button
+          type="button"
+          onClick={() => setEditorTab("assets")}
+          className={`flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-t-lg border-b-2 -mb-px transition-colors ${
+            editorTab === "assets"
+              ? "border-cran text-[#1a1a1a] bg-[#FAFAF8]"
+              : "border-transparent text-[#1a1a1a]/45 hover:text-[#1a1a1a]/70"
+          }`}
+        >
+          <Images size={16} aria-hidden />
+          Assets
+          {contentImages.length > 0 && (
+            <span className="text-[10px] font-bold tabular-nums bg-[#1a1a1a]/10 text-[#1a1a1a]/60 px-1.5 py-0.5 rounded">
+              {contentImages.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {editorTab === "assets" && (
+        <div className="flex-1 overflow-y-auto border-b border-[#E5E5E0] bg-[#FAFAF8] px-4 sm:px-6 py-6 space-y-8">
+          <section className="space-y-4">
+            <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
+              Search &amp; social
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5">
+              <div className="space-y-1.5 sm:col-span-2">
+                <label htmlFor="seoTitle" className="text-[11px] font-semibold text-[#1a1a1a]/50 uppercase tracking-wide">
+                  SEO title
+                </label>
+                <input
+                  id="seoTitle"
+                  type="text"
+                  name="seoTitle"
+                  value={formData.seoTitle}
+                  onChange={handleChange}
+                  placeholder="Defaults to post title — shown as Cran | …"
+                  className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2 text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
+                />
+              </div>
+              <div className="space-y-1.5 sm:col-span-2">
+                <label htmlFor="seoDescription" className="text-[11px] font-semibold text-[#1a1a1a]/50 uppercase tracking-wide">
+                  Meta description ({formData.seoDescription.length}/320)
+                </label>
+                <textarea
+                  id="seoDescription"
+                  name="seoDescription"
+                  value={formData.seoDescription}
+                  onChange={handleChange}
+                  rows={3}
+                  maxLength={320}
+                  placeholder="~150–160 characters ideal for Google. Leave empty to auto-generate from the first lines of the post."
+                  className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2 text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20 resize-y min-h-[72px]"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
+              Featured image
+            </h2>
+            <div className="bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5 space-y-3">
+              <p className="text-[12px] text-[#1a1a1a]/55 leading-relaxed">
+                Used for Open Graph, Twitter, and the article hero. Overrides the first in-article image when set.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  id="featuredImageUrl"
+                  type="url"
+                  name="featuredImageUrl"
+                  value={formData.featuredImageUrl}
+                  onChange={handleChange}
+                  placeholder="https://…"
+                  className="flex-1 border border-[#E5E5E0] rounded-lg px-3 py-2 text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
+                />
+                <input
+                  type="file"
+                  ref={featuredFileInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) void handleFeaturedImageUpload(file)
+                  }}
+                  accept="image/*"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => featuredFileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="shrink-0 px-4 py-2 rounded-lg border border-[#E5E5E0] text-[12px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8] disabled:opacity-50"
+                >
+                  Upload
+                </button>
+              </div>
+              {formData.featuredImageUrl.trim() && isHttpImage(formData.featuredImageUrl.trim()) && (
+                <div className="mt-3 rounded-lg border border-[#E5E5E0] overflow-hidden max-w-md bg-[#FAFAF8]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={formData.featuredImageUrl.trim()}
+                    alt="Featured preview"
+                    className="w-full h-40 object-cover"
+                  />
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
+              Images in this post
+            </h2>
+            {contentImages.length === 0 ? (
+              <p className="text-[13px] text-[#1a1a1a]/45 bg-white border border-dashed border-[#E5E5E0] rounded-xl px-4 py-8 text-center">
+                No markdown images yet. On the <strong>Write</strong> tab, use <strong>Add image</strong> or paste/drag files into the editor.
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {contentImages.map((img) => {
+                  const trimmedFeatured = formData.featuredImageUrl.trim()
+                  const isFeatured = trimmedFeatured === img.url
+                  return (
+                    <li
+                      key={`content-image-${img.index}`}
+                      className="bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4"
+                    >
+                      <div className="shrink-0 w-full sm:w-36 h-28 rounded-lg border border-[#E5E5E0] overflow-hidden bg-[#FAFAF8] flex items-center justify-center">
+                        {isHttpImage(img.url) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={img.url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-[10px] text-[#1a1a1a]/35 px-2 text-center">Preview needs http(s) URL</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0 space-y-3">
+                        <div className="space-y-1">
+                          <label className="text-[11px] font-semibold text-[#1a1a1a]/50 uppercase tracking-wide">
+                            Alt text (accessibility &amp; SEO)
+                          </label>
+                          <input
+                            type="text"
+                            value={img.alt}
+                            onChange={(e) => updateImageAlt(img.index, e.target.value)}
+                            placeholder="Describe the image for screen readers and search"
+                            className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2 text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
+                          />
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <code className="text-[11px] text-[#1a1a1a]/55 break-all bg-[#FAFAF8] px-2 py-1 rounded border border-[#E5E5E0] max-w-full">
+                            {img.url}
+                          </code>
+                          <button
+                            type="button"
+                            onClick={() => void copyToClipboard(img.url)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-[#E5E5E0] text-[11px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8]"
+                          >
+                            {copiedUrl === img.url ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
+                            {copiedUrl === img.url ? "Copied" : "Copy URL"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                featuredImageUrl: isFeatured ? "" : img.url,
+                              }))
+                            }
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md border text-[11px] font-semibold transition-colors ${
+                              isFeatured
+                                ? "border-cran/40 bg-cran/10 text-cran"
+                                : "border-[#E5E5E0] text-[#1a1a1a]/70 hover:bg-[#FAFAF8]"
+                            }`}
+                          >
+                            <Star size={12} className={isFeatured ? "fill-cran text-cran" : ""} aria-hidden />
+                            {isFeatured ? "Featured" : "Use as featured"}
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </section>
+        </div>
+      )}
+
       {/* Editor Content Area */}
+      {editorTab === "write" && (
       <div 
-        className={`flex-1 p-0 relative flex flex-col transition-colors ${isDragOver ? 'bg-cran/5' : ''}`}
+        className={`flex-1 p-0 relative flex flex-col min-h-0 transition-colors ${isDragOver ? 'bg-cran/5' : ''}`}
         onDragOver={(e) => { e.preventDefault(); setIsDragOver(true) }}
         onDragLeave={() => setIsDragOver(false)}
         onDrop={handleDrop}
@@ -297,6 +564,7 @@ export default function EditorForm({ post }: { post: Post }) {
           </div>
         )}
       </div>
+      )}
     </div>
   )
 }

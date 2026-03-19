@@ -1,12 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { getPostShareImageUrl } from "@/lib/markdown-images";
 
 const LATEST_LIMIT = 3;
 
-/** Extract the first image URL from markdown content, e.g. ![alt](https://...) */
-export function extractFirstImageUrl(content: string): string | null {
-  const match = content.match(/!\[[^\]]*\]\(([^)]+)\)/);
-  return match ? match[1].trim() : null;
-}
+export { extractFirstImageUrl, getPostShareImageUrl } from "@/lib/markdown-images";
 
 export type PostPreview = {
   id: string;
@@ -30,12 +27,13 @@ export async function getLatestPublishedPosts(): Promise<PostPreview[]> {
       slug: true,
       content: true,
       category: true,
+      featuredImageUrl: true,
       createdAt: true,
       author: { select: { name: true } },
     },
   });
   return posts.map((p) => ({
     ...p,
-    imageUrl: extractFirstImageUrl(p.content),
+    imageUrl: getPostShareImageUrl(p),
   }));
 }

@@ -23,17 +23,23 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
-  content   String
-  published Boolean  @default(false)
-  category  String?
-  tags      String[] @default([])
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  content          String
+  published        Boolean  @default(false)
+  category         String?
+  tags             String[] @default([])
+  /// Optional SEO: title segment after "Cran | " in meta tags
+  seoTitle         String?
+  /// Optional meta description (~150–160 chars)
+  seoDescription   String?  @db.Text
+  /// Featured image URL (https) for OG/Twitter and article hero
+  featuredImageUrl String?
+  authorId         String
+  author           User     @relation(fields: [authorId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Waitlist {
