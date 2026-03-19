@@ -4,11 +4,11 @@ import { SITE_URL } from '@/lib/site-config';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog & Research | Cran',
+  title: 'Cran | Blog & Research',
   description: 'Stories, insights, and updates from the Cran team.',
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
-    title: 'Blog | Cran',
+    title: 'Cran | Blog',
     description: 'Stories, insights, and updates from the Cran team.',
     url: `${SITE_URL}/blog`,
     type: 'website',

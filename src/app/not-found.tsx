@@ -2,6 +2,12 @@ import Link from "next/link";
 import { PawPrint, ArrowRight } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Cran | Page Not Found",
+  description: "This page could not be found on Cran.",
+};
 
 export default function NotFound() {
   return (

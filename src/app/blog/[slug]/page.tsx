@@ -23,7 +23,7 @@ export async function generateMetadata(
 
   if (!post) {
     return {
-      title: 'Post Not Found | Cran',
+      title: 'Cran | Post Not Found',
       description: 'The requested blog post could not be found.',
     }
   }
@@ -34,12 +34,13 @@ export async function generateMetadata(
   const heroImageUrl = extractFirstImageUrl(post.content);
   const hasHeroImage = heroImageUrl && heroImageUrl.startsWith("http");
 
+  const pageTitle = `Cran | ${post.title}`;
   return {
-    title: `${post.title} | Cran Blog`,
+    title: pageTitle,
     description: excerpt,
     authors: [{ name: authorName }],
     openGraph: {
-      title: post.title,
+      title: pageTitle,
       description: excerpt,
       url: `${SITE_URL}/blog/${post.slug}`,
       siteName: 'Cran',
@@ -53,7 +54,7 @@ export async function generateMetadata(
     },
     twitter: {
       card: hasHeroImage ? 'summary_large_image' : 'summary',
-      title: post.title,
+      title: pageTitle,
       description: excerpt,
       ...(hasHeroImage && { images: [heroImageUrl] }),
     },

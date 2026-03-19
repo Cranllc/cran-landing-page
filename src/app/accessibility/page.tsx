@@ -5,18 +5,18 @@ import { SITE_URL } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Accessibility | Cran",
+  title: "Cran | Accessibility",
   description: "Cran's commitment to digital accessibility and how we work to make our website and platform accessible to everyone.",
   alternates: { canonical: `${SITE_URL}/accessibility` },
   openGraph: {
-    title: "Accessibility | Cran",
+    title: "Cran | Accessibility",
     description: "Cran's commitment to digital accessibility and how we work to make our website and platform accessible to everyone.",
     url: `${SITE_URL}/accessibility`,
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Accessibility | Cran",
+    title: "Cran | Accessibility",
     description: "Cran's commitment to digital accessibility.",
   },
 };
