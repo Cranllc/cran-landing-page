@@ -24,17 +24,24 @@ import {
   Check,
 } from "lucide-react"
 
+/** SEO columns — intersect so EditorForm type-checks even if TS uses a pre-migration Prisma `Post`. */
+type PostForEditor = Post & {
+  seoTitle?: string | null
+  seoDescription?: string | null
+  featuredImageUrl?: string | null
+}
+
 type EditorTab = "write" | "assets"
 
-export default function EditorForm({ post }: { post: Post }) {
+export default function EditorForm({ post }: { post: PostForEditor }) {
   const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({
     title: post.title,
     slug: post.slug,
     content: post.content,
     published: post.published,
-    category: (post as any).category || "",
-    tags: (post as any).tags?.join(", ") || "",
+    category: post.category || "",
+    tags: post.tags?.join(", ") || "",
     seoTitle: post.seoTitle || "",
     seoDescription: post.seoDescription || "",
     featuredImageUrl: post.featuredImageUrl || "",
