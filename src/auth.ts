@@ -52,23 +52,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/auth/signin",
   },
+  /**
+   * Use DB sessions with PrismaAdapter (recommended). `strategy: "jwt"` + a partial `jwt` callback
+   * can drop `sub` / claims and break magic-link sign-in or leave `session.user.email` empty.
+   */
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
   callbacks: {
     async signIn({ user }) {
       return isAllowedAdminEmail(user.email)
-    },
-    /** JWT strategy: persist email on the token so `session.user.email` is always set for admin gates. */
-    async jwt({ token, user }) {
-      if (user?.email) token.email = user.email
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user && typeof token.email === "string") {
-        session.user.email = token.email
-      }
-      return session
     },
     async redirect({ url }) {
       const siteBase = baseUrl
