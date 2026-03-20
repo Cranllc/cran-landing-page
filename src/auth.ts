@@ -24,8 +24,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = new URL(url)
         const params = new URLSearchParams(parsed.search)
         // Strip callbackUrl from link — nested URLs can trigger Chrome's phishing heuristics.
-        // Keep the SAME origin Auth.js used for this token (localhost, preview, www, etc.). Replacing
-        // with SITE_URL sent dev users to production while tokens lived in local DB → verify always failed.
+        // `parsed.origin` comes from Auth.js, which (via next-auth) REPLACES the browser host with
+        // process.env.AUTH_URL / NEXTAUTH_URL when set. If those point at *.vercel.app, the email link
+        // will be vercel.app even when the user signed in on getcran.ai — fix: set AUTH_URL to
+        // https://www.getcran.ai for Production (same for NEXT_PUBLIC_SITE_URL).
         params.delete("callbackUrl")
         const magicLink = `${parsed.origin}${parsed.pathname}?${params.toString()}`
         const { error } = await resend.emails.send({
