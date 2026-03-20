@@ -243,7 +243,21 @@ export default async function BlogPost({ params }: Props) {
                 h1: ({...props}) => <h1 className="text-3xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
                 h2: ({...props}) => <h2 className="text-2xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
                 h3: ({...props}) => <h3 className="text-xl font-bold text-[#26251E] tracking-tight mt-12 mb-4" {...props} />,
-                code: ({...props}) => <code className="bg-[#1a1a1a]/5 text-[#B83A2E] px-1.5 py-0.5 rounded font-mono text-[14px]" {...props} />
+                code: ({...props}) => <code className="bg-[#1a1a1a]/5 text-[#B83A2E] px-1.5 py-0.5 rounded font-mono text-[14px]" {...props} />,
+                img: ({ src, alt, ...props }) => {
+                  if (!src || typeof src !== "string") return null;
+                  return (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={src}
+                      alt={alt ?? ""}
+                      className="not-prose block w-full max-w-full h-auto my-8 first:mt-0 rounded-lg border border-[#26251E]/10 bg-[#FAFAF8] shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
+                      loading="lazy"
+                      decoding="async"
+                      {...props}
+                    />
+                  );
+                },
               }}
             >
               {post.content}

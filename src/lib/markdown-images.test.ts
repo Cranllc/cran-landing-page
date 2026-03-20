@@ -6,7 +6,18 @@ import {
   getPostShareImageUrl,
   resolveImageUrlForPreview,
   getFirstInPostImagePreviewUrl,
+  sanitizeMarkdownImageAlt,
 } from "./markdown-images";
+
+describe("sanitizeMarkdownImageAlt", () => {
+  it("strips brackets that would break ![alt](url)", () => {
+    expect(sanitizeMarkdownImageAlt("shot ] oops.png")).toBe("shot  oops.png");
+  });
+
+  it("uses fallback when empty after sanitize", () => {
+    expect(sanitizeMarkdownImageAlt("]")).toBe("Image");
+  });
+});
 
 describe("parseMarkdownImages", () => {
   it("returns empty array when no images", () => {

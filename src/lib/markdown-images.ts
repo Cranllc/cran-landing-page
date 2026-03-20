@@ -1,3 +1,13 @@
+/** Alt text safe inside `![alt](url)` — `]` or newlines break the markdown parser. */
+export function sanitizeMarkdownImageAlt(alt: string): string {
+  const cleaned = alt
+    .replace(/\u00a0|\u202f|\u2007/g, " ") // NBSP / narrow NBSP (common in macOS screenshot names)
+    .replace(/\]/g, "")
+    .replace(/\r?\n/g, " ")
+    .trim();
+  return cleaned.length > 0 ? cleaned : "Image";
+}
+
 /** Extract the first image URL from markdown content, e.g. ![alt](https://...) */
 export function extractFirstImageUrl(content: string): string | null {
   const match = content.match(/!\[[^\]]*\]\(([^)]+)\)/);

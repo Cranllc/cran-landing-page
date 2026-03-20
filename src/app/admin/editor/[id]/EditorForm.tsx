@@ -3,7 +3,12 @@
 import { useState, useTransition, useRef, useMemo, useEffect } from "react"
 import { updatePost } from "@/actions/blog"
 import { uploadBlogImage } from "@/actions/storage"
-import { parseMarkdownImages, replaceMarkdownImageAlt, resolveImageUrlForPreview } from "@/lib/markdown-images"
+import {
+  parseMarkdownImages,
+  replaceMarkdownImageAlt,
+  resolveImageUrlForPreview,
+  sanitizeMarkdownImageAlt,
+} from "@/lib/markdown-images"
 import { SITE_URL } from "@/lib/site-config"
 import type { Post } from "@prisma/client"
 import {
@@ -175,7 +180,7 @@ export default function EditorForm({
       const res = await uploadBlogImage(uploadData)
       if (res.error) throw new Error(res.error)
 
-      const imageMarkdown = `\n![${file.name}](${res.url})\n`
+      const imageMarkdown = `\n![${sanitizeMarkdownImageAlt(file.name)}](${res.url})\n`
       insertTextAtCursor(imageMarkdown)
     } catch (err) {
       console.error(err)
