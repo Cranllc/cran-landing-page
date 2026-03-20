@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/site-config';
 import { getPostHeroImageUrl, getPostPreviewImageUrl } from '@/lib/markdown-images';
 import { sanitizeMarkdownPasteArtifacts } from '@/lib/sanitize-markdown-paste';
+import { getPostAuthorDisplayName } from '@/lib/blog-author';
 import ShareArticleClient from '@/components/ShareArticleClient';
 import Image from 'next/image';
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const excerpt = stripped.slice(0, 157);
     return excerpt + (stripped.length > 157 ? "..." : "");
   })();
-  const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+  const authorName = getPostAuthorDisplayName(post);
   const shareImage = getPostPreviewImageUrl(post);
   const hasShareImage = Boolean(
     shareImage && (shareImage.startsWith("https://") || shareImage.startsWith("http://"))
@@ -79,7 +80,7 @@ export default async function BlogPost({ params }: Props) {
   }
 
   const dateString = new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
+  const authorName = getPostAuthorDisplayName(post);
   const heroImageUrl = getPostHeroImageUrl(post);
   const hasHeroImage = Boolean(
     heroImageUrl && (heroImageUrl.startsWith("https://") || heroImageUrl.startsWith("http://"))

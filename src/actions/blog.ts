@@ -62,6 +62,8 @@ export async function updatePost(
     heroImageUrl?: string | null
     /** Cards + OG/Twitter; falls back to hero in readers if empty */
     previewImageUrl?: string | null
+    /** Shown as byline; empty clears override (falls back to account name/email) */
+    authorDisplayName?: string | null
   }
 ) {
   await verifyAdmin()
@@ -86,6 +88,9 @@ export async function updatePost(
     ...(hero !== undefined ? { heroImageUrl: hero } : {}),
     ...(preview !== undefined ? { previewImageUrl: preview } : {}),
     ...(featuredSync !== undefined ? { featuredImageUrl: featuredSync } : {}),
+    ...(data.authorDisplayName !== undefined
+      ? { authorDisplayName: data.authorDisplayName?.trim() || null }
+      : {}),
   }
 
   await prisma.post.update({

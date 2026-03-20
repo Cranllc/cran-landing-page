@@ -40,6 +40,8 @@ model Post {
   heroImageUrl       String?
   /// Blog cards + Open Graph / Twitter — falls back to hero in code if empty
   previewImageUrl  String?
+  /// Optional byline; when set, overrides author User name/email on the public post
+  authorDisplayName String?
   authorId         String
   author           User     @relation(fields: [authorId], references: [id])
   createdAt        DateTime @default(now())

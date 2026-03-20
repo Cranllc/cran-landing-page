@@ -41,6 +41,7 @@ type PostForEditor = Post & {
   featuredImageUrl?: string | null
   heroImageUrl?: string | null
   previewImageUrl?: string | null
+  authorDisplayName?: string | null
 }
 
 type EditorTab = "write" | "assets" | "seo"
@@ -64,6 +65,7 @@ export default function EditorForm({
     seoDescription: post.seoDescription || "",
     heroImageUrl: post.heroImageUrl?.trim() || post.featuredImageUrl?.trim() || "",
     previewImageUrl: post.previewImageUrl?.trim() || "",
+    authorDisplayName: post.authorDisplayName?.trim() || "",
   })
   
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle")
@@ -350,7 +352,22 @@ export default function EditorForm({
       </div>
 
       {/* Metadata bar */}
-      <div className="min-h-[50px] py-3 sm:py-0 border-b border-[#E5E5E0] bg-[#FAFAF8] flex flex-col sm:flex-row sm:items-center px-4 sm:px-6 shrink-0 gap-4 sm:gap-6 text-sm">
+      <div className="min-h-[50px] py-3 sm:py-0 border-b border-[#E5E5E0] bg-[#FAFAF8] flex flex-col sm:flex-row sm:flex-wrap sm:items-center px-4 sm:px-6 shrink-0 gap-4 sm:gap-6 text-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+          <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px] w-full sm:w-auto">Author</span>
+          <input
+            type="text"
+            name="authorDisplayName"
+            value={formData.authorDisplayName}
+            onChange={handleChange}
+            placeholder="Byline (optional)"
+            className="flex-1 w-full sm:w-[180px] bg-transparent border border-[#E5E5E0] rounded px-2 py-2 sm:py-1 outline-none text-base sm:text-[13px] focus:border-cran/50 focus:ring-1 focus:ring-cran/20 text-[#1a1a1a] shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all min-w-0"
+            aria-describedby="author-display-hint"
+          />
+          <span id="author-display-hint" className="sr-only">
+            Overrides the account name shown after by on the public post. Leave blank to use your profile name or email.
+          </span>
+        </div>
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
           <span className="text-[#1a1a1a]/50 font-bold uppercase tracking-wider text-[11px] w-full sm:w-auto">Category</span>
           <input

@@ -11,6 +11,7 @@ type PostSeoColumns = {
   featuredImageUrl: string | null;
   heroImageUrl: string | null;
   previewImageUrl: string | null;
+  authorDisplayName: string | null;
 };
 
 /** Full row + author for public blog post pages. */
