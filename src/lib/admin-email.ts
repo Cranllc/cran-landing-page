@@ -12,6 +12,7 @@ function isUnderApex(host: string, apex: string): boolean {
 export function isAllowedAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
   let normalized = email
+    .normalize("NFKC")
     .replace(/\u00a0|\u202f|\u2007/g, " ")
     .replace(/[\u200B-\u200D\uFEFF]/g, "")
     .trim()

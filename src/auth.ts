@@ -5,16 +5,17 @@ import { prisma } from "@/lib/prisma"
 import { prismaAdapterWithCaseInsensitiveEmail } from "@/lib/prisma-auth-adapter"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
 
-/** Prefer provider identifier for email magic-link flows (always normalized); avoids bad/empty `user.email` blocking allowlist. */
+/**
+ * Resolve the mailbox for allowlisting. Prefer `providerAccountId` when it looks like an email —
+ * some Auth.js paths omit `account.type === "email"` even for Resend.
+ */
 function resolveSignInEmail(
   user: { email?: string | null } | undefined,
   account: { type?: string; providerAccountId?: string | null } | null | undefined,
   profile: unknown
 ): string {
-  const fromAccount =
-    account?.type === "email" && typeof account.providerAccountId === "string"
-      ? account.providerAccountId.trim()
-      : ""
+  const pid = typeof account?.providerAccountId === "string" ? account.providerAccountId.trim() : ""
+  const fromAccount = pid.includes("@") ? pid : ""
   const fromUser = typeof user?.email === "string" ? user.email.trim() : ""
   const p = profile as { email?: string } | undefined
   const fromProfile = p && typeof p.email === "string" ? p.email.trim() : ""
@@ -80,7 +81,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         if (user.id != null) token.sub = String(user.id)
-        const em = typeof user.email === "string" ? user.email.trim() : ""
+        let em = typeof user.email === "string" ? user.email.trim() : ""
+        if (!em && user.id != null) {
+          const row = await prisma.user.findUnique({
+            where: { id: String(user.id) },
+            select: { email: true },
+          })
+          em = row?.email?.trim() ?? ""
+        }
         if (em) token.email = em
         if (typeof user.name === "string") token.name = user.name
         if (user.image != null) token.picture = user.image
@@ -95,7 +103,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ? candidate.slice(candidate.lastIndexOf("@") + 1)
           : "(no-domain)"
         console.warn(
-          `[auth] signIn denied: allowlist rejected (domain="${domain}", candidateLen=${candidate.length})`
+          `[auth] signIn denied: allowlist rejected (domain="${domain}", candidateLen=${candidate.length}, accountType=${account?.type ?? "none"}, hasProviderAccountId=${typeof account?.providerAccountId === "string"}, userEmailIsString=${typeof user?.email === "string"})`
         )
       }
       return ok

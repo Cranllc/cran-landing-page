@@ -13,7 +13,12 @@ export const metadata: Metadata = {
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
-  const email = session?.user?.email || ""
+  // No cookie / session: not "wrong email" — avoid ?error=AccessDenied (that implies allowlist reject).
+  if (!session?.user) {
+    redirect("/auth/signin")
+  }
+
+  const email = session.user.email || ""
   if (!isAllowedAdminEmail(email)) {
     redirect("/auth/signin?error=AccessDenied")
   }
