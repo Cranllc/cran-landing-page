@@ -1,9 +1,8 @@
 /**
- * Emails allowed to use the CMS / admin APIs.
+ * Allowed admin mailboxes (getcran.ai / cran-us.com trees).
  *
- * **Only the host matters** — any mailbox is OK as long as the domain is the apex or a
- * **subdomain** of **`getcran.ai`** or **`cran-us.com`** (e.g. `you@cran-us.com`,
- * `you@mail.cran-us.com`, `you@www.getcran.ai`). Matching is case-insensitive.
+ * Used when requesting a magic link (server `signIn` + optional client pre-check on the form).
+ * After a link is sent, the callback trusts the verified token — we don’t re-check here on every page.
  */
 function isUnderApex(host: string, apex: string): boolean {
   return host === apex || host === `www.${apex}` || host.endsWith(`.${apex}`)

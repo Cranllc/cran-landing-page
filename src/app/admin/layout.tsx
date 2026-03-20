@@ -1,5 +1,4 @@
 import { auth, signOut } from "@/auth"
-import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { unstable_noStore as noStore } from "next/cache"
 import { redirect } from "next/navigation"
 import { LayoutDashboard, ClipboardList, Images, Home } from "lucide-react"
@@ -18,15 +17,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   noStore()
   const session = await auth()
 
-  // No cookie / session: not "wrong email" — avoid ?error=AccessDenied (that implies allowlist reject).
-  if (!session?.user) {
+  // Domain was already checked when the magic link was requested; here we only need a signed-in user.
+  if (!session?.user?.email?.trim()) {
     redirect("/auth/signin")
   }
 
-  const email = session.user.email || ""
-  if (!isAllowedAdminEmail(email)) {
-    redirect("/auth/signin?error=AccessDenied")
-  }
+  const email = session.user.email.trim()
 
   return (
     <div className="min-h-dvh bg-[#FAFAF8] text-[#1a1a1a] flex flex-col">

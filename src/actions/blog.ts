@@ -2,18 +2,15 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
-import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 async function verifyAdmin() {
   const session = await auth()
   const user = session?.user
-  
-  if (!user || !isAllowedAdminEmail(user.email)) {
+  if (!user?.email?.trim()) {
     throw new Error("Unauthorized")
   }
-  
   return user
 }
 

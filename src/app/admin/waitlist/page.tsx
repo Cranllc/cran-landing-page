@@ -1,7 +1,4 @@
 import { prisma } from "@/lib/prisma"
-import { auth } from "@/auth"
-import { isAllowedAdminEmail } from "@/lib/admin-email"
-import { redirect } from "next/navigation"
 import NewsletterModal from "./NewsletterModal"
 
 export const metadata = {
@@ -10,13 +7,6 @@ export const metadata = {
 }
 
 export default async function WaitlistPage() {
-  const session = await auth()
-  const email = session?.user?.email || ""
-  
-  if (!isAllowedAdminEmail(email)) {
-    redirect("/auth/signin?error=AccessDenied")
-  }
-
   const signups = await (prisma as any).waitlist.findMany({
     orderBy: { createdAt: "desc" }
   })

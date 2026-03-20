@@ -1,7 +1,6 @@
 "use server"
 
 import { auth } from "@/auth"
-import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { getSupabaseAdmin } from "@/lib/supabase"
 
 const BUCKET_NAME = "blog-images"
@@ -9,11 +8,9 @@ const BUCKET_NAME = "blog-images"
 async function verifyAdmin() {
   const session = await auth()
   const user = session?.user
-  
-  if (!user || !isAllowedAdminEmail(user.email)) {
+  if (!user?.email?.trim()) {
     throw new Error("Unauthorized")
   }
-  
   return user
 }
 

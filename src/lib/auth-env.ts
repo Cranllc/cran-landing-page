@@ -1,6 +1,6 @@
 /**
  * Auth environment validation — keep magic-link + JWT behavior predictable.
- * Used by instrumentation (runtime) and documented in docs/AUTH_RUNBOOK.md.
+ * Used by instrumentation (runtime); see docs/auth-production.md.
  */
 
 const MIN_SECRET_LEN = 16
@@ -22,12 +22,25 @@ export function getAuthEnvIssues(): string[] {
   } else {
     try {
       const u = new URL(authUrl)
+      const path = u.pathname.replace(/\/$/, "") || "/"
+      // NextAuth merges origin from AUTH_URL; path should be / only (basePath is /api/auth in code).
+      if (path !== "/" && path !== "/api/auth") {
+        issues.push(
+          `AUTH_URL should be the site origin only (e.g. https://www.getcran.ai), not path "${u.pathname}". This app sets basePath=/api/auth in code.`
+        )
+      }
       if (u.protocol !== "https:" && process.env.NODE_ENV === "production") {
         issues.push("AUTH_URL should use https: in production.")
       }
       if (u.hostname.endsWith(".vercel.app")) {
         issues.push(
           "AUTH_URL must not point at *.vercel.app for the deployment users actually use (e.g. www.getcran.ai), or magic links and cookies will target the wrong host."
+        )
+      }
+      const cookieDom = (process.env.AUTH_COOKIE_DOMAIN || "").trim()
+      if (cookieDom && process.env.VERCEL_ENV === "preview") {
+        issues.push(
+          "AUTH_COOKIE_DOMAIN is set on a Vercel Preview — remove it for preview (*.vercel.app) or session cookies may not stick. Use it on Production only."
         )
       }
     } catch {

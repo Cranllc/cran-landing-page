@@ -25,15 +25,20 @@ function resolveSignInEmail(
 const authCookieDomain = process.env.AUTH_COOKIE_DOMAIN?.trim()
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  /** Must match `src/app/api/auth/[...nextauth]/route.ts`. Stops AUTH_URL path from breaking routes. */
+  basePath: "/api/auth",
   debug: process.env.NODE_ENV === "development",
   secret: process.env.AUTH_SECRET,
   adapter: prismaAdapterWithCaseInsensitiveEmail(prisma),
-  // Optional: e.g. AUTH_COOKIE_DOMAIN=.getcran.ai so the same session works on www + apex.
-  // Do not set on localhost or *.vercel.app previews.
+  // Optional: e.g. AUTH_COOKIE_DOMAIN=.getcran.ai for www + apex. Not on localhost/preview.
+  // CSRF cookie stays __Host- (no Domain) by design.
   ...(authCookieDomain
     ? {
         cookies: {
           sessionToken: {
+            options: { domain: authCookieDomain },
+          },
+          callbackUrl: {
             options: { domain: authCookieDomain },
           },
         },
@@ -109,18 +114,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token
     },
-    async signIn({ user, account, profile }) {
-      const candidate = resolveSignInEmail(user, account, profile)
-      const ok = isAllowedAdminEmail(candidate || undefined)
-      if (!ok) {
-        const domain = candidate.includes("@")
-          ? candidate.slice(candidate.lastIndexOf("@") + 1)
-          : "(no-domain)"
-        console.warn(
-          `[auth] signIn denied: allowlist rejected (domain="${domain}", candidateLen=${candidate.length}, accountType=${account?.type ?? "none"}, hasProviderAccountId=${typeof account?.providerAccountId === "string"}, userEmailIsString=${typeof user?.email === "string"})`
-        )
+    /**
+     * Domain allowlist runs only when the user clicks “Send magic link” (verification request).
+     * After that, the link is bound to a DB token + identifier — callback always succeeds so we
+     * don’t double-reject on shape/casing quirks.
+     */
+    async signIn({ user, account, profile, email }) {
+      const isVerificationRequest =
+        email !== null &&
+        email !== undefined &&
+        typeof email === "object" &&
+        "verificationRequest" in email &&
+        (email as { verificationRequest?: boolean }).verificationRequest === true
+
+      if (isVerificationRequest) {
+        const candidate = resolveSignInEmail(user, account, profile)
+        const ok = isAllowedAdminEmail(candidate || undefined)
+        if (!ok) {
+          console.warn("[auth] Magic link not sent: address is not an allowed admin domain.")
+        }
+        return ok
       }
-      return ok
+
+      if (account?.type === "email") {
+        return true
+      }
+
+      const candidate = resolveSignInEmail(user, account, profile)
+      return isAllowedAdminEmail(candidate || undefined)
     },
     async session({ session, token }) {
       const te = typeof token.email === "string" ? token.email.trim() : ""

@@ -23,14 +23,14 @@ Email sign-in will only be **predictable** if environment and DNS match how user
 - **`scripts/check-auth-env.mjs`** runs before production builds on Vercel (`VERCEL_ENV=production`) and **fails the build** if the above is inconsistent (e.g. `AUTH_URL` still on `vercel.app`).
 - **`instrumentation.ts`** logs warnings on server start in production if something is still wrong.
 
-## Allowlisted mailboxes
+## Allowed admin domains
 
-- See `src/lib/admin-email.ts`: `*.getcran.ai` and `*.cran-us.com` (apex + subdomains), NFKC-normalized.
+- Checked **only when sending** the magic link (`src/lib/admin-email.ts` + `signIn` verification request). Same rules: `*.getcran.ai` and `*.cran-us.com`, NFKC-normalized. The link itself is tied to a DB token; callback doesn’t re-run the domain gate.
 
 ## If login fails
 
-1. **Open `/auth/signin` with no query** — if you’re redirected there from `/admin` **without** `?error=AccessDenied`, the session cookie didn’t stick (secret, host, or callback).  
-2. **`?error=AccessDenied`** — allowlist rejected the resolved email; check Vercel logs for `[auth] signIn denied`.  
+1. **Redirect to `/auth/signin` with no query** — usually **no session cookie** (secret, host, `AUTH_URL`, or cookie domain).  
+2. **`?error=AccessDenied`** — rare; means the server rejected the address when requesting the link (or a non–email-provider path).  
 3. Request a **new** magic link after any `AUTH_URL` / secret change.  
 4. Confirm in DevTools → Application → Cookies for **`www.getcran.ai`** that `authjs.session-token` (or `__Secure-authjs.session-token`) appears **after** clicking the link.
 

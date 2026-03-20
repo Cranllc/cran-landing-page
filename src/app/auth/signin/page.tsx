@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { ArrowRight, Home, Lock } from "lucide-react"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 
 function signInErrorMessage(raw: string | null | undefined): string {
   const code = typeof raw === "string" ? raw : ""
@@ -25,9 +26,16 @@ export default function SignIn() {
     setStatus("loading")
     setErrorMessage(null)
 
+    const trimmed = email.trim()
+    if (!isAllowedAdminEmail(trimmed)) {
+      setStatus("error")
+      setErrorMessage(signInErrorMessage("AccessDenied"))
+      return
+    }
+
     try {
       const res = await signIn("resend", { 
-        email, 
+        email: trimmed, 
         redirect: false
       })
 

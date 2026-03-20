@@ -1,5 +1,16 @@
 # Auth / magic link — production checklist
 
+## Stack (audit)
+
+| Piece | Role |
+|-------|------|
+| `src/auth.ts` | NextAuth v5 + Resend email provider, JWT sessions, Prisma adapter (users + verification tokens), `signIn` allowlist, `jwt`/`session` email hydration, `redirect` uses request `baseUrl`. |
+| `basePath: "/api/auth"` | **Locked in code** — must match `src/app/api/auth/[...nextauth]/route.ts`. `AUTH_URL` should be **origin only** (`https://www.getcran.ai`), not a path. |
+| `src/app/admin/layout.tsx` | `dynamic` + `noStore()` + `auth()`; needs signed-in user with an email (domain already enforced when the link was sent). |
+| `src/lib/admin-email.ts` | Domain allowlist for **magic-link request** only (+ optional client hint on sign-in form). |
+| `src/lib/prisma-auth-adapter.ts` | Case-insensitive `getUserByEmail` for Postgres. |
+| `instrumentation.ts` | Production startup: logs `getAuthEnvIssues()` from `src/lib/auth-env.ts`. |
+
 Emails deliver but you get sent back to sign-in or “denied” when opening `/admin` almost always means **the session cookie is missing or not sent** on the next request—not Resend.
 
 ## Required (Vercel **Production**)
@@ -7,7 +18,7 @@ Emails deliver but you get sent back to sign-in or “denied” when opening `/a
 | Variable | Value |
 |----------|--------|
 | `AUTH_SECRET` | One stable secret for this project (never rotate casually; changing it logs everyone out). |
-| `AUTH_URL` | Exactly the origin users use: `https://www.getcran.ai` (not `*.vercel.app`). |
+| `AUTH_URL` | **Origin only**: `https://www.getcran.ai` (no extra path, or exactly `/api/auth` if you really mirror that — prefer origin only). Not `*.vercel.app` for the live site. |
 | `NEXT_PUBLIC_SITE_URL` | Same canonical origin, e.g. `https://www.getcran.ai`. |
 
 Redeploy after changing env vars.
