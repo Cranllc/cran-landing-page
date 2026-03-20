@@ -4,6 +4,7 @@ import { Resend as ResendSDK } from "resend"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import { SITE_URL } from "@/lib/site-config"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 
 const baseUrl = SITE_URL.replace(/\/$/, "")
 
@@ -56,8 +57,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      if (!user.email) return false
-      return user.email.endsWith("@getcran.ai") || user.email.endsWith("@cran-us.com")
+      return isAllowedAdminEmail(user.email)
+    },
+    /** JWT strategy: persist email on the token so `session.user.email` is always set for admin gates. */
+    async jwt({ token, user }) {
+      if (user?.email) token.email = user.email
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user && typeof token.email === "string") {
+        session.user.email = token.email
+      }
+      return session
     },
     async redirect({ url }) {
       const siteBase = baseUrl

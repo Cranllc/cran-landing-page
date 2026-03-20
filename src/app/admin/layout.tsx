@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { redirect } from "next/navigation"
 import { LayoutDashboard, ClipboardList, Images, Home } from "lucide-react"
 import Link from "next/link"
@@ -13,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth()
 
   const email = session?.user?.email || ""
-  if (!email.endsWith("@getcran.ai") && !email.endsWith("@cran-us.com")) {
+  if (!isAllowedAdminEmail(email)) {
     redirect("/auth/signin?error=AccessDenied")
   }
 

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { redirect } from "next/navigation"
 import NewsletterModal from "./NewsletterModal"
 
@@ -12,7 +13,7 @@ export default async function WaitlistPage() {
   const session = await auth()
   const email = session?.user?.email || ""
   
-  if (!email.endsWith("@getcran.ai") && !email.endsWith("@cran-us.com")) {
+  if (!isAllowedAdminEmail(email)) {
     redirect("/auth/signin?error=AccessDenied")
   }
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 
 /** Test Resend delivery. Dev only — prevents production abuse / extra Resend costs. */
 export async function GET(req: Request) {
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
   }
   const { searchParams } = new URL(req.url)
   const to = searchParams.get("to") || "tyler@cran-us.com"
-  if (!to.endsWith("@getcran.ai") && !to.endsWith("@cran-us.com")) {
+  if (!isAllowedAdminEmail(to)) {
     return NextResponse.json({ error: "Only @getcran.ai or @cran-us.com addresses allowed." }, { status: 403 })
   }
   const apiKey = process.env.RESEND_API_KEY

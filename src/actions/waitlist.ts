@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
+import { isAllowedAdminEmail } from "@/lib/admin-email"
 import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -10,7 +11,7 @@ async function verifyAdmin() {
   const session = await auth()
   const user = session?.user
   
-  if (!user || !user.email || (!user.email.endsWith("@getcran.ai") && !user.email.endsWith("@cran-us.com"))) {
+  if (!user || !isAllowedAdminEmail(user.email)) {
     throw new Error("Unauthorized")
   }
   
