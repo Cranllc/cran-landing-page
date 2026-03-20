@@ -58,12 +58,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const resend = new ResendSDK(apiKey)
         const parsed = new URL(url)
         const params = new URLSearchParams(parsed.search)
-        // Strip callbackUrl from link — nested URLs can trigger Chrome's phishing heuristics.
-        // `parsed.origin` comes from Auth.js, which (via next-auth) REPLACES the browser host with
-        // process.env.AUTH_URL / NEXTAUTH_URL when set. If those point at *.vercel.app, the email link
-        // will be vercel.app even when the user signed in on getcran.ai — fix: set AUTH_URL to
-        // https://www.getcran.ai for Production (same for NEXT_PUBLIC_SITE_URL).
-        params.delete("callbackUrl")
+        // Always send users to /admin after verify. Removing callbackUrl broke the flow when the
+        // client used `signIn(..., { redirect: false })` (no callback cookie) — Auth.js then had no
+        // destination and users often ended on /auth/signin. Forcing `/admin` is safe (same-site path).
+        params.set("callbackUrl", "/admin")
         const magicLink = `${parsed.origin}${parsed.pathname}?${params.toString()}`
         const { error } = await resend.emails.send({
           from,

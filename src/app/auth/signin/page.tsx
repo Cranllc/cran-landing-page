@@ -34,9 +34,10 @@ export default function SignIn() {
     }
 
     try {
-      const res = await signIn("resend", { 
-        email: trimmed, 
-        redirect: false
+      const res = await signIn("resend", {
+        email: trimmed,
+        redirect: false,
+        callbackUrl: "/admin",
       })
 
       if (res?.error) {
