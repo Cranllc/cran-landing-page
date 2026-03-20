@@ -8,7 +8,7 @@ import { ArrowRight, Home, Lock } from "lucide-react"
 function signInErrorMessage(raw: string | null | undefined): string {
   const code = typeof raw === "string" ? raw : ""
   if (code.includes("AccessDenied")) {
-    return "That email isn’t authorized for admin. Use your @getcran.ai or @cran-us.com address."
+    return "That address isn’t allowed for admin. Use any mailbox at @getcran.ai or @cran-us.com (e.g. you@getcran.ai or accounts@cran-us.com)."
   }
   return "We couldn’t send the sign-in email. Please try again in a moment."
 }
@@ -104,11 +104,15 @@ export default function SignIn() {
                     }
                   }}
                 disabled={status === "loading"}
-                  placeholder="tyler@cran-us.com"
+                  placeholder="you@getcran.ai"
                   required
                   autoFocus
                   className="w-full h-12 rounded-xl border border-charcoal/10 bg-[#FAFAF8] px-4 text-[15px] font-medium text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-cran/50 focus:ring-2 focus:ring-cran/20 focus:bg-white transition-all disabled:opacity-50"
                 />
+                <p className="mt-2 text-[11px] font-medium text-[#1a1a1a]/40">
+                  Allowed domains: <span className="text-[#1a1a1a]/55">@getcran.ai</span> ·{" "}
+                  <span className="text-[#1a1a1a]/55">@cran-us.com</span>
+                </p>
               </div>
 
               {status === "error" && errorMessage && (
