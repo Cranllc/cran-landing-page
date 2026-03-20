@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const to = searchParams.get("to") || "tyler@cran-us.com"
   if (!isAllowedAdminEmail(to)) {
-    return NextResponse.json({ error: "Only @getcran.ai or @cran-us.com addresses allowed." }, { status: 403 })
+    return NextResponse.json({ error: "Only getcran.ai / cran-us.com mailboxes (including subdomains) allowed." }, { status: 403 })
   }
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {

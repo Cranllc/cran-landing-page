@@ -90,9 +90,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account, profile }) {
       const candidate = resolveSignInEmail(user, account, profile)
       const ok = isAllowedAdminEmail(candidate || undefined)
-      if (!ok && process.env.NODE_ENV === "development") {
+      if (!ok) {
+        const domain = candidate.includes("@")
+          ? candidate.slice(candidate.lastIndexOf("@") + 1)
+          : "(no-domain)"
         console.warn(
-          "[auth] signIn denied — resolved email empty or not allowlisted. Check User.email casing vs login address."
+          `[auth] signIn denied: allowlist rejected (domain="${domain}", candidateLen=${candidate.length})`
         )
       }
       return ok
