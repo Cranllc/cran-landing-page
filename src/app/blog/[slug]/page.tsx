@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/site-config';
 import { getPostHeroImageUrl, getPostPreviewImageUrl } from '@/lib/markdown-images';
+import { sanitizeMarkdownPasteArtifacts } from '@/lib/sanitize-markdown-paste';
 import ShareArticleClient from '@/components/ShareArticleClient';
 import Image from 'next/image';
 
@@ -241,6 +242,19 @@ export default async function BlogPost({ params }: Props) {
                 h1: ({...props}) => <h1 className="text-3xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
                 h2: ({...props}) => <h2 className="text-2xl font-bold text-[#26251E] tracking-tight mt-16 mb-6" {...props} />,
                 h3: ({...props}) => <h3 className="text-xl font-bold text-[#26251E] tracking-tight mt-12 mb-4" {...props} />,
+                a: ({ href, children, className, ...props }) => {
+                  const external = typeof href === "string" && /^https?:\/\//i.test(href)
+                  return (
+                    <a
+                      href={href}
+                      className={`text-cran font-semibold underline-offset-[3px] decoration-cran/35 decoration-2 hover:underline ${className ?? ""}`}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      {...props}
+                    >
+                      {children}
+                    </a>
+                  )
+                },
                 code: ({...props}) => <code className="bg-[#1a1a1a]/5 text-[#B83A2E] px-1.5 py-0.5 rounded font-mono text-[14px]" {...props} />,
                 img: ({ src, alt, ...props }) => {
                   if (!src || typeof src !== "string") return null;
@@ -258,7 +272,7 @@ export default async function BlogPost({ params }: Props) {
                 },
               }}
             >
-              {post.content}
+              {sanitizeMarkdownPasteArtifacts(post.content)}
             </ReactMarkdown>
             
             <p className="mt-8 mb-6">
