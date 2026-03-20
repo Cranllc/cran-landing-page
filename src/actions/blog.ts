@@ -62,11 +62,16 @@ export async function updatePost(
     heroImageUrl?: string | null
     /** Cards + OG/Twitter; falls back to hero in readers if empty */
     previewImageUrl?: string | null
-    /** Shown as byline; empty clears override (falls back to account name/email) */
-    authorDisplayName?: string | null
+    /** Shown as byline; pass null or "" to clear (falls back to account name/email) */
+    authorDisplayName: string | null
   }
 ) {
   await verifyAdmin()
+
+  const previous = await prisma.post.findUnique({
+    where: { id },
+    select: { slug: true },
+  })
 
   const preview = data.previewImageUrl === undefined ? undefined : data.previewImageUrl || null
   const hero = data.heroImageUrl === undefined ? undefined : data.heroImageUrl || null
@@ -88,9 +93,7 @@ export async function updatePost(
     ...(hero !== undefined ? { heroImageUrl: hero } : {}),
     ...(preview !== undefined ? { previewImageUrl: preview } : {}),
     ...(featuredSync !== undefined ? { featuredImageUrl: featuredSync } : {}),
-    ...(data.authorDisplayName !== undefined
-      ? { authorDisplayName: data.authorDisplayName?.trim() || null }
-      : {}),
+    authorDisplayName: data.authorDisplayName?.trim() || null,
   }
 
   await prisma.post.update({
@@ -100,6 +103,9 @@ export async function updatePost(
   
   revalidatePath("/admin")
   revalidatePath("/blog")
+  if (previous?.slug && previous.slug !== data.slug) {
+    revalidatePath(`/blog/${previous.slug}`)
+  }
   revalidatePath(`/blog/${data.slug}`)
   revalidatePath("/")
 }

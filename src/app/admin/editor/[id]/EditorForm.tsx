@@ -124,6 +124,7 @@ export default function EditorForm({
           seoDescription: formData.seoDescription.trim() || null,
           heroImageUrl: formData.heroImageUrl.trim() || null,
           previewImageUrl: formData.previewImageUrl.trim() || null,
+          authorDisplayName: formData.authorDisplayName.trim() || null,
         })
         setSaveStatus("saved")
         setTimeout(() => setSaveStatus("idle"), 2000)
