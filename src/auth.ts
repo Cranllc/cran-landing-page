@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import Resend from "next-auth/providers/resend"
 import { Resend as ResendSDK } from "resend"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
+import { prismaAdapterWithCaseInsensitiveEmail } from "@/lib/prisma-auth-adapter"
 import { SITE_URL } from "@/lib/site-config"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
 
@@ -11,7 +11,7 @@ const baseUrl = SITE_URL.replace(/\/$/, "")
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   secret: process.env.AUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+  adapter: prismaAdapterWithCaseInsensitiveEmail(prisma),
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
@@ -64,8 +64,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user }) {
-      return isAllowedAdminEmail(user.email)
+    async signIn({ user, account, profile }) {
+      const fromUser = typeof user?.email === "string" ? user.email : ""
+      const fromAccount =
+        account?.type === "email" && typeof account.providerAccountId === "string"
+          ? account.providerAccountId
+          : ""
+      const fromProfile =
+        profile && typeof (profile as { email?: string }).email === "string"
+          ? (profile as { email: string }).email
+          : ""
+      const candidate = (fromUser || fromAccount || fromProfile).trim()
+      const ok = isAllowedAdminEmail(candidate || undefined)
+      if (!ok && process.env.NODE_ENV === "development") {
+        console.warn(
+          "[auth] signIn denied — resolved email empty or not allowlisted. Check User.email casing vs login address."
+        )
+      }
+      return ok
     },
     async redirect({ url }) {
       const siteBase = baseUrl
