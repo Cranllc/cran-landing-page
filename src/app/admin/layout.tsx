@@ -34,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Blog Posts
             </Link>
             <Link href="/admin/post-assets" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
-              Post assets
+              Post images
             </Link>
             <Link href="/admin/waitlist" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
               Waitlist
@@ -79,7 +79,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </Link>
         <Link href="/admin/post-assets" className="flex flex-col items-center gap-1 p-2.5 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center min-w-0">
           <Images strokeWidth={2.5} size={20} className="opacity-80 shrink-0" />
-          <span className="text-[9px] font-bold tracking-wide uppercase truncate w-full">Assets</span>
+          <span className="text-[9px] font-bold tracking-wide uppercase truncate w-full">Images</span>
         </Link>
         <Link href="/admin/waitlist" className="flex flex-col items-center gap-1 p-2.5 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center min-w-0">
           <ClipboardList strokeWidth={2.5} size={20} className="opacity-80 shrink-0" />

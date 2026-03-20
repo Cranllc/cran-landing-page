@@ -27,9 +27,9 @@ Confirm `Post` has `seoTitle`, `seoDescription`, `featuredImageUrl`.
 ## 3. Manual — local (`npm run dev`)
 
 - [ ] **Admin → open a post** — **Write** tab: edit body, save, no errors.
-- [ ] **Assets** tab — SEO title, meta description, featured URL + upload.
-- [ ] **Assets** — List shows images from markdown; editing **alt** updates markdown (switch to Write and confirm).
-- [ ] **Use as featured** — Sets featured URL; toggle off clears it.
+- [ ] **SEO** tab — SEO title, meta description, cover/featured URL + upload.
+- [ ] **Assets** tab — Only markdown `![]()` images; editing **alt** updates markdown (switch to Write and confirm).
+- [ ] **Use as cover** (on Assets) — Sets cover URL on SEO tab; toggle off clears it.
 - [ ] **Copy URL** — Puts image URL on clipboard.
 - [ ] **Published post** — Visit `/blog/{slug}`: hero uses featured or first image; view source or DevTools → `<script type="application/ld+json">` contains Article + BreadcrumbList.
 

@@ -4,6 +4,8 @@ import {
   replaceMarkdownImageAlt,
   extractFirstImageUrl,
   getPostShareImageUrl,
+  resolveImageUrlForPreview,
+  getFirstInPostImagePreviewUrl,
 } from "./markdown-images";
 
 describe("parseMarkdownImages", () => {
@@ -103,5 +105,41 @@ describe("getPostShareImageUrl", () => {
 
   it("returns null when nothing usable", () => {
     expect(getPostShareImageUrl({ featuredImageUrl: null, content: "no img" })).toBeNull();
+  });
+});
+
+describe("resolveImageUrlForPreview", () => {
+  const base = "https://www.example.com";
+
+  it("returns https URLs unchanged", () => {
+    expect(resolveImageUrlForPreview("https://cdn.com/a.png", base)).toBe("https://cdn.com/a.png");
+  });
+
+  it("joins root-relative paths to site base", () => {
+    expect(resolveImageUrlForPreview("/dog.jpg", base)).toBe("https://www.example.com/dog.jpg");
+  });
+
+  it("returns null for empty base and relative path", () => {
+    expect(resolveImageUrlForPreview("/x.png", "")).toBeNull();
+  });
+});
+
+describe("getFirstInPostImagePreviewUrl", () => {
+  const base = "https://www.example.com";
+
+  it("uses first markdown image only (ignores featured concept)", () => {
+    expect(
+      getFirstInPostImagePreviewUrl("![a](https://z.com/1.png)", base)
+    ).toBe("https://z.com/1.png");
+  });
+
+  it("resolves root-relative image in markdown", () => {
+    expect(getFirstInPostImagePreviewUrl("![](/uploads/x.png)", base)).toBe(
+      "https://www.example.com/uploads/x.png"
+    );
+  });
+
+  it("returns null when no images in body", () => {
+    expect(getFirstInPostImagePreviewUrl("No images here", base)).toBeNull();
   });
 });

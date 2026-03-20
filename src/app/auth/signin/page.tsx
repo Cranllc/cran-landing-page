@@ -5,17 +5,25 @@ import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { ArrowRight, Home, Lock } from "lucide-react"
 
+function signInErrorMessage(raw: string | null | undefined): string {
+  const code = typeof raw === "string" ? raw : ""
+  if (code.includes("AccessDenied")) {
+    return "That email isn’t authorized for admin. Use your @getcran.ai or @cran-us.com address."
+  }
+  return "We couldn’t send the sign-in email. Please try again in a moment."
+}
+
 export default function SignIn() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
-  const [errorDetail, setErrorDetail] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
 
     setStatus("loading")
-    setErrorDetail(null)
+    setErrorMessage(null)
 
     try {
       const res = await signIn("resend", { 
@@ -25,7 +33,9 @@ export default function SignIn() {
 
       if (res?.error) {
         setStatus("error")
-        setErrorDetail(typeof res.error === "string" ? res.error : (res as { error?: string })?.error ?? null)
+        const raw =
+          typeof res.error === "string" ? res.error : (res as { error?: string }).error ?? null
+        setErrorMessage(signInErrorMessage(raw))
       } else {
         setStatus("success")
         // NOTE: For Magic Links, NextAuth doesn't automatically log you in right here. 
@@ -35,7 +45,7 @@ export default function SignIn() {
     } catch (err) {
       console.error(err)
       setStatus("error")
-      setErrorDetail(err instanceof Error ? err.message : "Unknown error")
+      setErrorMessage(signInErrorMessage(err instanceof Error ? err.message : null))
     }
   }
 
@@ -88,8 +98,11 @@ export default function SignIn() {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
-                  if (status === "error") setStatus("idle")
-                }}
+                    if (status === "error") {
+                      setStatus("idle")
+                      setErrorMessage(null)
+                    }
+                  }}
                 disabled={status === "loading"}
                   placeholder="tyler@cran-us.com"
                   required
@@ -98,22 +111,12 @@ export default function SignIn() {
                 />
               </div>
 
-              {status === "error" && (
-                <div className="space-y-2">
-                  <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">
-                    There was a problem sending the email. Please try again.
-                    {errorDetail && (
-                      <p className="mt-2 text-xs font-mono text-red-600/90 break-all">{errorDetail}</p>
-                    )}
-                  </div>
-                  <a
-                    href={`/api/debug-resend?to=${encodeURIComponent(email)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-xs text-charcoal/60 hover:text-cran hover:underline"
-                  >
-                    Open diagnostic (shows Resend error) →
-                  </a>
+              {status === "error" && errorMessage && (
+                <div
+                  className="text-red-600 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100"
+                  role="alert"
+                >
+                  {errorMessage}
                 </div>
               )}
 

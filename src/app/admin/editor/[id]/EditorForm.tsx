@@ -3,7 +3,8 @@
 import { useState, useTransition, useRef, useMemo, useEffect } from "react"
 import { updatePost } from "@/actions/blog"
 import { uploadBlogImage } from "@/actions/storage"
-import { parseMarkdownImages, replaceMarkdownImageAlt } from "@/lib/markdown-images"
+import { parseMarkdownImages, replaceMarkdownImageAlt, resolveImageUrlForPreview } from "@/lib/markdown-images"
+import { SITE_URL } from "@/lib/site-config"
 import type { Post } from "@prisma/client"
 import {
   ImageIcon,
@@ -22,6 +23,7 @@ import {
   Star,
   Copy,
   Check,
+  Share2,
 } from "lucide-react"
 
 /** SEO columns — intersect so EditorForm type-checks even if TS uses a pre-migration Prisma `Post`. */
@@ -31,7 +33,7 @@ type PostForEditor = Post & {
   featuredImageUrl?: string | null
 }
 
-type EditorTab = "write" | "assets"
+type EditorTab = "write" | "assets" | "seo"
 
 export default function EditorForm({
   post,
@@ -66,6 +68,14 @@ export default function EditorForm({
   useEffect(() => {
     setEditorTab(initialTab)
   }, [initialTab])
+
+  /** Absolute base for resolving `/…` image URLs in previews (localhost vs production). */
+  const [previewOrigin, setPreviewOrigin] = useState("")
+  useEffect(() => {
+    setPreviewOrigin(window.location.origin)
+  }, [])
+
+  const imagePreviewBase = previewOrigin || SITE_URL.replace(/\/$/, "")
 
   const contentImages = useMemo(() => parseMarkdownImages(formData.content), [formData.content])
 
@@ -240,9 +250,6 @@ export default function EditorForm({
     }
   }
 
-  const isHttpImage = (url: string) =>
-    url.startsWith("https://") || url.startsWith("http://")
-
   return (
     <div className="flex flex-col h-full bg-[#FAFAF8]">
       {/* Top action bar */}
@@ -318,8 +325,8 @@ export default function EditorForm({
         </div>
       </div>
 
-      {/* Write | Assets */}
-      <div className="border-b border-[#E5E5E0] bg-white px-4 sm:px-6 shrink-0 flex gap-1">
+      {/* Write | Assets (markdown images) | SEO */}
+      <div className="border-b border-[#E5E5E0] bg-white px-4 sm:px-6 shrink-0 flex gap-1 flex-wrap">
         <button
           type="button"
           onClick={() => setEditorTab("write")}
@@ -349,10 +356,25 @@ export default function EditorForm({
             </span>
           )}
         </button>
+        <button
+          type="button"
+          onClick={() => setEditorTab("seo")}
+          className={`flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-t-lg border-b-2 -mb-px transition-colors ${
+            editorTab === "seo"
+              ? "border-cran text-[#1a1a1a] bg-[#FAFAF8]"
+              : "border-transparent text-[#1a1a1a]/45 hover:text-[#1a1a1a]/70"
+          }`}
+        >
+          <Share2 size={16} aria-hidden />
+          SEO
+        </button>
       </div>
 
-      {editorTab === "assets" && (
+      {editorTab === "seo" && (
         <div className="flex-1 overflow-y-auto border-b border-[#E5E5E0] bg-[#FAFAF8] px-4 sm:px-6 py-6 space-y-8">
+          <p className="text-[13px] text-[#1a1a1a]/50 max-w-2xl">
+            Search snippets, social cards, and the article <strong>cover</strong> image. These are separate from images you embed in the post body — those are managed under <strong>Assets</strong>.
+          </p>
           <section className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
               Search &amp; social
@@ -392,11 +414,11 @@ export default function EditorForm({
 
           <section className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
-              Featured image
+              Cover / featured image
             </h2>
             <div className="bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5 space-y-3">
               <p className="text-[12px] text-[#1a1a1a]/55 leading-relaxed">
-                Used for Open Graph, Twitter, and the article hero. Overrides the first in-article image when set.
+                Open Graph, Twitter card, and the hero above the article. Not the same as images inside the post — use <strong>Assets</strong> for those. If empty, the first in-article image is used when published.
               </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
@@ -427,19 +449,33 @@ export default function EditorForm({
                   Upload
                 </button>
               </div>
-              {formData.featuredImageUrl.trim() && isHttpImage(formData.featuredImageUrl.trim()) && (
-                <div className="mt-3 rounded-lg border border-[#E5E5E0] overflow-hidden max-w-md bg-[#FAFAF8]">
+              {(() => {
+                const featuredPreview = resolveImageUrlForPreview(formData.featuredImageUrl, imagePreviewBase)
+                if (!featuredPreview) return null
+                return (
+                <div className="mt-3 rounded-lg border border-[#E5E5E0] overflow-hidden max-w-lg bg-[#FAFAF8]">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[#1a1a1a]/40 px-3 pt-2 pb-1">
+                    Preview
+                  </p>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={formData.featuredImageUrl.trim()}
-                    alt="Featured preview"
-                    className="w-full h-40 object-cover"
+                    src={featuredPreview}
+                    alt="Cover preview"
+                    className="w-full max-h-64 min-h-[160px] object-contain object-center bg-[#F3F3F0]"
                   />
                 </div>
-              )}
+                )
+              })()}
             </div>
           </section>
+        </div>
+      )}
 
+      {editorTab === "assets" && (
+        <div className="flex-1 overflow-y-auto border-b border-[#E5E5E0] bg-[#FAFAF8] px-4 sm:px-6 py-6 space-y-8">
+          <p className="text-[13px] text-[#1a1a1a]/50 max-w-2xl">
+            <strong>Assets</strong> are only the images referenced in your markdown (<code className="text-[12px] bg-white px-1 py-0.5 rounded border border-[#E5E5E0]">![]()</code>). Set alt text and URLs here. Use <strong>SEO</strong> for the cover image and meta tags.
+          </p>
           <section className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
               Images in this post
@@ -453,17 +489,24 @@ export default function EditorForm({
                 {contentImages.map((img) => {
                   const trimmedFeatured = formData.featuredImageUrl.trim()
                   const isFeatured = trimmedFeatured === img.url
+                  const rowPreview = resolveImageUrlForPreview(img.url, imagePreviewBase)
                   return (
                     <li
                       key={`content-image-${img.index}`}
                       className="bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4"
                     >
-                      <div className="shrink-0 w-full sm:w-36 h-28 rounded-lg border border-[#E5E5E0] overflow-hidden bg-[#FAFAF8] flex items-center justify-center">
-                        {isHttpImage(img.url) ? (
+                      <div className="shrink-0 w-full sm:w-40 h-32 rounded-lg border border-[#E5E5E0] overflow-hidden bg-[#FAFAF8] flex items-center justify-center">
+                        {rowPreview ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={img.url} alt="" className="w-full h-full object-cover" />
+                          <img
+                            src={rowPreview}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
-                          <span className="text-[10px] text-[#1a1a1a]/35 px-2 text-center">Preview needs http(s) URL</span>
+                          <span className="text-[10px] text-[#1a1a1a]/35 px-2 text-center leading-snug">
+                            Add an https URL or a path like /image.png (preview uses your site base)
+                          </span>
                         )}
                       </div>
                       <div className="flex-1 min-w-0 space-y-3">
@@ -506,7 +549,7 @@ export default function EditorForm({
                             }`}
                           >
                             <Star size={12} className={isFeatured ? "fill-cran text-cran" : ""} aria-hidden />
-                            {isFeatured ? "Featured" : "Use as featured"}
+                            {isFeatured ? "Cover set" : "Use as cover"}
                           </button>
                         </div>
                       </div>

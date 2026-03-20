@@ -14,6 +14,24 @@ export function getPostShareImageUrl(post: {
   return extractFirstImageUrl(post.content);
 }
 
+/**
+ * Turn a stored image URL into an absolute URL for `<img src>` (admin previews, etc.).
+ * Supports `https://…`, `http://…`, and site-root paths like `/foo.jpg`.
+ */
+export function resolveImageUrlForPreview(url: string | null | undefined, siteBaseUrl: string): string | null {
+  const u = url?.trim();
+  if (!u) return null;
+  if (u.startsWith("https://") || u.startsWith("http://")) return u;
+  const base = siteBaseUrl.replace(/\/$/, "");
+  if (u.startsWith("/") && base.length > 0) return `${base}${u}`;
+  return null;
+}
+
+/** First `![alt](url)` in the post body as an absolute URL (admin list thumbnails). Ignores featured/cover. */
+export function getFirstInPostImagePreviewUrl(content: string, siteBaseUrl: string): string | null {
+  return resolveImageUrlForPreview(extractFirstImageUrl(content), siteBaseUrl);
+}
+
 /** One markdown image `![alt](url)` occurrence in content (by scan order). */
 export type ParsedMarkdownImage = {
   index: number;

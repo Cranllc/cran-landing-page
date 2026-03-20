@@ -18,7 +18,8 @@ export default async function EditorPage({
     notFound()
   }
 
-  const initialTab = tab === "assets" ? "assets" : "write"
+  const initialTab =
+    tab === "assets" ? "assets" : tab === "seo" ? "seo" : "write"
 
   return (
     <div className="flex flex-col h-[calc(100vh-140px)]">
