@@ -2,9 +2,21 @@ import { SITE_URL } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cran | Privacy Policy",
+  title: "Privacy Policy",
   description: "Cran's privacy policy. Learn how we collect, use, and protect your personal information.",
   alternates: { canonical: `${SITE_URL}/legal/privacy-policy` },
+  openGraph: {
+    title: "Privacy Policy",
+    description: "Cran's privacy policy. Learn how we collect, use, and protect your personal information.",
+    url: `${SITE_URL}/legal/privacy-policy`,
+    siteName: "Cran",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Privacy Policy",
+    description: "How Cran collects, uses, and protects your personal information.",
+  },
 };
 
 const LAST_UPDATED = "March 15, 2025";

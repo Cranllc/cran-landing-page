@@ -36,7 +36,7 @@ Confirm `Post` has `seoTitle`, `seoDescription`, `featuredImageUrl`.
 ## 4. Production smoke (after deploy)
 
 - [ ] `https://www.getcran.ai/sitemap.xml` returns **200** XML.
-- [ ] One blog URL: correct `<title>` (`Cran | …`) and meta description (custom or auto).
+- [ ] One blog URL: correct `<title>` (post title only; home is `Cran | …`) and meta description (custom or auto).
 - [ ] Optional: [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) or Twitter Card Validator on a post URL.
 
 ## 5. Existing scripts

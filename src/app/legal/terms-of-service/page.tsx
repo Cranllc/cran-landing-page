@@ -2,9 +2,21 @@ import { SITE_URL } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cran | Terms of Service",
+  title: "Terms of Service",
   description: "Terms of service for using Cran's website and AI-powered shelter management platform.",
   alternates: { canonical: `${SITE_URL}/legal/terms-of-service` },
+  openGraph: {
+    title: "Terms of Service",
+    description: "Terms of service for using Cran's website and AI-powered shelter management platform.",
+    url: `${SITE_URL}/legal/terms-of-service`,
+    siteName: "Cran",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Terms of Service",
+    description: "Terms for using Cran's website and shelter management platform.",
+  },
 };
 
 const LAST_UPDATED = "March 15, 2025";

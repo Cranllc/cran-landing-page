@@ -6,18 +6,19 @@ import { MessageSquare, Mail } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cran | Support",
+  title: "Support",
   description: "Get help, ask questions, or join the Cran community. We're here to support animal shelters.",
   alternates: { canonical: `${SITE_URL}/support` },
   openGraph: {
-    title: "Cran | Support",
+    title: "Support",
     description: "Get help, ask questions, or join the Cran community. We're here to support animal shelters.",
     url: `${SITE_URL}/support`,
+    siteName: "Cran",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Cran | Support",
+    title: "Support",
     description: "Get help, ask questions, or join the Cran community.",
   },
 };

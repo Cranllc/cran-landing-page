@@ -2,11 +2,25 @@ import Link from "next/link";
 import { PawPrint, ArrowRight } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { SITE_URL } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cran | Page Not Found",
+  title: "Page Not Found",
   description: "This page could not be found on Cran.",
+  robots: { index: false, follow: true },
+  openGraph: {
+    title: "Page Not Found",
+    description: "This page could not be found on Cran.",
+    url: SITE_URL,
+    siteName: "Cran",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Page Not Found",
+    description: "This page could not be found on Cran.",
+  },
 };
 
 export default function NotFound() {

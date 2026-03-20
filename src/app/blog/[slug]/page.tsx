@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPostBySlug } from '@/lib/blog-cache';
+import { getPostBySlug, type BlogPostWithAuthor } from '@/lib/blog-cache';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
@@ -8,22 +8,19 @@ import { getPostShareImageUrl } from '@/lib/markdown-images';
 import ShareArticleClient from '@/components/ShareArticleClient';
 import Image from 'next/image';
 
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 
 type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const post = await getPostBySlug(resolvedParams.slug);
 
   if (!post) {
     return {
-      title: 'Cran | Post Not Found',
+      title: 'Post Not Found',
       description: 'The requested blog post could not be found.',
     }
   }
@@ -43,8 +40,7 @@ export async function generateMetadata(
       : null;
   const hasShareImage = Boolean(shareImage);
 
-  const titleSegment = post.seoTitle?.trim() || post.title;
-  const pageTitle = `Cran | ${titleSegment}`;
+  const pageTitle = post.seoTitle?.trim() || post.title;
   return {
     title: pageTitle,
     description: metaDescription,
@@ -77,7 +73,7 @@ export async function generateMetadata(
 
 export default async function BlogPost({ params }: Props) {
   const resolvedParams = await params;
-  const post: any = await getPostBySlug(resolvedParams.slug);
+  const post: BlogPostWithAuthor | null = await getPostBySlug(resolvedParams.slug);
 
   if (!post || !post.published) {
     notFound();

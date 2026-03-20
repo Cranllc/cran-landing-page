@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/auth"
-import { supabase } from "@/lib/supabase"
+import { getSupabaseAdmin } from "@/lib/supabase"
 
 const BUCKET_NAME = "blog-images"
 
@@ -18,6 +18,8 @@ async function verifyAdmin() {
 
 export async function uploadBlogImage(formData: FormData) {
   try {
+    const supabase = getSupabaseAdmin()
+
     // 1. Verify admin permissions
     await verifyAdmin()
 

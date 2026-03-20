@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { ArrowRight, Lock } from "lucide-react"
+import { ArrowRight, Home, Lock } from "lucide-react"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -41,7 +41,14 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-white text-charcoal font-sans flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      
+      <Link
+        href="/"
+        className="absolute left-4 top-4 sm:left-6 sm:top-6 z-20 inline-flex items-center gap-2 text-sm font-semibold text-[#1a1a1a]/60 hover:text-cran transition-colors"
+      >
+        <Home className="w-4 h-4 shrink-0" strokeWidth={2.25} aria-hidden />
+        Back to site
+      </Link>
+
       {/* Abstract Background Elements */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cran/5 rounded-full blur-[100px] pointer-events-none" />
       

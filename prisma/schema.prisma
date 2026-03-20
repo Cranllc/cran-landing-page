@@ -30,7 +30,7 @@ model Post {
   published        Boolean  @default(false)
   category         String?
   tags             String[] @default([])
-  /// Optional SEO: title segment after "Cran | " in meta tags
+  /// Optional SEO: overrides post title in document title / Open Graph (root page keeps "Cran | …")
   seoTitle         String?
   /// Optional meta description (~150–160 chars)
   seoDescription   String?  @db.Text

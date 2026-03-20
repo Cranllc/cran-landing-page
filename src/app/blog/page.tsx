@@ -4,14 +4,20 @@ import { SITE_URL } from '@/lib/site-config';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cran | Blog & Research',
+  title: 'Blog & Research',
   description: 'Stories, insights, and updates from the Cran team.',
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
-    title: 'Cran | Blog',
+    title: 'Blog & Research',
     description: 'Stories, insights, and updates from the Cran team.',
     url: `${SITE_URL}/blog`,
+    siteName: 'Cran',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog & Research',
+    description: 'Stories, insights, and updates from the Cran team.',
   },
 };
 

@@ -4,7 +4,8 @@ import { redirect } from "next/navigation"
 import NewsletterModal from "./NewsletterModal"
 
 export const metadata = {
-  title: "Cran | Waitlist Signups",
+  title: "Waitlist Signups",
+  robots: { index: false, follow: false },
 }
 
 export default async function WaitlistPage() {

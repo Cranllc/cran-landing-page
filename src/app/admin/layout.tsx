@@ -1,7 +1,13 @@
 import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
-import { LayoutDashboard, ClipboardList } from "lucide-react"
+import { LayoutDashboard, ClipboardList, Images, Home } from "lucide-react"
 import Link from "next/link"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Blog Admin",
+  robots: { index: false, follow: false },
+}
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -27,14 +33,24 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
               Blog Posts
             </Link>
-            <Link href="/admin/waitlist" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors items-center flex gap-1.5">
-              Waitlist <span className="px-1.5 py-0.5 rounded bg-cran/10 text-cran text-[10px] font-bold uppercase tracking-wider">New</span>
+            <Link href="/admin/post-assets" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
+              Post assets
+            </Link>
+            <Link href="/admin/waitlist" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
+              Waitlist
             </Link>
           </nav>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="text-[13px] font-medium text-[#1a1a1a]/60">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 shrink-0 rounded-lg px-2 py-1.5 sm:px-3 text-sm font-semibold text-cran hover:bg-cran/10 hover:text-[#B83A2E] transition-colors whitespace-nowrap"
+          >
+            <Home className="w-4 h-4 shrink-0" strokeWidth={2.25} aria-hidden />
+            View site
+          </Link>
+          <div className="text-[13px] font-medium text-[#1a1a1a]/60 max-w-[100px] sm:max-w-[180px] lg:max-w-[220px] truncate" title={email}>
             {email}
           </div>
           <form
@@ -56,17 +72,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E0] z-50 flex items-center justify-around px-2 pb-safe" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        <Link href="/admin" className="flex flex-col items-center gap-1.5 p-3 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center">
-          <LayoutDashboard strokeWidth={2.5} size={22} className="opacity-80" />
-          <span className="text-[10px] font-bold tracking-wide uppercase">Posts</span>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E0] z-50 flex items-center justify-around px-1 pb-safe" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <Link href="/admin" className="flex flex-col items-center gap-1 p-2.5 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center min-w-0">
+          <LayoutDashboard strokeWidth={2.5} size={20} className="opacity-80 shrink-0" />
+          <span className="text-[9px] font-bold tracking-wide uppercase truncate w-full">Posts</span>
         </Link>
-        <Link href="/admin/waitlist" className="flex flex-col items-center gap-1.5 p-3 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center">
-          <div className="relative">
-            <ClipboardList strokeWidth={2.5} size={22} className="opacity-80" />
-            <div className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-cran shadow-[0_0_8px_rgba(214,68,54,0.6)]"></div>
-          </div>
-          <span className="text-[10px] font-bold tracking-wide uppercase">Waitlist</span>
+        <Link href="/admin/post-assets" className="flex flex-col items-center gap-1 p-2.5 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center min-w-0">
+          <Images strokeWidth={2.5} size={20} className="opacity-80 shrink-0" />
+          <span className="text-[9px] font-bold tracking-wide uppercase truncate w-full">Assets</span>
+        </Link>
+        <Link href="/admin/waitlist" className="flex flex-col items-center gap-1 p-2.5 text-[#1a1a1a]/60 hover:text-cran transition-colors active:scale-95 flex-1 text-center min-w-0">
+          <ClipboardList strokeWidth={2.5} size={20} className="opacity-80 shrink-0" />
+          <span className="text-[9px] font-bold tracking-wide uppercase truncate w-full">Waitlist</span>
         </Link>
       </nav>
     </div>

@@ -3,13 +3,22 @@ import { notFound } from "next/navigation"
 import EditorForm from "./EditorForm"
 import Link from "next/link"
 
-export default async function EditorPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = await params;
-  const post = await getPost(resolvedParams.id);
+export default async function EditorPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ tab?: string }>
+}) {
+  const resolvedParams = await params
+  const { tab } = await searchParams
+  const post = await getPost(resolvedParams.id)
 
   if (!post) {
     notFound()
   }
+
+  const initialTab = tab === "assets" ? "assets" : "write"
 
   return (
     <div className="flex flex-col h-[calc(100vh-140px)]">
@@ -24,7 +33,7 @@ export default async function EditorPage({ params }: { params: Promise<{ id: str
       </div>
       
       <div className="flex-1 bg-white border border-[#E5E5E0] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col">
-        <EditorForm post={post} />
+        <EditorForm post={post} initialTab={initialTab} />
       </div>
     </div>
   )

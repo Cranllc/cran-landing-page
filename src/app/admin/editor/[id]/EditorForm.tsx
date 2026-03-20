@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition, useRef, useMemo } from "react"
+import { useState, useTransition, useRef, useMemo, useEffect } from "react"
 import { updatePost } from "@/actions/blog"
 import { uploadBlogImage } from "@/actions/storage"
 import { parseMarkdownImages, replaceMarkdownImageAlt } from "@/lib/markdown-images"
@@ -33,7 +33,13 @@ type PostForEditor = Post & {
 
 type EditorTab = "write" | "assets"
 
-export default function EditorForm({ post }: { post: PostForEditor }) {
+export default function EditorForm({
+  post,
+  initialTab = "write",
+}: {
+  post: PostForEditor
+  initialTab?: EditorTab
+}) {
   const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({
     title: post.title,
@@ -54,8 +60,12 @@ export default function EditorForm({ post }: { post: PostForEditor }) {
   const featuredFileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
-  const [editorTab, setEditorTab] = useState<EditorTab>("write")
+  const [editorTab, setEditorTab] = useState<EditorTab>(initialTab)
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    setEditorTab(initialTab)
+  }, [initialTab])
 
   const contentImages = useMemo(() => parseMarkdownImages(formData.content), [formData.content])
 
@@ -138,22 +148,32 @@ export default function EditorForm({ post }: { post: PostForEditor }) {
     }
   }
 
+  const MAX_IMAGE_BYTES = 5 * 1024 * 1024 // match Supabase bucket / server action limit
+
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) return
-    
+    if (file.size > MAX_IMAGE_BYTES) {
+      alert(`Image is too large (max ${MAX_IMAGE_BYTES / (1024 * 1024)}MB). Try compressing or resizing.`)
+      return
+    }
+
     setIsUploading(true)
     const uploadData = new FormData()
     uploadData.append("file", file)
-    
+
     try {
       const res = await uploadBlogImage(uploadData)
       if (res.error) throw new Error(res.error)
-      
+
       const imageMarkdown = `\n![${file.name}](${res.url})\n`
       insertTextAtCursor(imageMarkdown)
     } catch (err) {
       console.error(err)
-      alert("Failed to upload image")
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Failed to upload image (if this says “unexpected response”, the file may still be too large or the server rejected the request)."
+      alert(msg)
     } finally {
       setIsUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ""
@@ -162,6 +182,10 @@ export default function EditorForm({ post }: { post: PostForEditor }) {
 
   const handleFeaturedImageUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) return
+    if (file.size > MAX_IMAGE_BYTES) {
+      alert(`Image is too large (max ${MAX_IMAGE_BYTES / (1024 * 1024)}MB). Try compressing or resizing.`)
+      return
+    }
     setIsUploading(true)
     const uploadData = new FormData()
     uploadData.append("file", file)
@@ -171,7 +195,8 @@ export default function EditorForm({ post }: { post: PostForEditor }) {
       setFormData((prev) => ({ ...prev, featuredImageUrl: res.url ?? "" }))
     } catch (err) {
       console.error(err)
-      alert("Failed to upload featured image")
+      const msg = err instanceof Error ? err.message : "Failed to upload featured image"
+      alert(msg)
     } finally {
       setIsUploading(false)
       if (featuredFileInputRef.current) featuredFileInputRef.current.value = ""
@@ -343,7 +368,7 @@ export default function EditorForm({ post }: { post: PostForEditor }) {
                   name="seoTitle"
                   value={formData.seoTitle}
                   onChange={handleChange}
-                  placeholder="Defaults to post title — shown as Cran | …"
+                  placeholder="Defaults to post title — used as the browser tab / search title"
                   className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2 text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
                 />
               </div>
