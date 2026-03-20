@@ -22,10 +22,23 @@ function resolveSignInEmail(
   return (fromAccount || fromUser || fromProfile).trim()
 }
 
+const authCookieDomain = process.env.AUTH_COOKIE_DOMAIN?.trim()
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   secret: process.env.AUTH_SECRET,
   adapter: prismaAdapterWithCaseInsensitiveEmail(prisma),
+  // Optional: e.g. AUTH_COOKIE_DOMAIN=.getcran.ai so the same session works on www + apex.
+  // Do not set on localhost or *.vercel.app previews.
+  ...(authCookieDomain
+    ? {
+        cookies: {
+          sessionToken: {
+            options: { domain: authCookieDomain },
+          },
+        },
+      }
+    : {}),
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
@@ -76,6 +89,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
    */
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days — explicit so behavior matches expectations
   },
   callbacks: {
     async jwt({ token, user }) {

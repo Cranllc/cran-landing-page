@@ -1,5 +1,6 @@
 import { auth, signOut } from "@/auth"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
+import { unstable_noStore as noStore } from "next/cache"
 import { redirect } from "next/navigation"
 import { LayoutDashboard, ClipboardList, Images, Home } from "lucide-react"
 import Link from "next/link"
@@ -10,7 +11,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+/** Always read the real Cookie header for this request — cached RSC layouts can look “logged out”. */
+export const dynamic = "force-dynamic"
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  noStore()
   const session = await auth()
 
   // No cookie / session: not "wrong email" — avoid ?error=AccessDenied (that implies allowlist reject).
