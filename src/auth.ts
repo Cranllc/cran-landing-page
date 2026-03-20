@@ -5,6 +5,22 @@ import { prisma } from "@/lib/prisma"
 import { prismaAdapterWithCaseInsensitiveEmail } from "@/lib/prisma-auth-adapter"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
 
+/** Prefer provider identifier for email magic-link flows (always normalized); avoids bad/empty `user.email` blocking allowlist. */
+function resolveSignInEmail(
+  user: { email?: string | null } | undefined,
+  account: { type?: string; providerAccountId?: string | null } | null | undefined,
+  profile: unknown
+): string {
+  const fromAccount =
+    account?.type === "email" && typeof account.providerAccountId === "string"
+      ? account.providerAccountId.trim()
+      : ""
+  const fromUser = typeof user?.email === "string" ? user.email.trim() : ""
+  const p = profile as { email?: string } | undefined
+  const fromProfile = p && typeof p.email === "string" ? p.email.trim() : ""
+  return (fromAccount || fromUser || fromProfile).trim()
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   secret: process.env.AUTH_SECRET,
@@ -64,23 +80,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         if (user.id != null) token.sub = String(user.id)
-        if (typeof user.email === "string" && user.email) token.email = user.email
+        const em = typeof user.email === "string" ? user.email.trim() : ""
+        if (em) token.email = em
         if (typeof user.name === "string") token.name = user.name
         if (user.image != null) token.picture = user.image
       }
       return token
     },
     async signIn({ user, account, profile }) {
-      const fromUser = typeof user?.email === "string" ? user.email : ""
-      const fromAccount =
-        account?.type === "email" && typeof account.providerAccountId === "string"
-          ? account.providerAccountId
-          : ""
-      const fromProfile =
-        profile && typeof (profile as { email?: string }).email === "string"
-          ? (profile as { email: string }).email
-          : ""
-      const candidate = (fromUser || fromAccount || fromProfile).trim()
+      const candidate = resolveSignInEmail(user, account, profile)
       const ok = isAllowedAdminEmail(candidate || undefined)
       if (!ok && process.env.NODE_ENV === "development") {
         console.warn(
@@ -92,7 +100,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       const te = typeof token.email === "string" ? token.email.trim() : ""
       const se = typeof session.user?.email === "string" ? session.user.email.trim() : ""
-      const email = se || te || undefined
+      let email = se || te || undefined
+      if (!email && typeof token.sub === "string" && token.sub) {
+        const row = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { email: true },
+        })
+        const dbEmail = row?.email?.trim()
+        if (dbEmail) email = dbEmail
+      }
       return {
         user: {
           name: session.user?.name ?? (typeof token.name === "string" ? token.name : undefined),
