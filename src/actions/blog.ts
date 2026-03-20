@@ -60,24 +60,39 @@ export async function updatePost(
     tags?: string[]
     seoTitle?: string | null
     seoDescription?: string | null
-    featuredImageUrl?: string | null
+    /** Article header — not from markdown body */
+    heroImageUrl?: string | null
+    /** Cards + OG/Twitter; falls back to hero in readers if empty */
+    previewImageUrl?: string | null
   }
 ) {
   await verifyAdmin()
 
+  const preview = data.previewImageUrl === undefined ? undefined : data.previewImageUrl || null
+  const hero = data.heroImageUrl === undefined ? undefined : data.heroImageUrl || null
+  /** Legacy column: keep aligned for anything still reading `featuredImageUrl` only */
+  const featuredSync =
+    preview !== undefined || hero !== undefined ? preview || hero || null : undefined
+
+  // Inferred object (no `Prisma.PostUpdateInput` annotation): avoids IDE/ts errors when
+  // @prisma/client is briefly out of sync with schema before `prisma generate`.
+  const patch = {
+    title: data.title,
+    slug: data.slug,
+    content: data.content,
+    published: data.published,
+    ...(data.category !== undefined ? { category: data.category } : {}),
+    ...(data.tags !== undefined ? { tags: data.tags } : {}),
+    ...(data.seoTitle !== undefined ? { seoTitle: data.seoTitle || null } : {}),
+    ...(data.seoDescription !== undefined ? { seoDescription: data.seoDescription || null } : {}),
+    ...(hero !== undefined ? { heroImageUrl: hero } : {}),
+    ...(preview !== undefined ? { previewImageUrl: preview } : {}),
+    ...(featuredSync !== undefined ? { featuredImageUrl: featuredSync } : {}),
+  }
+
   await prisma.post.update({
     where: { id },
-    data: {
-      title: data.title,
-      slug: data.slug,
-      content: data.content,
-      published: data.published,
-      category: data.category,
-      tags: data.tags,
-      seoTitle: data.seoTitle === undefined ? undefined : data.seoTitle || null,
-      seoDescription: data.seoDescription === undefined ? undefined : data.seoDescription || null,
-      featuredImageUrl: data.featuredImageUrl === undefined ? undefined : data.featuredImageUrl || null,
-    },
+    data: patch,
   })
   
   revalidatePath("/admin")

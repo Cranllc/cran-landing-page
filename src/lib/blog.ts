@@ -1,9 +1,14 @@
 import { prisma } from "@/lib/prisma";
-import { getPostShareImageUrl } from "@/lib/markdown-images";
+import { getPostPreviewImageUrl } from "@/lib/markdown-images";
 
 const LATEST_LIMIT = 3;
 
-export { extractFirstImageUrl, getPostShareImageUrl } from "@/lib/markdown-images";
+export {
+  extractFirstImageUrl,
+  getPostHeroImageUrl,
+  getPostPreviewImageUrl,
+  getPostShareImageUrl,
+} from "@/lib/markdown-images";
 
 export type PostPreview = {
   id: string;
@@ -28,12 +33,14 @@ export async function getLatestPublishedPosts(): Promise<PostPreview[]> {
       content: true,
       category: true,
       featuredImageUrl: true,
+      heroImageUrl: true,
+      previewImageUrl: true,
       createdAt: true,
       author: { select: { name: true } },
     },
   });
   return posts.map((p) => ({
     ...p,
-    imageUrl: getPostShareImageUrl(p),
+    imageUrl: getPostPreviewImageUrl(p),
   }));
 }

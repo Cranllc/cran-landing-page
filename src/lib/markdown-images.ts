@@ -14,14 +14,51 @@ export function extractFirstImageUrl(content: string): string | null {
   return match ? match[1].trim() : null;
 }
 
-/** Featured image URL if set and http(s), else first markdown image in body */
+/** Normalized https URL or null (ignores root-relative here — use resolveImageUrlForPreview for admin). */
+export function pickHttpImageUrl(url: string | null | undefined): string | null {
+  const u = url?.trim();
+  if (!u) return null;
+  if (u.startsWith("https://") || u.startsWith("http://")) return u;
+  return null;
+}
+
+/**
+ * Article header image only. Never uses markdown body images.
+ * Legacy: falls back to `featuredImageUrl` if `heroImageUrl` is empty.
+ */
+export function getPostHeroImageUrl(post: {
+  heroImageUrl?: string | null;
+  featuredImageUrl?: string | null;
+}): string | null {
+  return pickHttpImageUrl(post.heroImageUrl) || pickHttpImageUrl(post.featuredImageUrl);
+}
+
+/**
+ * Blog cards + Open Graph / Twitter. Order: preview → hero → legacy featured.
+ * Never uses markdown body images.
+ */
+export function getPostPreviewImageUrl(post: {
+  previewImageUrl?: string | null;
+  heroImageUrl?: string | null;
+  featuredImageUrl?: string | null;
+}): string | null {
+  return (
+    pickHttpImageUrl(post.previewImageUrl) ||
+    pickHttpImageUrl(post.heroImageUrl) ||
+    pickHttpImageUrl(post.featuredImageUrl)
+  );
+}
+
+/**
+ * @deprecated Prefer getPostPreviewImageUrl. Kept for imports; ignores `content` (no body fallback).
+ */
 export function getPostShareImageUrl(post: {
   featuredImageUrl?: string | null;
-  content: string;
+  content?: string;
+  previewImageUrl?: string | null;
+  heroImageUrl?: string | null;
 }): string | null {
-  const f = post.featuredImageUrl?.trim();
-  if (f && (f.startsWith("https://") || f.startsWith("http://"))) return f;
-  return extractFirstImageUrl(post.content);
+  return getPostPreviewImageUrl(post);
 }
 
 /**
@@ -78,4 +115,15 @@ export function replaceMarkdownImageAlt(content: string, imageIndex: number, new
   const safeAlt = newAlt.replace(/\]/g, "");
   const replacement = `![${safeAlt}](${target.url})`;
   return content.slice(0, target.start) + replacement + content.slice(target.end);
+}
+
+/** Remove the Nth `![alt](url)` from markdown (0-based scan order). Does not delete remote files. */
+export function removeMarkdownImageAtIndex(content: string, imageIndex: number): string {
+  const images = parseMarkdownImages(content);
+  const target = images.find((img) => img.index === imageIndex);
+  if (!target) return content;
+  const before = content.slice(0, target.start);
+  const after = content.slice(target.end);
+  const merged = before + after;
+  return merged.replace(/\n{3,}/g, "\n\n");
 }

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Hide scrollbars (e.g. admin tab strip) while keeping overflow scroll */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 @theme inline {
   --color-cran: #D64436;
   --color-cran-hover: #B83A2E;

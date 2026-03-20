@@ -22,18 +22,23 @@ export default async function EditorPage({
     tab === "assets" ? "assets" : tab === "seo" ? "seo" : "write"
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)]">
-      <div className="mb-6 flex items-center justify-between">
-        <Link href="/admin" className="text-sm font-semibold text-[#1a1a1a]/50 hover:text-cran flex items-center gap-1.5 transition-colors">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <div className="flex flex-1 min-h-0 flex-col">
+      <div className="mb-4 sm:mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <Link
+          href="/admin"
+          className="text-sm font-semibold text-[#1a1a1a]/50 hover:text-cran inline-flex items-center gap-1.5 transition-colors min-h-11 sm:min-h-0 py-2 sm:py-0 touch-manipulation w-fit -mx-1 px-1 rounded-lg"
+        >
+          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
           Back to Dashboard
         </Link>
-        <div className="text-xs font-bold uppercase tracking-widest text-[#1a1a1a]/30">
+        <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#1a1a1a]/30">
           Markdown Editor
         </div>
       </div>
-      
-      <div className="flex-1 bg-white border border-[#E5E5E0] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col">
+
+      <div className="flex-1 min-h-0 bg-white border border-[#E5E5E0] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col">
         <EditorForm post={post} initialTab={initialTab} />
       </div>
     </div>

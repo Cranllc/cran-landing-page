@@ -4,6 +4,8 @@ import {
   replaceMarkdownImageAlt,
   extractFirstImageUrl,
   getPostShareImageUrl,
+  getPostHeroImageUrl,
+  getPostPreviewImageUrl,
   resolveImageUrlForPreview,
   getFirstInPostImagePreviewUrl,
   sanitizeMarkdownImageAlt,
@@ -86,36 +88,54 @@ describe("extractFirstImageUrl", () => {
   });
 });
 
-describe("getPostShareImageUrl", () => {
-  it("prefers featuredImageUrl when http(s)", () => {
+describe("getPostPreviewImageUrl", () => {
+  it("prefers preview, then hero, then legacy featured", () => {
     expect(
-      getPostShareImageUrl({
-        featuredImageUrl: "https://featured.com/h.jpg",
-        content: "![x](https://body.com/b.png)",
+      getPostPreviewImageUrl({
+        previewImageUrl: "https://p.com/1.png",
+        heroImageUrl: "https://h.com/2.png",
+        featuredImageUrl: "https://f.com/3.png",
       })
-    ).toBe("https://featured.com/h.jpg");
+    ).toBe("https://p.com/1.png");
+    expect(
+      getPostPreviewImageUrl({
+        previewImageUrl: null,
+        heroImageUrl: "https://h.com/x.png",
+        featuredImageUrl: null,
+      })
+    ).toBe("https://h.com/x.png");
+    expect(
+      getPostPreviewImageUrl({
+        previewImageUrl: " ",
+        heroImageUrl: null,
+        featuredImageUrl: "https://f.com/f.png",
+      })
+    ).toBe("https://f.com/f.png");
   });
 
-  it("ignores empty featured and uses body image", () => {
+  it("never reads markdown body", () => {
     expect(
       getPostShareImageUrl({
-        featuredImageUrl: "  ",
+        featuredImageUrl: null,
+        previewImageUrl: null,
+        heroImageUrl: null,
         content: "![x](https://body.com/b.png)",
       })
-    ).toBe("https://body.com/b.png");
+    ).toBeNull();
   });
+});
 
-  it("falls back to first markdown image when featured is relative", () => {
+describe("getPostHeroImageUrl", () => {
+  it("uses hero then legacy featured", () => {
     expect(
-      getPostShareImageUrl({
-        featuredImageUrl: "/uploads/x.png",
-        content: "![x](https://body.com/b.png)",
+      getPostHeroImageUrl({
+        heroImageUrl: "https://h.com/a.png",
+        featuredImageUrl: "https://f.com/b.png",
       })
-    ).toBe("https://body.com/b.png");
-  });
-
-  it("returns null when nothing usable", () => {
-    expect(getPostShareImageUrl({ featuredImageUrl: null, content: "no img" })).toBeNull();
+    ).toBe("https://h.com/a.png");
+    expect(
+      getPostHeroImageUrl({ heroImageUrl: null, featuredImageUrl: "https://f.com/b.png" })
+    ).toBe("https://f.com/b.png");
   });
 });
 

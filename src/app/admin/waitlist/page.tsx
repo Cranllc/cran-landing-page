@@ -21,7 +21,7 @@ export default async function WaitlistPage() {
   })
 
   return (
-    <div className="p-4 sm:p-8 md:p-12 max-w-6xl mx-auto h-full overflow-y-auto pb-32">
+    <div className="w-full max-w-6xl mx-auto h-full overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-12">
       <div className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-[#1a1a1a] mb-2">Waitlist Signups</h1>
@@ -45,17 +45,17 @@ export default async function WaitlistPage() {
             <table className="w-full text-left text-sm text-[#1a1a1a]">
               <thead className="text-xs uppercase bg-[#FAFAF8] text-[#1a1a1a]/50 font-bold tracking-wider border-b border-[#E5E5E0]">
                 <tr>
-                  <th className="px-6 py-4">Participant Email</th>
-                  <th className="px-6 py-4 whitespace-nowrap">Date Joined</th>
+                  <th className="px-3 sm:px-6 py-3 sm:py-4">Participant Email</th>
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">Date Joined</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E5E0]">
                 {signups.map((signup: { id: string, email: string, createdAt: Date }) => (
                   <tr key={signup.id} className="hover:bg-[#FAFAF8]/50 transition-colors">
-                    <td className="px-6 py-4 font-semibold text-[#1a1a1a]">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-[#1a1a1a] break-all">
                       {signup.email}
                     </td>
-                    <td className="px-6 py-4 text-[#1a1a1a]/60 whitespace-nowrap">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 text-[#1a1a1a]/60 whitespace-nowrap">
                       {new Date(signup.createdAt).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",

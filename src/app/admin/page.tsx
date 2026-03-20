@@ -13,7 +13,7 @@ export default async function AdminDashboard() {
         </div>
         
         <form action={createPost}>
-          <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#1a1a1a] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-black transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+          <button type="submit" className="w-full sm:w-auto min-h-11 flex items-center justify-center gap-2 bg-[#1a1a1a] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-black transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 touch-manipulation">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4"/></svg>
             Write Post
           </button>
@@ -45,7 +45,7 @@ export default async function AdminDashboard() {
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <Link href={`/admin/editor/${post.id}`} className="flex-1 sm:flex-none text-center px-3 py-1.5 text-sm font-semibold text-[#1a1a1a]/60 hover:text-[#1a1a1a] bg-[#FAFAF8] hover:bg-[#F0F0ED] rounded-md transition-colors border border-transparent hover:border-[#E5E5E0]">
+                  <Link href={`/admin/editor/${post.id}`} className="flex-1 sm:flex-none min-h-11 sm:min-h-0 inline-flex items-center justify-center text-center px-3 py-2.5 sm:py-1.5 text-sm font-semibold text-[#1a1a1a]/60 hover:text-[#1a1a1a] bg-[#FAFAF8] hover:bg-[#F0F0ED] rounded-md transition-colors border border-transparent hover:border-[#E5E5E0] touch-manipulation">
                     Edit
                   </Link>
                   
@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
                     "use server"
                     await deletePost(post.id)
                   }} className="flex-1 sm:flex-none">
-                    <button type="submit" className="w-full sm:w-auto px-3 py-1.5 text-sm font-semibold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 rounded-md transition-colors">
+                    <button type="submit" className="w-full sm:w-auto min-h-11 sm:min-h-0 px-3 py-2.5 sm:py-1.5 text-sm font-semibold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 rounded-md transition-colors touch-manipulation">
                       Delete
                     </button>
                   </form>

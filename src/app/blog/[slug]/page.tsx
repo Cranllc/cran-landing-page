@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/site-config';
-import { getPostShareImageUrl } from '@/lib/markdown-images';
+import { getPostHeroImageUrl, getPostPreviewImageUrl } from '@/lib/markdown-images';
 import ShareArticleClient from '@/components/ShareArticleClient';
 import Image from 'next/image';
 
@@ -33,12 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return excerpt + (stripped.length > 157 ? "..." : "");
   })();
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
-  const heroImageUrl = getPostShareImageUrl(post);
-  const shareImage =
-    heroImageUrl && (heroImageUrl.startsWith("https://") || heroImageUrl.startsWith("http://"))
-      ? heroImageUrl
-      : null;
-  const hasShareImage = Boolean(shareImage);
+  const shareImage = getPostPreviewImageUrl(post);
+  const hasShareImage = Boolean(
+    shareImage && (shareImage.startsWith("https://") || shareImage.startsWith("http://"))
+  );
 
   const pageTitle = post.seoTitle?.trim() || post.title;
   return {
@@ -81,7 +79,7 @@ export default async function BlogPost({ params }: Props) {
 
   const dateString = new Date(post.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || "Cran Team";
-  const heroImageUrl = getPostShareImageUrl(post);
+  const heroImageUrl = getPostHeroImageUrl(post);
   const hasHeroImage = Boolean(
     heroImageUrl && (heroImageUrl.startsWith("https://") || heroImageUrl.startsWith("http://"))
   );

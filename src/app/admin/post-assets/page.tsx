@@ -62,7 +62,7 @@ export default async function PostAssetsPage() {
                 </div>
                 <Link
                   href={`/admin/editor/${post.id}?tab=assets`}
-                  className="shrink-0 text-center px-4 py-2 text-sm font-semibold text-white bg-cran hover:bg-[#B83A2E] rounded-lg transition-colors"
+                  className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center text-center min-h-11 px-4 py-2.5 text-sm font-semibold text-white bg-cran hover:bg-[#B83A2E] rounded-lg transition-colors touch-manipulation"
                 >
                   Edit images
                 </Link>

@@ -9,6 +9,8 @@ type PostSeoColumns = {
   seoTitle: string | null;
   seoDescription: string | null;
   featuredImageUrl: string | null;
+  heroImageUrl: string | null;
+  previewImageUrl: string | null;
 };
 
 /** Full row + author for public blog post pages. */

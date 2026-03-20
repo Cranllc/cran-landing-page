@@ -34,8 +34,12 @@ model Post {
   seoTitle         String?
   /// Optional meta description (~150–160 chars)
   seoDescription   String?  @db.Text
-  /// Featured image URL (https) for OG/Twitter and article hero
+  /// Legacy: kept in sync on save (preview || hero) for older readers
   featuredImageUrl String?
+  /// Article header image only — never taken from markdown body
+  heroImageUrl       String?
+  /// Blog cards + Open Graph / Twitter — falls back to hero in code if empty
+  previewImageUrl  String?
   authorId         String
   author           User     @relation(fields: [authorId], references: [id])
   createdAt        DateTime @default(now())
