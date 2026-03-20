@@ -53,11 +53,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth/signin",
   },
   /**
-   * Use DB sessions with PrismaAdapter (recommended). `strategy: "jwt"` + a partial `jwt` callback
-   * can drop `sub` / claims and break magic-link sign-in or leave `session.user.email` empty.
+   * JWT sessions with Prisma adapter: users / verification tokens stay in Postgres; the session
+   * cookie is a signed JWT. Auth.js builds the token (sub, email, …) on magic-link callback — we
+   * do not override `jwt` / `session` so that flow stays intact.
+   *
+   * Database sessions (`strategy: "database"`) can 500 if `createSession` fails or cookies from an
+   * old strategy are invalid; JWT is the usual setup for email + adapter.
    */
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   callbacks: {
     async signIn({ user }) {
