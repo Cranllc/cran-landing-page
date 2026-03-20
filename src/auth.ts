@@ -3,10 +3,7 @@ import Resend from "next-auth/providers/resend"
 import { Resend as ResendSDK } from "resend"
 import { prisma } from "@/lib/prisma"
 import { prismaAdapterWithCaseInsensitiveEmail } from "@/lib/prisma-auth-adapter"
-import { SITE_URL } from "@/lib/site-config"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
-
-const baseUrl = SITE_URL.replace(/\/$/, "")
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
@@ -27,9 +24,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = new URL(url)
         const params = new URLSearchParams(parsed.search)
         // Strip callbackUrl from link — nested URLs can trigger Chrome's phishing heuristics.
-        // Redirect callback below defaults to /admin for magic-link sign-ins.
+        // Keep the SAME origin Auth.js used for this token (localhost, preview, www, etc.). Replacing
+        // with SITE_URL sent dev users to production while tokens lived in local DB → verify always failed.
         params.delete("callbackUrl")
-        const magicLink = `${baseUrl}${parsed.pathname}?${params.toString()}`
+        const magicLink = `${parsed.origin}${parsed.pathname}?${params.toString()}`
         const { error } = await resend.emails.send({
           from,
           to: identifier,
@@ -54,16 +52,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   /**
    * JWT sessions with Prisma adapter: users / verification tokens stay in Postgres; the session
-   * cookie is a signed JWT. Auth.js builds the token (sub, email, …) on magic-link callback — we
-   * do not override `jwt` / `session` so that flow stays intact.
-   *
-   * Database sessions (`strategy: "database"`) can 500 if `createSession` fails or cookies from an
-   * old strategy are invalid; JWT is the usual setup for email + adapter.
+   * cookie is an encrypted JWT. We keep a minimal `jwt` callback so `sub` / `email` from the DB user
+   * are always copied into the token on sign-in (avoids empty `session.user.email` on `/admin`).
    */
   session: {
     strategy: "jwt",
   },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        if (user.id != null) token.sub = String(user.id)
+        if (typeof user.email === "string" && user.email) token.email = user.email
+        if (typeof user.name === "string") token.name = user.name
+        if (user.image != null) token.picture = user.image
+      }
+      return token
+    },
     async signIn({ user, account, profile }) {
       const fromUser = typeof user?.email === "string" ? user.email : ""
       const fromAccount =
@@ -83,13 +87,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return ok
     },
-    async redirect({ url }) {
-      const siteBase = baseUrl
-      if (url.startsWith("/")) return `${siteBase}${url}`
+    async session({ session, token }) {
+      const te = typeof token.email === "string" ? token.email.trim() : ""
+      const se = typeof session.user?.email === "string" ? session.user.email.trim() : ""
+      const email = se || te || undefined
+      return {
+        user: {
+          name: session.user?.name ?? (typeof token.name === "string" ? token.name : undefined),
+          email,
+          image:
+            session.user?.image ??
+            (typeof token.picture === "string" ? token.picture : undefined),
+        },
+        expires: session.expires?.toISOString?.() ?? session.expires,
+      }
+    },
+    async redirect({ url, baseUrl: authBaseUrl }) {
+      const origin = authBaseUrl.replace(/\/$/, "")
+      if (url.startsWith("/")) return `${origin}${url}`
       try {
-        if (new URL(url).origin === siteBase) return url
+        if (new URL(url).origin === origin) return url
       } catch {}
-      return `${siteBase}/admin`
+      return `${origin}/admin`
     },
   },
 })
