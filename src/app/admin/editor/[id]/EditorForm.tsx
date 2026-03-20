@@ -31,6 +31,7 @@ import {
   Check,
   Share2,
   Trash2,
+  Upload,
 } from "lucide-react"
 
 /** SEO columns — intersect so EditorForm type-checks even if TS uses a pre-migration Prisma `Post`. */
@@ -73,6 +74,10 @@ export default function EditorForm({
   const previewFileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
+  /** SEO tab: which drop zone is highlighted (hero vs preview image upload). */
+  const [seoDropTarget, setSeoDropTarget] = useState<null | "hero" | "preview">(null)
+  /** Which SEO image upload is in flight (for accurate “Uploading…” label). */
+  const [seoUploadingSlot, setSeoUploadingSlot] = useState<null | "hero" | "preview">(null)
   const [editorTab, setEditorTab] = useState<EditorTab>(initialTab)
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null)
 
@@ -202,6 +207,12 @@ export default function EditorForm({
     }
   }
 
+  const clearSeoDropHighlight = (e: React.DragEvent<HTMLElement>) => {
+    const related = e.relatedTarget as Node | null
+    if (related && e.currentTarget.contains(related)) return
+    setSeoDropTarget(null)
+  }
+
   const handleSideImageUpload = async (file: File, field: "heroImageUrl" | "previewImageUrl") => {
     if (!file.type.startsWith("image/")) return
     if (file.size > MAX_IMAGE_BYTES) {
@@ -209,6 +220,7 @@ export default function EditorForm({
       return
     }
     setIsUploading(true)
+    setSeoUploadingSlot(field === "heroImageUrl" ? "hero" : "preview")
     const uploadData = new FormData()
     uploadData.append("file", file)
     try {
@@ -221,6 +233,7 @@ export default function EditorForm({
       alert(msg)
     } finally {
       setIsUploading(false)
+      setSeoUploadingSlot(null)
       const ref = field === "heroImageUrl" ? heroFileInputRef : previewFileInputRef
       if (ref.current) ref.current.value = ""
     }
@@ -407,10 +420,32 @@ export default function EditorForm({
         </button>
       </div>
 
+      {/* Always mounted so hero/preview uploads work on Write tab too (refs stay attached). */}
+      <input
+        type="file"
+        ref={heroFileInputRef}
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) void handleSideImageUpload(file, "heroImageUrl")
+        }}
+        accept="image/*"
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={previewFileInputRef}
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) void handleSideImageUpload(file, "previewImageUrl")
+        }}
+        accept="image/*"
+        className="hidden"
+      />
+
       {editorTab === "seo" && (
         <div className="flex-1 overflow-y-auto border-b border-[#E5E5E0] bg-[#FAFAF8] px-4 sm:px-6 py-6 space-y-8">
           <p className="text-[13px] text-[#1a1a1a]/50 max-w-2xl">
-            Text snippets for search/social, plus <strong>hero</strong> (top of the article) and <strong>preview</strong> (cards + link previews). Neither is taken from markdown body images — use <strong>Assets</strong> for those.
+            Text snippets for search/social, plus <strong>hero</strong> and <strong>preview</strong> images — upload below (or paste a URL). Neither is taken from markdown body images — use <strong>Assets</strong> for in-article images.
           </p>
           <section className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
@@ -457,33 +492,67 @@ export default function EditorForm({
               <p className="text-[12px] text-[#1a1a1a]/55 leading-relaxed">
                 Large image under the title on the post page only. Leave empty for the branded placeholder — we <strong>do not</strong> pull this from markdown images.
               </p>
+              <button
+                type="button"
+                aria-label="Upload hero image: drop file or open file picker"
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget("hero")
+                }}
+                onDragLeave={clearSeoDropHighlight}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget(null)
+                  const file = e.dataTransfer.files?.[0]
+                  if (file) void handleSideImageUpload(file, "heroImageUrl")
+                }}
+                onClick={() => {
+                  if (!isUploading) heroFileInputRef.current?.click()
+                }}
+                disabled={isUploading}
+                className={`w-full rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors touch-manipulation disabled:opacity-60 ${
+                  seoDropTarget === "hero"
+                    ? "border-cran bg-cran/5"
+                    : "border-[#E5E5E0] bg-[#FAFAF8] hover:border-cran/35 hover:bg-[#F3F3F0]"
+                }`}
+              >
+                <Upload
+                  className={`mx-auto mb-2 h-8 w-8 ${seoDropTarget === "hero" ? "text-cran" : "text-[#1a1a1a]/35"}`}
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+                <span className="block text-[13px] font-semibold text-[#1a1a1a]">
+                  {seoUploadingSlot === "hero" ? "Uploading…" : "Upload hero image"}
+                </span>
+                <span className="mt-1 block text-[11px] font-medium text-[#1a1a1a]/45">
+                  Drop a file here, or click to choose · PNG, JPG, WebP · max 5MB
+                </span>
+              </button>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#1a1a1a]/35">
+                Or paste image URL
+              </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   id="heroImageUrl"
-                  type="url"
+                  type="text"
                   name="heroImageUrl"
+                  inputMode="url"
+                  autoComplete="off"
                   value={formData.heroImageUrl}
                   onChange={handleChange}
                   placeholder="https://…"
                   className="flex-1 min-w-0 border border-[#E5E5E0] rounded-lg px-3 py-2.5 sm:py-2 text-base sm:text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
                 />
-                <input
-                  type="file"
-                  ref={heroFileInputRef}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) void handleSideImageUpload(file, "heroImageUrl")
-                  }}
-                  accept="image/*"
-                  className="hidden"
-                />
                 <button
                   type="button"
                   onClick={() => heroFileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="shrink-0 min-h-11 px-4 py-2.5 sm:py-2 rounded-lg border border-[#E5E5E0] text-[12px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8] disabled:opacity-50 touch-manipulation"
+                  className="inline-flex shrink-0 min-h-11 items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg border border-[#E5E5E0] text-[12px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8] disabled:opacity-50 touch-manipulation"
                 >
-                  Upload
+                  <Upload size={14} aria-hidden />
+                  Choose file
                 </button>
               </div>
               {(() => {
@@ -514,33 +583,67 @@ export default function EditorForm({
               <p className="text-[12px] text-[#1a1a1a]/55 leading-relaxed">
                 Homepage blog cards, Open Graph, and Twitter. If empty, we use the <strong>hero</strong> image. Still not taken from in-article markdown.
               </p>
+              <button
+                type="button"
+                aria-label="Upload preview image: drop file or open file picker"
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget("preview")
+                }}
+                onDragLeave={clearSeoDropHighlight}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget(null)
+                  const file = e.dataTransfer.files?.[0]
+                  if (file) void handleSideImageUpload(file, "previewImageUrl")
+                }}
+                onClick={() => {
+                  if (!isUploading) previewFileInputRef.current?.click()
+                }}
+                disabled={isUploading}
+                className={`w-full rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors touch-manipulation disabled:opacity-60 ${
+                  seoDropTarget === "preview"
+                    ? "border-cran bg-cran/5"
+                    : "border-[#E5E5E0] bg-[#FAFAF8] hover:border-cran/35 hover:bg-[#F3F3F0]"
+                }`}
+              >
+                <Upload
+                  className={`mx-auto mb-2 h-8 w-8 ${seoDropTarget === "preview" ? "text-cran" : "text-[#1a1a1a]/35"}`}
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+                <span className="block text-[13px] font-semibold text-[#1a1a1a]">
+                  {seoUploadingSlot === "preview" ? "Uploading…" : "Upload preview image"}
+                </span>
+                <span className="mt-1 block text-[11px] font-medium text-[#1a1a1a]/45">
+                  Drop a file here, or click to choose · PNG, JPG, WebP · max 5MB
+                </span>
+              </button>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#1a1a1a]/35">
+                Or paste image URL
+              </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   id="previewImageUrl"
-                  type="url"
+                  type="text"
                   name="previewImageUrl"
+                  inputMode="url"
+                  autoComplete="off"
                   value={formData.previewImageUrl}
                   onChange={handleChange}
                   placeholder="https://… (optional)"
                   className="flex-1 min-w-0 border border-[#E5E5E0] rounded-lg px-3 py-2.5 sm:py-2 text-base sm:text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20"
                 />
-                <input
-                  type="file"
-                  ref={previewFileInputRef}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) void handleSideImageUpload(file, "previewImageUrl")
-                  }}
-                  accept="image/*"
-                  className="hidden"
-                />
                 <button
                   type="button"
                   onClick={() => previewFileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="shrink-0 min-h-11 px-4 py-2.5 sm:py-2 rounded-lg border border-[#E5E5E0] text-[12px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8] disabled:opacity-50 touch-manipulation"
+                  className="inline-flex shrink-0 min-h-11 items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg border border-[#E5E5E0] text-[12px] font-semibold text-[#1a1a1a]/70 hover:bg-[#FAFAF8] disabled:opacity-50 touch-manipulation"
                 >
-                  Upload
+                  <Upload size={14} aria-hidden />
+                  Choose file
                 </button>
               </div>
               {(() => {
@@ -737,6 +840,149 @@ export default function EditorForm({
             <span className="text-[11px] font-medium text-[#1a1a1a]/30 hidden md:inline whitespace-nowrap">
               (Drag &amp; drop)
             </span>
+          </div>
+        </div>
+
+        {/* Hero + preview: same fields as SEO tab, available while writing */}
+        <div
+          className="shrink-0 border-b border-[#E5E5E0] bg-white px-3 py-3 sm:px-4"
+          onDragOver={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onDrop={(e) => {
+            /* Only hero/preview buttons handle drops; block body handler */
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+        >
+          <p className="text-[11px] font-semibold text-[#1a1a1a]/45 mb-2">
+            Post images (not in article body) — <strong className="text-[#1a1a1a]/70">Hero</strong> shows under the title;{" "}
+            <strong className="text-[#1a1a1a]/70">Preview</strong> is for cards &amp; link shares. Save to persist.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="min-w-0 rounded-lg border border-[#E5E5E0] bg-[#FAFAF8] p-2.5 space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">Hero</span>
+              <button
+                type="button"
+                aria-label="Upload hero image from Write tab"
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget("hero")
+                }}
+                onDragLeave={clearSeoDropHighlight}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget(null)
+                  const file = e.dataTransfer.files?.[0]
+                  if (file) void handleSideImageUpload(file, "heroImageUrl")
+                }}
+                onClick={() => {
+                  if (!isUploading) heroFileInputRef.current?.click()
+                }}
+                disabled={isUploading}
+                className={`w-full rounded-lg border border-dashed px-2 py-3 text-center transition-colors touch-manipulation disabled:opacity-60 ${
+                  seoDropTarget === "hero" ? "border-cran bg-cran/5" : "border-[#E5E5E0] hover:border-cran/30"
+                }`}
+              >
+                <Upload className="mx-auto h-5 w-5 text-[#1a1a1a]/35 mb-1" strokeWidth={2} aria-hidden />
+                <span className="text-[11px] font-semibold text-[#1a1a1a]">
+                  {seoUploadingSlot === "hero" ? "Uploading…" : "Drop or tap to upload"}
+                </span>
+              </button>
+              <div className="flex gap-1.5">
+                <input
+                  id="write-tab-hero-url"
+                  type="text"
+                  name="heroImageUrl"
+                  inputMode="url"
+                  autoComplete="off"
+                  value={formData.heroImageUrl}
+                  onChange={handleChange}
+                  placeholder="Or paste URL"
+                  className="min-w-0 flex-1 rounded-md border border-[#E5E5E0] bg-white px-2 py-1.5 text-[12px] text-[#1a1a1a] outline-none focus:border-cran/50"
+                />
+                <button
+                  type="button"
+                  onClick={() => heroFileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="shrink-0 rounded-md border border-[#E5E5E0] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1a1a1a]/70 hover:bg-[#F3F3F0] disabled:opacity-50 touch-manipulation"
+                >
+                  File
+                </button>
+              </div>
+              {(() => {
+                const u = resolveImageUrlForPreview(formData.heroImageUrl, imagePreviewBase)
+                if (!u) return null
+                return (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={u} alt="" className="h-14 w-full rounded-md object-cover border border-[#E5E5E0]" />
+                )
+              })()}
+            </div>
+            <div className="min-w-0 rounded-lg border border-[#E5E5E0] bg-[#FAFAF8] p-2.5 space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">Preview</span>
+              <button
+                type="button"
+                aria-label="Upload preview image from Write tab"
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget("preview")
+                }}
+                onDragLeave={clearSeoDropHighlight}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setSeoDropTarget(null)
+                  const file = e.dataTransfer.files?.[0]
+                  if (file) void handleSideImageUpload(file, "previewImageUrl")
+                }}
+                onClick={() => {
+                  if (!isUploading) previewFileInputRef.current?.click()
+                }}
+                disabled={isUploading}
+                className={`w-full rounded-lg border border-dashed px-2 py-3 text-center transition-colors touch-manipulation disabled:opacity-60 ${
+                  seoDropTarget === "preview" ? "border-cran bg-cran/5" : "border-[#E5E5E0] hover:border-cran/30"
+                }`}
+              >
+                <Upload className="mx-auto h-5 w-5 text-[#1a1a1a]/35 mb-1" strokeWidth={2} aria-hidden />
+                <span className="text-[11px] font-semibold text-[#1a1a1a]">
+                  {seoUploadingSlot === "preview" ? "Uploading…" : "Drop or tap to upload"}
+                </span>
+              </button>
+              <div className="flex gap-1.5">
+                <input
+                  id="write-tab-preview-url"
+                  type="text"
+                  name="previewImageUrl"
+                  inputMode="url"
+                  autoComplete="off"
+                  value={formData.previewImageUrl}
+                  onChange={handleChange}
+                  placeholder="Or paste URL (optional)"
+                  className="min-w-0 flex-1 rounded-md border border-[#E5E5E0] bg-white px-2 py-1.5 text-[12px] text-[#1a1a1a] outline-none focus:border-cran/50"
+                />
+                <button
+                  type="button"
+                  onClick={() => previewFileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="shrink-0 rounded-md border border-[#E5E5E0] bg-white px-2 py-1.5 text-[11px] font-semibold text-[#1a1a1a]/70 hover:bg-[#F3F3F0] disabled:opacity-50 touch-manipulation"
+                >
+                  File
+                </button>
+              </div>
+              {(() => {
+                const u = resolveImageUrlForPreview(formData.previewImageUrl, imagePreviewBase)
+                if (!u) return null
+                return (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={u} alt="" className="h-14 w-full rounded-md object-cover border border-[#E5E5E0]" />
+                )
+              })()}
+            </div>
           </div>
         </div>
 
