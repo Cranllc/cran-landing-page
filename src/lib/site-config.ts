@@ -13,34 +13,50 @@ export const SUPPORT_PREFILLED_MAILTO = `mailto:support@getcran.ai?subject=${enc
 
 const MAILTO_DEMO = SUPPORT_PREFILLED_MAILTO;
 
-function resolveDemoUrl(): string {
-  const raw =
-    process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||
-    process.env.NEXT_PUBLIC_DEMO_URL?.trim() ||
-    "";
-  if (!raw) return MAILTO_DEMO;
-  if (raw.startsWith("mailto:")) {
-    try {
-      new URL(raw);
-      return raw;
-    } catch {
-      return MAILTO_DEMO;
-    }
-  }
+/** Stale pilot CTAs sometimes point here; skip so calendar / mailto can win. */
+function looksLikeFirebaseDynamicLinkUrl(url: URL): boolean {
+  const h = url.hostname;
+  return h.endsWith(".page.link") || h.includes("firebasedynamiclinks");
+}
+
+function pickHttpDemoUrl(raw: string): string | null {
   try {
     const u = new URL(raw);
-    if (u.protocol === "http:" || u.protocol === "https:") return u.href;
+    if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+    if (looksLikeFirebaseDynamicLinkUrl(u)) return null;
+    return u.href;
   } catch {
-    // Non-parseable or incomplete URIs (e.g. bad paste) — avoid opening broken / Firebase Dynamic Link error pages.
-    return MAILTO_DEMO;
+    return null;
   }
+}
+
+function resolveDemoUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim(),
+    process.env.NEXT_PUBLIC_DEMO_URL?.trim(),
+  ].filter((s): s is string => Boolean(s));
+
+  for (const raw of candidates) {
+    if (raw.startsWith("mailto:")) {
+      try {
+        new URL(raw);
+        return raw;
+      } catch {
+        continue;
+      }
+    }
+    const http = pickHttpDemoUrl(raw);
+    if (http) return http;
+  }
+
   return MAILTO_DEMO;
 }
 
 /**
  * Pilot / demo booking URL (Google Calendar, Calendly, etc.).
- * `google_cal` from `.env` is mapped to `NEXT_PUBLIC_GOOGLE_CAL` in `next.config.ts` for the client bundle.
- * Invalid / non-HTTP(S) values fall back to prefilled mailto.
+ * `google_cal` is merged first in `next.config.ts` into `NEXT_PUBLIC_GOOGLE_CAL`.
+ * Tries that, then `NEXT_PUBLIC_DEMO_URL`, skipping Firebase Dynamic Link URLs so a stale
+ * `*.page.link` value does not beat a real `calendar.app.google` link. Unusable values → mailto.
  */
 export const DEMO_URL = resolveDemoUrl();
 
