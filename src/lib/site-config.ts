@@ -1,11 +1,22 @@
 /** Canonical site URL for SEO (sitemap, canonical, openGraph, robots). */
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.getcran.ai";
 
-const MAILTO_DEMO = "mailto:support@getcran.ai?subject=Schedule%20a%20Demo";
+/**
+ * mailto: with subject + body prefilled so the default action is “review and send”.
+ * Used when no HTTPS booking URL is configured and for general “email us” links.
+ */
+export const SUPPORT_PREFILLED_MAILTO = `mailto:support@getcran.ai?subject=${encodeURIComponent(
+  "Cran — pilot interest"
+)}&body=${encodeURIComponent(
+  "Hi Cran team,\n\nWe're interested in learning more about Cran for our shelter.\n\nOrganization:\nMy name and role:\n\nThanks,\n"
+)}`;
+
+const MAILTO_DEMO = SUPPORT_PREFILLED_MAILTO;
 
 /**
- * Pilot / demo booking URL: Google Calendar appointment schedule, Calendly, etc.
- * Order: NEXT_PUBLIC_GOOGLE_CAL, then NEXT_PUBLIC_DEMO_URL, then mailto.
+ * Pilot / demo booking URL (Google Calendar, Calendly, etc.).
+ * `google_cal` from `.env` is mapped to `NEXT_PUBLIC_GOOGLE_CAL` in `next.config.ts` for the client bundle.
+ * Order: that value, then `NEXT_PUBLIC_DEMO_URL`, then prefilled mailto.
  */
 export const DEMO_URL =
   process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||

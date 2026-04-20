@@ -8,7 +8,7 @@ import { joinWaitlist } from "@/actions/waitlist";
 import ClaudeMark from "@/components/ClaudeMark";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
-import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab } from "@/lib/site-config";
+import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAILTO } from "@/lib/site-config";
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
@@ -313,7 +313,13 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           )}
 
           <p className="mt-6 text-base text-charcoal/75 font-medium">
-            Or email <a href="mailto:support@getcran.ai" className="text-charcoal/75 underline underline-offset-4 hover:text-charcoal transition-colors">support@getcran.ai</a>
+            Or email{" "}
+            <a
+              href={SUPPORT_PREFILLED_MAILTO}
+              className="text-charcoal/75 underline underline-offset-4 hover:text-charcoal transition-colors"
+            >
+              support@getcran.ai
+            </a>
           </p>
         </div>
       </section>

@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
+/** Calendar booking URL: your env key `google_cal`, or explicit `NEXT_PUBLIC_GOOGLE_CAL`. */
+const googleCalUrl =
+  process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||
+  process.env.google_cal?.trim() ||
+  "";
+
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_GOOGLE_CAL: googleCalUrl,
+  },
   experimental: {
     optimizePackageImports: ["lucide-react"],
     /** Blog uploads use Server Actions + FormData; default ~1MB causes 400 + broken RSC response */

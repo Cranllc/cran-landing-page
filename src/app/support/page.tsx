@@ -1,7 +1,13 @@
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SITE_URL } from "@/lib/site-config";
+import {
+  DEMO_URL,
+  PILOT_CTA_LABEL,
+  pilotCtaOpensInNewTab,
+  SITE_URL,
+  SUPPORT_PREFILLED_MAILTO,
+} from "@/lib/site-config";
 import { MessageSquare, Mail } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -58,7 +64,7 @@ export default function SupportPage() {
             </a>
 
             <a
-              href="mailto:support@getcran.ai"
+              href={SUPPORT_PREFILLED_MAILTO}
               className="flex items-center gap-4 p-6 rounded-xl border border-charcoal/10 bg-white hover:border-cran/30 hover:shadow-md transition-all group focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 rounded-xl"
             >
               <div className="w-12 h-12 rounded-lg bg-cran/10 flex items-center justify-center group-hover:bg-cran/20 transition-colors">
