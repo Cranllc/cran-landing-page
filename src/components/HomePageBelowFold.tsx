@@ -2,18 +2,69 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, Mail, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Mail, ChevronDown } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { joinWaitlist } from "@/actions/waitlist";
+import ClaudeMark from "@/components/ClaudeMark";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
+import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAILTO } from "@/lib/site-config";
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
-const FAQ_ITEMS = [
-  { q: "What is Cran?", a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork." },
-  { q: "Who is it for?", a: "Shelters and rescues of any size." },
-  { q: "How do I get early access?", a: "Join the waitlist. We'll reach out when we're ready to onboard early partners." },
+const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
+  {
+    q: "What is Cran?",
+    a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork.",
+  },
+  {
+    q: "Who is the pilot for?",
+    a: "Shelters and rescues that want to run intake, care, and adoption workflows in one place, and are open to giving product feedback as we improve.",
+  },
+  {
+    q: "What works today?",
+    a: "Core workflows are live: intake, animal profiles, tasks and care plans, rounds, handoffs, adoptions, and reporting.",
+  },
+  {
+    q: "What is still evolving?",
+    a: "Some automation depth, workflow polish, and parts of the integration experience are still being refined during pilot.",
+  },
+  {
+    q: "How does onboarding work?",
+    a: "We start with setup and role configuration, then help your team go live on core workflows.",
+  },
+  {
+    q: "Can we import from our current system?",
+    a: "Yes. Cran supports structured imports and mapping help so teams can migrate key records without manual re entry. Otherwise, we'll help migrate data for you.",
+  },
+  {
+    q: "What AI features are available now?",
+    a: "Berry can assist with intake, adoption bio, task, handoffs, and daily briefings.",
+  },
+  {
+    q: "What integrations are available?",
+    a: "Pilot supports practical integrations like Stripe Connect for payments and RescueGroups sync, and more coming soon.",
+  },
+  {
+    q: "Does Cran work on mobile?",
+    a: "Yes. It is designed for real shelter use, including mobile browser workflows.",
+  },
+  {
+    q: "How do we request early access?",
+    a: (
+      <>
+        Share your shelter type, team size, current tools, and biggest workflow pain points.{" "}
+        <a
+          href={DEMO_URL}
+          className="text-cran font-semibold underline underline-offset-2 hover:text-cran-hover"
+          {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {PILOT_CTA_LABEL}
+        </a>{" "}
+        and we&apos;ll confirm pilot fit and next steps.
+      </>
+    ),
+  },
 ];
 
 export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: BlogPostForClient[] }) {
@@ -52,7 +103,10 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors">▲ Vercel</div>
               <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/75 hover:text-charcoal transition-colors">Stripe</div>
               <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/75 hover:text-charcoal transition-colors">AWS</div>
-              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor" aria-hidden /> OpenAI</div>
+              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5">
+                <ClaudeMark size={18} />
+                Claude
+              </div>
           </div>
         </div>
       </section>
@@ -241,8 +295,19 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
             Ready to upgrade?
           </h2>
-          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
-            We're building Cran. Join the waitlist for early access and for updates.
+          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-4 leading-relaxed max-w-lg mx-auto">
+            Cran is in an early partner phase. If your shelter may be a fit,{" "}
+            <a
+              href={DEMO_URL}
+              className="text-cran font-semibold underline underline-offset-4 hover:text-cran-hover"
+              {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              {PILOT_CTA_LABEL}
+            </a>{" "}
+            to start a conversation with the team.
+          </p>
+          <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
+            Want email updates only? Join the waitlist below — we&apos;ll keep you posted as we expand access.
           </p>
 
           <form onSubmit={handleJoinWaitlist} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6">
@@ -282,7 +347,13 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           )}
 
           <p className="mt-6 text-base text-charcoal/75 font-medium">
-            Or email <a href="mailto:support@getcran.ai" className="text-charcoal/75 underline underline-offset-4 hover:text-charcoal transition-colors">support@getcran.ai</a>
+            Or email{" "}
+            <a
+              href={SUPPORT_PREFILLED_MAILTO}
+              className="text-charcoal/75 underline underline-offset-4 hover:text-charcoal transition-colors"
+            >
+              support@getcran.ai
+            </a>
           </p>
         </div>
       </section>

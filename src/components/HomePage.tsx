@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import type { PostPreview } from "@/lib/blog";
+import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab } from "@/lib/site-config";
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string };
 
@@ -49,7 +50,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
           <div className="relative mx-auto w-full max-w-4xl z-10 flex flex-col items-center text-center px-6">
             <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-cran/20 bg-cran/[0.06] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-cran select-none fade-up">
               <span className="w-1 h-1 rounded-full bg-cran animate-pulse"></span>
-              Coming soon
+              In pilot
             </div>
 
             <h1
@@ -68,12 +69,16 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
             </p>
 
             <div className="mt-10 flex flex-col items-stretch justify-center gap-2 sm:flex-row pb-12 w-full max-w-xs sm:max-w-none fade-up-d3">
-              <a href="#waitlist" className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]">
-                Join Waitlist
+              <a
+                href={DEMO_URL}
+                className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
+                {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {PILOT_CTA_LABEL}
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
               </a>
-              <a href="#learn-more" className="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 text-sm font-medium text-white/85 transition-colors hover:border-white/30 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#08080A]">
-                Learn more
+              <a href="#waitlist" className="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 text-sm font-medium text-white/85 transition-colors hover:border-white/30 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#08080A]">
+                Join waitlist
               </a>
             </div>
           </div>
