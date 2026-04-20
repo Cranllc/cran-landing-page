@@ -13,13 +13,47 @@ import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAI
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
 const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
-  { q: "What is Cran?", a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork." },
-  { q: "Who is it for?", a: "Shelters and rescues of any size." },
   {
-    q: "How do I get early access?",
+    q: "What is Cran?",
+    a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork.",
+  },
+  {
+    q: "Who is the pilot for?",
+    a: "Shelters and rescues that want to run intake, care, and adoption workflows in one place, and are open to giving product feedback as we improve.",
+  },
+  {
+    q: "What works today?",
+    a: "Core workflows are live: intake, animal profiles, tasks and care plans, rounds, handoffs, adoptions, and reporting.",
+  },
+  {
+    q: "What is still evolving?",
+    a: "Some automation depth, workflow polish, and parts of the integration experience are still being refined during pilot.",
+  },
+  {
+    q: "How does onboarding work?",
+    a: "We start with setup and role configuration, then help your team go live on core workflows.",
+  },
+  {
+    q: "Can we import from our current system?",
+    a: "Yes. Cran supports structured imports and mapping help so teams can migrate key records without manual re entry. Otherwise, we'll help migrate data for you.",
+  },
+  {
+    q: "What AI features are available now?",
+    a: "Berry can assist with intake, adoption bio, task, handoffs, and daily briefings.",
+  },
+  {
+    q: "What integrations are available?",
+    a: "Pilot supports practical integrations like Stripe Connect for payments and RescueGroups sync, and more coming soon.",
+  },
+  {
+    q: "Does Cran work on mobile?",
+    a: "Yes. It is designed for real shelter use, including mobile browser workflows.",
+  },
+  {
+    q: "How do we request early access?",
     a: (
       <>
-        We&apos;re onboarding pilot shelters first.{" "}
+        Share your shelter type, team size, current tools, and biggest workflow pain points.{" "}
         <a
           href={DEMO_URL}
           className="text-cran font-semibold underline underline-offset-2 hover:text-cran-hover"
@@ -27,7 +61,7 @@ const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
         >
           {PILOT_CTA_LABEL}
         </a>{" "}
-        to talk with the team. For product updates without a call, join the waitlist below.
+        and we&apos;ll confirm pilot fit and next steps.
       </>
     ),
   },
