@@ -3,18 +3,34 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Mail, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { joinWaitlist } from "@/actions/waitlist";
 import ClaudeMark from "@/components/ClaudeMark";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
+import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab } from "@/lib/site-config";
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
-const FAQ_ITEMS = [
+const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
   { q: "What is Cran?", a: "Shelter management powered by AI and designed for mobile. Staff stay on the floor instead of at a computer, with tools that keep them focused on animals instead of paperwork." },
   { q: "Who is it for?", a: "Shelters and rescues of any size." },
-  { q: "How do I get early access?", a: "Join the waitlist. We'll reach out when we're ready to onboard early partners." },
+  {
+    q: "How do I get early access?",
+    a: (
+      <>
+        We&apos;re onboarding pilot shelters first.{" "}
+        <a
+          href={DEMO_URL}
+          className="text-cran font-semibold underline underline-offset-2 hover:text-cran-hover"
+          {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {PILOT_CTA_LABEL}
+        </a>{" "}
+        to talk with the team. For product updates without a call, join the waitlist below.
+      </>
+    ),
+  },
 ];
 
 export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: BlogPostForClient[] }) {
@@ -245,8 +261,19 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
             Ready to upgrade?
           </h2>
-          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
-            We're building Cran. Join the waitlist for early access and for updates.
+          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-4 leading-relaxed max-w-lg mx-auto">
+            Cran is in an early partner phase. If your shelter may be a fit,{" "}
+            <a
+              href={DEMO_URL}
+              className="text-cran font-semibold underline underline-offset-4 hover:text-cran-hover"
+              {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              {PILOT_CTA_LABEL}
+            </a>{" "}
+            to start a conversation with the team.
+          </p>
+          <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
+            Want email updates only? Join the waitlist below — we&apos;ll keep you posted as we expand access.
           </p>
 
           <form onSubmit={handleJoinWaitlist} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6">
