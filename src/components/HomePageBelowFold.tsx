@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, Mail, ChevronDown } from "lucide-react";
+import { ArrowRight, Mail, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { joinWaitlist } from "@/actions/waitlist";
+import ClaudeMark from "@/components/ClaudeMark";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
 
@@ -52,7 +53,10 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
               <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors">▲ Vercel</div>
               <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/75 hover:text-charcoal transition-colors">Stripe</div>
               <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/75 hover:text-charcoal transition-colors">AWS</div>
-              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5"><Sparkles size={18} fill="currentColor" aria-hidden /> OpenAI</div>
+              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5">
+                <ClaudeMark size={18} />
+                Claude
+              </div>
           </div>
         </div>
       </section>
