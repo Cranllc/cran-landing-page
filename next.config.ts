@@ -2,13 +2,9 @@ import type { NextConfig } from "next";
 
 /**
  * Calendar booking URL for the client bundle.
- * `google_cal` wins over `NEXT_PUBLIC_GOOGLE_CAL` so a correct invite in `.env` / Vercel
- * is not overridden by an old `NEXT_PUBLIC_GOOGLE_CAL` (e.g. a broken Firebase Dynamic Link).
+ * Keep this single-source: `google_cal`.
  */
-const googleCalUrl =
-  process.env.google_cal?.trim() ||
-  process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||
-  "";
+const googleCalUrl = process.env.google_cal?.trim() || "";
 
 const nextConfig = {
   env: {
