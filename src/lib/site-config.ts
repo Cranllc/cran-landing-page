@@ -13,15 +13,36 @@ export const SUPPORT_PREFILLED_MAILTO = `mailto:support@getcran.ai?subject=${enc
 
 const MAILTO_DEMO = SUPPORT_PREFILLED_MAILTO;
 
+function resolveDemoUrl(): string {
+  const raw =
+    process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||
+    process.env.NEXT_PUBLIC_DEMO_URL?.trim() ||
+    "";
+  if (!raw) return MAILTO_DEMO;
+  if (raw.startsWith("mailto:")) {
+    try {
+      new URL(raw);
+      return raw;
+    } catch {
+      return MAILTO_DEMO;
+    }
+  }
+  try {
+    const u = new URL(raw);
+    if (u.protocol === "http:" || u.protocol === "https:") return u.href;
+  } catch {
+    // Non-parseable or incomplete URIs (e.g. bad paste) — avoid opening broken / Firebase Dynamic Link error pages.
+    return MAILTO_DEMO;
+  }
+  return MAILTO_DEMO;
+}
+
 /**
  * Pilot / demo booking URL (Google Calendar, Calendly, etc.).
  * `google_cal` from `.env` is mapped to `NEXT_PUBLIC_GOOGLE_CAL` in `next.config.ts` for the client bundle.
- * Order: that value, then `NEXT_PUBLIC_DEMO_URL`, then prefilled mailto.
+ * Invalid / non-HTTP(S) values fall back to prefilled mailto.
  */
-export const DEMO_URL =
-  process.env.NEXT_PUBLIC_GOOGLE_CAL?.trim() ||
-  process.env.NEXT_PUBLIC_DEMO_URL?.trim() ||
-  MAILTO_DEMO;
+export const DEMO_URL = resolveDemoUrl();
 
 /** Primary marketing CTA label (pilot conversation). */
 export const PILOT_CTA_LABEL =
