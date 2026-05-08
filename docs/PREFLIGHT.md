@@ -24,14 +24,14 @@ npx prisma migrate deploy
 
 Confirm `Post` has `seoTitle`, `seoDescription`, `heroImageUrl`, `previewImageUrl` (and legacy `featuredImageUrl` synced on save).
 
-## 3. Manual — local (`npm run dev`)
+## 3. Manual (local `npm run dev`)
 
-- [ ] **Admin → open a post** — **Write** tab: edit body, save, no errors.
-- [ ] **SEO** tab — SEO title, meta description, cover/featured URL + upload.
-- [ ] **Assets** tab — Only markdown `![]()` images; editing **alt** updates markdown (switch to Write and confirm).
-- [ ] **Use as hero / Use as preview** (on Assets) — Copies that markdown image URL into the matching SEO field.
-- [ ] **Copy URL** — Puts image URL on clipboard.
-- [ ] **Published post** — Visit `/blog/{slug}`: hero uses **hero** field only (placeholder if empty — not first body image); view source → Article + BreadcrumbList JSON-LD.
+- [ ] **Admin → open a post**, **Write** tab: edit body, save, no errors.
+- [ ] **SEO** tab: SEO title, meta description, cover/featured URL + upload.
+- [ ] **Assets** tab: Only markdown `![]()` images; editing **alt** updates markdown (switch to Write and confirm).
+- [ ] **Use as hero / Use as preview** (on Assets): Copies that markdown image URL into the matching SEO field.
+- [ ] **Copy URL**: Puts image URL on clipboard.
+- [ ] **Published post**: Visit `/blog/{slug}`: hero uses **hero** field only (placeholder if empty, not first body image); view source → Article + BreadcrumbList JSON-LD.
 
 ## 4. Production smoke (after deploy)
 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { Resend } from "resend"
 import { isAllowedAdminEmail } from "@/lib/admin-email"
 
-/** Test Resend delivery. Dev only — prevents production abuse / extra Resend costs. */
+/** Test Resend delivery. Dev only; prevents production abuse / extra Resend costs. */
 export async function GET(req: Request) {
   if (process.env.NODE_ENV !== "development") {
     return NextResponse.json({

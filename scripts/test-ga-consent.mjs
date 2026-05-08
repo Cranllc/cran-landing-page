@@ -54,7 +54,7 @@ if (hasCollect && afterAccept > beforeAccept) {
   console.log("\n✓ PASS: GA script loads. Accept flow completes.");
   console.log("   Verify in GA4 Realtime (Reports > Realtime) after accepting.");
   if (!hasCollect) {
-    console.log("   Note: Collect requests may use sendBeacon — check Network tab manually.");
+    console.log("   Note: Collect requests may use sendBeacon; check Network tab manually.");
   }
   process.exit(0);
 } else {

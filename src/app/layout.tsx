@@ -20,7 +20,7 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Cran | AI-Powered Shelter Management",
   description:
-    "Camera intake with AI breed detection, medical records, kennel management, task automation, and SPDA export — one platform built for animal shelters and rescues.",
+    "Camera intake with AI breed detection, medical records, kennel management, task automation, and SPDA export: one platform built for animal shelters and rescues.",
   keywords: [
     "animal shelter software",
     "shelter management platform",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Cran",
     title: "Cran | AI-Powered Shelter Management",
-    description: "One platform for everything — intake, medical, kennels, adoptions, reporting. Built for shelters.",
+    description: "One platform for everything: intake, medical, kennels, adoptions, reporting. Built for shelters.",
     images: [
       {
         url: `${SITE_URL.replace(/\/$/, "")}/openGraph.png`,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Cran | AI-Powered Shelter Management",
-    description: "One platform for everything — built for shelters.",
+    description: "One platform for everything, built for shelters.",
     images: [`${SITE_URL.replace(/\/$/, "")}/openGraph.png`],
   },
   robots: {
@@ -108,7 +108,7 @@ const faqJsonLd = {
   "@type": "FAQPage",
   mainEntity: [
     { "@type": "Question", name: "What AI features does Cran include?", acceptedAnswer: { "@type": "Answer", text: "Camera intake with breed detection, AI bio generation, AI health triage with risk prediction, AI grant report generation, AI task assignment, and AI shift handoff summaries. All included." } },
-    { "@type": "Question", name: "Does Cran work for rescues?", acceptedAnswer: { "@type": "Answer", text: "Yes. Foster management, transport coordination, volunteer tools, and adoption events — all included for rescues and shelters." } },
+    { "@type": "Question", name: "Does Cran work for rescues?", acceptedAnswer: { "@type": "Answer", text: "Yes. Foster management, transport coordination, volunteer tools, and adoption events: all included for rescues and shelters." } },
     { "@type": "Question", name: "Does Cran work on phones?", acceptedAnswer: { "@type": "Answer", text: "Cran is mobile-first. Camera intake is the default home screen. Works as a Progressive Web App with offline capability." } },
     { "@type": "Question", name: "Can Cran export data for grants?", acceptedAnswer: { "@type": "Answer", text: "One-click SPDA CSV export plus AI-drafted grant narratives. 200+ pre-built compliance reports." } },
     { "@type": "Question", name: "Is shelter data safe?", acceptedAnswer: { "@type": "Answer", text: "Consent-first. Full data ownership. PII scrubbed before AI. AES-256 at rest, TLS 1.2+ in transit." } },

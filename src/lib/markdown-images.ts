@@ -1,4 +1,4 @@
-/** Alt text safe inside `![alt](url)` — `]` or newlines break the markdown parser. */
+/** Alt text safe inside `![alt](url)`; `]` or newlines break the markdown parser. */
 export function sanitizeMarkdownImageAlt(alt: string): string {
   const cleaned = alt
     .replace(/\u00a0|\u202f|\u2007/g, " ") // NBSP / narrow NBSP (common in macOS screenshot names)
@@ -14,7 +14,7 @@ export function extractFirstImageUrl(content: string): string | null {
   return match ? match[1].trim() : null;
 }
 
-/** Normalized https URL or null (ignores root-relative here — use resolveImageUrlForPreview for admin). */
+/** Normalized https URL or null (ignores root-relative here; use resolveImageUrlForPreview for admin). */
 export function pickHttpImageUrl(url: string | null | undefined): string | null {
   const u = url?.trim();
   if (!u) return null;

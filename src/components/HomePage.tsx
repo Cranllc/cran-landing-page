@@ -36,7 +36,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
 
       <main id="main-content" className="relative z-10 bg-[#FAFAF8]">
 
-        {/* HERO — DARK (above fold, minimal deps) */}
+        {/* HERO (dark, above fold, minimal deps) */}
         <section
           ref={heroRef}
           className="hero-section relative overflow-hidden pt-28 lg:pt-40 pb-0 flex flex-col items-center min-h-[90vh] bg-[#08080A]"
@@ -123,7 +123,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
           </div>
         </section>
 
-        {/* Below-fold: Trust, Built For, Why, Blog, FAQ, Waitlist, Footer — separate JS chunk */}
+        {/* Below-fold: Trust, Built For, Why, Blog, FAQ, Waitlist, Footer (separate JS chunk) */}
         <HomePageBelowFold blogPosts={blogPosts} />
       </main>
     </div>

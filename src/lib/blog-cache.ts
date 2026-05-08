@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 /**
- * DB columns that older generated `Post` types may omit (pre-migration) — intersect so blog metadata always type-checks.
+ * DB columns that older generated `Post` types may omit (pre-migration); intersect so blog metadata always type-checks.
  */
 type PostSeoColumns = {
   seoTitle: string | null;
@@ -18,7 +18,7 @@ type PostSeoColumns = {
 /** Full row + author for public blog post pages. */
 export type BlogPostWithAuthor = Post & PostSeoColumns & { author: User };
 
-/** Cached post fetch — dedupes generateMetadata + page component on blog/[slug]. */
+/** Cached post fetch; dedupes generateMetadata + page component on blog/[slug]. */
 export const getPostBySlug = cache(
   async (slug: string): Promise<BlogPostWithAuthor | null> => {
     // Avoid Full Route Cache / stale HTML after admin edits (author, title, etc.)

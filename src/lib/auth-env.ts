@@ -1,5 +1,5 @@
 /**
- * Auth environment validation — keep magic-link + JWT behavior predictable.
+ * Auth environment validation: keep magic-link + JWT behavior predictable.
  * Used by instrumentation (runtime); see docs/auth-production.md.
  */
 
@@ -17,7 +17,7 @@ export function getAuthEnvIssues(): string[] {
   const authUrl = (process.env.AUTH_URL || process.env.NEXTAUTH_URL || "").trim()
   if (!authUrl) {
     issues.push(
-      "Set AUTH_URL (or NEXTAUTH_URL) to your canonical public origin, e.g. https://www.getcran.ai — NextAuth rewrites requests to this host for links and cookies."
+      "Set AUTH_URL (or NEXTAUTH_URL) to your canonical public origin, e.g. https://www.getcran.ai. NextAuth rewrites requests to this host for links and cookies."
     )
   } else {
     try {
@@ -40,7 +40,7 @@ export function getAuthEnvIssues(): string[] {
       const cookieDom = (process.env.AUTH_COOKIE_DOMAIN || "").trim()
       if (cookieDom && process.env.VERCEL_ENV === "preview") {
         issues.push(
-          "AUTH_COOKIE_DOMAIN is set on a Vercel Preview — remove it for preview (*.vercel.app) or session cookies may not stick. Use it on Production only."
+          "AUTH_COOKIE_DOMAIN is set on a Vercel Preview. Remove it for preview (*.vercel.app) or session cookies may not stick. Use it on Production only."
         )
       }
     } catch {

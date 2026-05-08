@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/** Always read the real Cookie header for this request — cached RSC layouts can look “logged out”. */
+/** Always read the real Cookie header for this request; cached RSC layouts can look “logged out”. */
 export const dynamic = "force-dynamic"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -85,7 +85,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {children}
       </main>
 
-      {/* Mobile Bottom Navigation — 44px+ touch targets */}
+      {/* Mobile Bottom Navigation (44px+ touch targets) */}
       <nav
         className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E0] z-50 flex items-stretch justify-around px-1 pt-1"
         style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}

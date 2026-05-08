@@ -6,7 +6,7 @@ import { prismaAdapterWithCaseInsensitiveEmail } from "@/lib/prisma-auth-adapter
 import { isAllowedAdminEmail } from "@/lib/admin-email"
 
 /**
- * Resolve the mailbox for allowlisting. Prefer `providerAccountId` when it looks like an email —
+ * Resolve the mailbox for allowlisting. Prefer `providerAccountId` when it looks like an email;
  * some Auth.js paths omit `account.type === "email"` even for Resend.
  */
 function resolveSignInEmail(
@@ -59,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = new URL(url)
         const params = new URLSearchParams(parsed.search)
         // Always send users to /admin after verify. Removing callbackUrl broke the flow when the
-        // client used `signIn(..., { redirect: false })` (no callback cookie) — Auth.js then had no
+        // client used `signIn(..., { redirect: false })` (no callback cookie); Auth.js then had no
         // destination and users often ended on /auth/signin. Forcing `/admin` is safe (same-site path).
         params.set("callbackUrl", "/admin")
         const magicLink = `${parsed.origin}${parsed.pathname}?${params.toString()}`
@@ -92,7 +92,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
    */
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days — explicit so behavior matches expectations
+    maxAge: 30 * 24 * 60 * 60, // 30 days; explicit so behavior matches expectations
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -114,7 +114,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     /**
      * Domain allowlist runs only when the user clicks “Send magic link” (verification request).
-     * After that, the link is bound to a DB token + identifier — callback always succeeds so we
+     * After that, the link is bound to a DB token + identifier; callback always succeeds so we
      * don’t double-reject on shape/casing quirks.
      */
     async signIn({ user, account, profile, email }) {

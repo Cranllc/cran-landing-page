@@ -1,4 +1,4 @@
-# Auth / admin magic link — reliability runbook
+# Auth / admin magic link (reliability runbook)
 
 Email sign-in will only be **predictable** if environment and DNS match how users open the site. No code path can fix wrong `AUTH_URL` or mixed secrets.
 
@@ -29,15 +29,15 @@ Email sign-in will only be **predictable** if environment and DNS match how user
 
 ## If login fails
 
-1. **Redirect to `/auth/signin` with no query** — usually **no session cookie** (secret, host, `AUTH_URL`, or cookie domain).  
-2. **`?error=AccessDenied`** — rare; means the server rejected the address when requesting the link (or a non–email-provider path).  
+1. **Redirect to `/auth/signin` with no query**: usually **no session cookie** (secret, host, `AUTH_URL`, or cookie domain).  
+2. **`?error=AccessDenied`**: rare; means the server rejected the address when requesting the link (or a non-email-provider path).  
 3. Request a **new** magic link after any `AUTH_URL` / secret change.  
 4. Confirm in DevTools → Application → Cookies for **`www.getcran.ai`** that `authjs.session-token` (or `__Secure-authjs.session-token`) appears **after** clicking the link.
 
 ## Tests
 
-- `npm test` includes Vitest checks for `isAllowedAdminEmail` — run in CI so allowlist regressions are caught.
+- `npm test` includes Vitest checks for `isAllowedAdminEmail`; run in CI so allowlist regressions are caught.
 
 ## Honest limit
 
-**100%** delivery depends on Resend, recipient mail filters, and user inbox — but **your app** can be **100% consistent** on URL, cookie host, secret, and allowlist by enforcing the env rules above and keeping Production config in sync.
+**100%** delivery depends on Resend, recipient mail filters, and user inbox, but **your app** can be **100% consistent** on URL, cookie host, secret, and allowlist by enforcing the env rules above and keeping Production config in sync.

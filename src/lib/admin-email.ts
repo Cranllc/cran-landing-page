@@ -2,7 +2,7 @@
  * Allowed admin mailboxes (getcran.ai / cran-us.com trees).
  *
  * Used when requesting a magic link (server `signIn` + optional client pre-check on the form).
- * After a link is sent, the callback trusts the verified token — we don’t re-check here on every page.
+ * After a link is sent, the callback trusts the verified token; we don’t re-check here on every page.
  */
 function isUnderApex(host: string, apex: string): boolean {
   return host === apex || host === `www.${apex}` || host.endsWith(`.${apex}`)

@@ -1,12 +1,12 @@
 import { GA_ID, COOKIE_CONSENT_KEY } from "@/lib/ga";
 
 /**
- * GA4 via inline scripts only — no next/script onLoad (unreliable with beforeInteractive).
+ * GA4 via inline scripts only; no next/script onLoad (unreliable with beforeInteractive).
  *
  * Flow:
  * 1. Inline script sets up dataLayer, gtag, and consent defaults (denied).
  * 2. gtag.js loads via a regular <script async>.
- * 3. gtag("js") + gtag("config") run immediately — GA queues events until consent is granted.
+ * 3. gtag("js") + gtag("config") run immediately; GA queues events until consent is granted.
  * 4. If the user already accepted cookies, consent is upgraded inline.
  * 5. If not, CookieConsent calls grantConsent() later which upgrades consent and triggers the queued hits.
  */

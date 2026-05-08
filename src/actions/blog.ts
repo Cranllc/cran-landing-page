@@ -58,7 +58,7 @@ export async function updatePost(
     tags?: string[]
     seoTitle?: string | null
     seoDescription?: string | null
-    /** Article header — not from markdown body */
+    /** Article header (not from markdown body) */
     heroImageUrl?: string | null
     /** Cards + OG/Twitter; falls back to hero in readers if empty */
     previewImageUrl?: string | null

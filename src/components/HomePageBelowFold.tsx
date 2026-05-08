@@ -90,7 +90,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
   return (
     <>
       {/*
-      TRUST — Partners + Infrastructure (commented out: do not show stack / partner strip on site for now)
+      TRUST / Partners + Infrastructure (commented out: do not show stack / partner strip on site for now)
       <section id="learn-more" className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
@@ -149,7 +149,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             <span className="absolute top-0 left-0 md:-left-2 text-[3.5rem] md:text-[5rem] font-serif leading-none text-cran select-none pointer-events-none" aria-hidden="true">&ldquo;</span>
             <span className="absolute bottom-0 right-0 md:-right-2 text-[3.5rem] md:text-[5rem] font-serif leading-none text-cran select-none pointer-events-none" aria-hidden="true">&rdquo;</span>
             <p className="relative z-10 text-lg md:text-xl text-charcoal/75 leading-relaxed font-medium italic px-8 md:px-14">
-              Shelter staff deserve tools that actually help — not spreadsheets, paper trails, and software built for someone else. We&apos;re building Cran because animal welfare organizations do life-changing work, and they shouldn&apos;t have to fight their systems to do it.
+              Shelter staff deserve tools that actually help, not spreadsheets, paper trails, and software built for someone else. We&apos;re building Cran because animal welfare organizations do life-changing work, and they shouldn&apos;t have to fight their systems to do it.
             </p>
           </blockquote>
         </div>
@@ -308,7 +308,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             to start a conversation with the team.
           </p>
           <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
-            Want email updates only? Join the waitlist below — we&apos;ll keep you posted as we expand access.
+            Want email updates only? Join the waitlist below; we&apos;ll keep you posted as we expand access.
           </p>
 
           <form onSubmit={handleJoinWaitlist} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6">

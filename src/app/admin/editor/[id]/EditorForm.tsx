@@ -34,7 +34,7 @@ import {
   Upload,
 } from "lucide-react"
 
-/** SEO columns — intersect so EditorForm type-checks even if TS uses a pre-migration Prisma `Post`. */
+/** SEO columns: intersect so EditorForm type-checks even if TS uses a pre-migration Prisma `Post`. */
 type PostForEditor = Post & {
   seoTitle?: string | null
   seoDescription?: string | null
@@ -272,7 +272,7 @@ export default function EditorForm({
   const removeImageFromPost = (imageIndex: number, imageUrl: string) => {
     if (
       !confirm(
-        "Remove this image from the post body? The file is not deleted from storage (e.g. Supabase) — only the markdown line is removed. Hero / preview will be cleared if they used this URL."
+        "Remove this image from the post body? The file is not deleted from storage (e.g. Supabase); only the markdown line is removed. Hero / preview will be cleared if they used this URL."
       )
     ) {
       return
@@ -463,7 +463,7 @@ export default function EditorForm({
       {editorTab === "seo" && (
         <div className="flex-1 overflow-y-auto border-b border-[#E5E5E0] bg-[#FAFAF8] px-4 sm:px-6 py-6 space-y-8">
           <p className="text-[13px] text-[#1a1a1a]/50 max-w-2xl">
-            Text snippets for search/social, plus <strong>hero</strong> and <strong>preview</strong> images — upload below (or paste a URL). Neither is taken from markdown body images — use <strong>Assets</strong> for in-article images.
+            Text snippets for search/social, plus <strong>hero</strong> and <strong>preview</strong> images: upload below (or paste a URL). Neither is taken from markdown body images; use <strong>Assets</strong> for in-article images.
           </p>
           <section className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1a1a1a]/40">
@@ -480,7 +480,7 @@ export default function EditorForm({
                   name="seoTitle"
                   value={formData.seoTitle}
                   onChange={handleChange}
-                  placeholder="Defaults to post title — used as the browser tab / search title"
+                  placeholder="Defaults to post title; used as the browser tab / search title"
                   className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2.5 sm:py-2 text-base sm:text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20 min-w-0"
                 />
               </div>
@@ -508,7 +508,7 @@ export default function EditorForm({
             </h2>
             <div className="bg-white border border-[#E5E5E0] rounded-xl p-4 sm:p-5 space-y-3">
               <p className="text-[12px] text-[#1a1a1a]/55 leading-relaxed">
-                Large image under the title on the post page only. Leave empty for the branded placeholder — we <strong>do not</strong> pull this from markdown images.
+                Large image under the title on the post page only. Leave empty for the branded placeholder; we <strong>do not</strong> pull this from markdown images.
               </p>
               <button
                 type="button"
@@ -875,7 +875,7 @@ export default function EditorForm({
           }}
         >
           <p className="text-[11px] font-semibold text-[#1a1a1a]/45 mb-2">
-            Post images (not in article body) — <strong className="text-[#1a1a1a]/70">Hero</strong> shows under the title;{" "}
+            Post images (not in article body): <strong className="text-[#1a1a1a]/70">Hero</strong> shows under the title;{" "}
             <strong className="text-[#1a1a1a]/70">Preview</strong> is for cards &amp; link shares. Save to persist.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

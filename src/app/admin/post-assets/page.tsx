@@ -12,7 +12,7 @@ export default async function PostAssetsPage() {
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-[#1a1a1a]">Post images</h1>
         <p className="text-sm font-medium text-[#1a1a1a]/50 mt-1">
-          Images embedded in post markdown — edit alts and URLs in the editor <strong>Assets</strong> tab. SEO and cover image live under <strong>SEO</strong>.
+          Images embedded in post markdown: edit alts and URLs in the editor <strong>Assets</strong> tab. SEO and cover image live under <strong>SEO</strong>.
         </p>
       </div>
 

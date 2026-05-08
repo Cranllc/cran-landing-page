@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 import type { Metadata } from 'next';
 
-/** Fresh DB read on every request — avoids cached “by …” / body after editor saves. */
+/** Fresh DB read on every request; avoids cached “by …” / body after editor saves. */
 export const dynamic = 'force-dynamic';
 
 type Props = {

@@ -6,7 +6,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.getcran
  * Used when no HTTPS booking URL is configured and for general “email us” links.
  */
 export const SUPPORT_PREFILLED_MAILTO = `mailto:support@getcran.ai?subject=${encodeURIComponent(
-  "Cran — pilot interest"
+  "Cran: pilot interest"
 )}&body=${encodeURIComponent(
   "Hi Cran team,\n\nWe're interested in learning more about Cran for our shelter.\n\nOrganization:\nMy name and role:\n\nThanks,\n"
 )}`;

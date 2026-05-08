@@ -36,9 +36,9 @@ model Post {
   seoDescription   String?  @db.Text
   /// Legacy: kept in sync on save (preview || hero) for older readers
   featuredImageUrl String?
-  /// Article header image only — never taken from markdown body
+  /// Article header image only; never taken from markdown body
   heroImageUrl       String?
-  /// Blog cards + Open Graph / Twitter — falls back to hero in code if empty
+  /// Blog cards + Open Graph / Twitter; falls back to hero in code if empty
   previewImageUrl  String?
   /// Optional byline; when set, overrides author User name/email on the public post
   authorDisplayName String?

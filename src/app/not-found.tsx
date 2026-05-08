@@ -40,7 +40,7 @@ export default function NotFound() {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold text-charcoal mb-3">
-            Oops — this page wandered off
+            Oops. This page wandered off
           </h1>
           <p className="text-charcoal/60 text-lg mb-10 max-w-md mx-auto">
             Like a curious cat exploring the wrong kennel. Don&apos;t worry, we&apos;ll help you find your way back.
