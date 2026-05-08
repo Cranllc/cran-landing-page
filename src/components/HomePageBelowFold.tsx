@@ -359,15 +359,6 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             </div>
           )}
 
-          <a
-            href={DEMO_URL}
-            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-cran-hover px-8 text-[15px] font-bold text-white transition-all shadow-md shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5 hover:bg-[#9A3228] focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-[#F8F7F4]"
-            {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          >
-            {PILOT_CTA_LABEL}
-            <ArrowRight size={16} className="shrink-0" aria-hidden />
-          </a>
-
           <p className="mt-8 text-base text-charcoal/75 font-medium">
             Or email{" "}
             <a
