@@ -82,7 +82,7 @@ const softwareJsonLd = {
     "Adoptions and public application links",
     "Fosters, partners, and transport coordination",
     "Reporting and data export",
-    "Listing integrations where enabled in pilot",
+    "Listing integrations as part of the pilot program",
     "Lost and found, behavior notes, and scheduling",
     "Installable web experience with offline-friendly flows where supported",
   ],
@@ -106,7 +106,7 @@ const faqJsonLd = {
       name: "What AI features does Cran include?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Cran uses AI to speed up common shelter work like intake, bios, care notes, and reporting drafts. What is on depends on your pilot agreement and settings.",
+        text: "Cran uses AI to speed up common shelter work like intake, bios, care notes, and reporting drafts. Scope depends on your pilot agreement and how we work together.",
       },
     },
     {
@@ -146,7 +146,7 @@ const faqJsonLd = {
       name: "Can adoptable animals appear on major adoption sites?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Listing integrations are part of the pilot roadmap. What is enabled depends on your organization and rollout stage; we walk through options when you apply.",
+        text: "Listing integrations are part of the pilot. When you apply, we cover what your rollout includes today and what is planned next.",
       },
     },
   ],

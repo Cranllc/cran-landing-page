@@ -495,7 +495,7 @@ export default function EditorForm({
                   onChange={handleChange}
                   rows={3}
                   maxLength={320}
-                  placeholder="~150–160 characters ideal for Google. Leave empty to auto-generate from the first lines of the post."
+                  placeholder="~150-160 characters ideal for Google. Leave empty to auto-generate from the first lines of the post."
                   className="w-full border border-[#E5E5E0] rounded-lg px-3 py-2.5 sm:py-2 text-base sm:text-[13px] text-[#1a1a1a] outline-none focus:border-cran/50 focus:ring-1 focus:ring-cran/20 resize-y min-h-[88px] sm:min-h-[72px]"
                 />
               </div>

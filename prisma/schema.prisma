@@ -32,7 +32,7 @@ model Post {
   tags             String[] @default([])
   /// Optional SEO: overrides post title in document title / Open Graph (root page keeps "Cran | …")
   seoTitle         String?
-  /// Optional meta description (~150–160 chars)
+  /// Optional meta description (~150-160 chars)
   seoDescription   String?  @db.Text
   /// Legacy: kept in sync on save (preview || hero) for older readers
   featuredImageUrl String?

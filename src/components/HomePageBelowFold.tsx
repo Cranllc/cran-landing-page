@@ -38,11 +38,11 @@ const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
   },
   {
     q: "What AI features are available now?",
-    a: "AI is there to speed up intake, bios, care notes, and reporting-style drafts. What is turned on is agreed in pilot and can be adjusted as you go.",
+    a: "AI is there to speed up intake, bios, care notes, and reporting-style drafts. How we use it with your team is something we figure out together during the pilot.",
   },
   {
     q: "What integrations are available?",
-    a: "Payments and public listings are in active pilot. We confirm what is available for your org when we talk, rather than promising a fixed catalog on the marketing site.",
+    a: "We are piloting payments and listing integrations now, with more on the roadmap. During the pilot we align with you on what is live today and what we are building toward next.",
   },
   {
     q: "Does Cran work on mobile?",
