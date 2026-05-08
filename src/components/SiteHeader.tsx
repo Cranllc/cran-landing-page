@@ -54,16 +54,6 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/#waitlist"
-              className={`inline-flex h-8 items-center justify-center rounded-md border px-3.5 text-[13px] font-medium transition-all focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 ${
-                isScrolled
-                  ? "border-charcoal/15 bg-transparent text-charcoal/80 hover:bg-charcoal/5 focus:ring-offset-white"
-                  : "border-white/20 bg-transparent text-white/85 hover:bg-white/[0.08] focus:ring-offset-[#0F0F10]"
-              }`}
-            >
-              Join waitlist
-            </Link>
             <a
               href={DEMO_URL}
               className={`inline-flex h-8 items-center justify-center rounded-md bg-cran-hover px-3.5 text-[13px] font-medium text-white transition-all hover:bg-[#9A3228] focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 ${isScrolled ? "shadow-sm focus:ring-offset-white" : "shadow-lg shadow-cran/20 focus:ring-offset-[#0F0F10]"}`}
@@ -102,17 +92,6 @@ export default function SiteHeader({ forceLightMode = false }: { forceLightMode?
               >
                 {PILOT_CTA_LABEL}
               </a>
-              <Link
-                href="/#waitlist"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block w-full inline-flex h-10 items-center justify-center rounded-lg border text-[14px] font-medium focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-inset ${
-                  isScrolled
-                    ? "border-charcoal/15 text-charcoal/80 bg-transparent hover:bg-charcoal/5 focus:ring-offset-white"
-                    : "border-white/20 text-white/85 bg-transparent hover:bg-white/[0.06] focus:ring-offset-[#0F0F10]"
-                }`}
-              >
-                Join waitlist
-              </Link>
             </div>
           </div>
         </div>

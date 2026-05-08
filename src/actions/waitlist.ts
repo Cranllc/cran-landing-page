@@ -29,7 +29,7 @@ export async function joinWaitlist(email: string) {
     if (error.code === 'P2002') {
       return { success: true }
     }
-    console.error("Waitlist error:", error)
+    console.error("Pilot signup error:", error)
     return { error: "Something went wrong. Please try again later." }
   }
 }
@@ -44,7 +44,7 @@ export async function sendWaitlistBlast(subject: string, message: string) {
     const signups = await (prisma as any).waitlist.findMany({ select: { email: true } })
     const emails = signups.map((s: any) => s.email)
     
-    if (!emails.length) return { error: "No one on the waitlist yet!" }
+    if (!emails.length) return { error: "No pilot signup emails yet!" }
     
     // Draft the email batch payload
     const batchList = emails.map((email: string) => ({
@@ -61,7 +61,7 @@ export async function sendWaitlistBlast(subject: string, message: string) {
             ${message.replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>')}
           </div>
           <div style="margin-top: 48px; border-top: 1px solid #E5E5E0; padding-top: 24px; font-size: 13px; color: #8B939C;">
-            You are receiving this update because you joined the Waitlist for Cran LLC.
+            You are receiving this update because you shared your email with Cran LLC for pilot-related news.
           </div>
         </div>
       `

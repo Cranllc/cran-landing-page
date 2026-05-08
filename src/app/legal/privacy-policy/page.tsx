@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
           We may collect information you provide directly, including:
         </p>
         <ul className="list-disc pl-6 space-y-2 text-[#26251E]/80">
-          <li><strong>Contact information:</strong> Name, email address, and organization when you sign up for our waitlist or contact us</li>
+          <li><strong>Contact information:</strong> Name, email address, and organization when you express interest in the Cran pilot program or contact us</li>
           <li><strong>Account information:</strong> Login credentials and profile details if you create an account</li>
           <li><strong>Communications:</strong> Messages you send to us via email or other channels</li>
         </ul>
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
         <p className="text-[#26251E]/80 leading-relaxed mb-4">We use the information we collect to:</p>
         <ul className="list-disc pl-6 space-y-2 text-[#26251E]/80">
           <li>Provide, maintain, and improve our services</li>
-          <li>Process your waitlist signup and communicate with you about potential product access</li>
+          <li>Process your pilot interest and communicate with you about the pilot program and potential product access</li>
           <li>Send marketing communications (where you have opted in)</li>
           <li>Respond to your inquiries and support requests</li>
           <li>Analyze usage and improve our website and product</li>

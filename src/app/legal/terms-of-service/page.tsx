@@ -34,7 +34,7 @@ export default function TermsOfServicePage() {
       <section className="mb-10">
         <h2 className="text-xl font-semibold text-[#26251E] mb-4">1. Acceptance of Terms</h2>
         <p className="text-[#26251E]/80 leading-relaxed mb-4">
-          By accessing our website, signing up for our waitlist, creating an account, or using any Cran products or services, you agree to these Terms and our Privacy Policy. If you do not agree, do not use our services. If you are using our services on behalf of an organization, you represent that you have authority to bind that organization to these Terms.
+          By accessing our website, expressing interest in our pilot program, creating an account, or using any Cran products or services, you agree to these Terms and our Privacy Policy. If you do not agree, do not use our services. If you are using our services on behalf of an organization, you represent that you have authority to bind that organization to these Terms.
         </p>
       </section>
 

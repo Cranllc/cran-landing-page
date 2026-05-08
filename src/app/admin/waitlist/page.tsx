@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import NewsletterModal from "./NewsletterModal"
 
 export const metadata = {
-  title: "Waitlist Signups",
+  title: "Pilot signups",
   robots: { index: false, follow: false },
 }
 
@@ -15,9 +15,9 @@ export default async function WaitlistPage() {
     <div className="w-full max-w-6xl mx-auto h-full overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-12">
       <div className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#1a1a1a] mb-2">Waitlist Signups</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#1a1a1a] mb-2">Pilot signups</h1>
           <p className="text-[#1a1a1a]/60 font-medium">
-            {signups.length} total shelters have expressed interest.
+            {signups.length} total {signups.length === 1 ? "contact" : "contacts"} interested in the pilot.
           </p>
         </div>
         
@@ -29,7 +29,7 @@ export default async function WaitlistPage() {
       <div className="bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-[#E5E5E0] overflow-hidden">
         {signups.length === 0 ? (
           <div className="p-12 text-center text-[#1a1a1a]/50">
-            No waitlist signups yet.
+            No pilot signups yet.
           </div>
         ) : (
           <div className="overflow-x-auto">

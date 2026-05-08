@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Mail, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { joinWaitlist } from "@/actions/waitlist";
 import SiteFooter from "@/components/SiteFooter";
@@ -49,10 +49,10 @@ const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
     a: "Yes. It is built for floor use in the browser, and you can add it to your home screen on supported phones for a more app-like feel.",
   },
   {
-    q: "How do we request early access?",
+    q: "How do we join the pilot?",
     a: (
-      <>
-        Share your shelter type, team size, current tools, and biggest workflow pain points.{" "}
+        <>
+        Share your shelter type, team size, current tools, and biggest workflow pain points, then{" "}
         <a
           href={DEMO_URL}
           className="text-cran font-semibold underline underline-offset-2 hover:text-cran-hover"
@@ -60,7 +60,7 @@ const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
         >
           {PILOT_CTA_LABEL}
         </a>{" "}
-        and we&apos;ll confirm pilot fit and next steps.
+        or add your email below for pilot updates. We&apos;ll confirm fit and next steps.
       </>
     ),
   },
@@ -72,7 +72,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
   const [errorMessage, setErrorMessage] = useState("");
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
 
-  const handleJoinWaitlist = async (e: React.FormEvent) => {
+  const handlePilotEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setStatus("loading");
@@ -286,18 +286,22 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
         </div>
       </section>
 
-      {/* WAITLIST */}
-      <section className="py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]" id="waitlist">
+      {/* PILOT CTA */}
+      <section
+        className="py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]"
+        id="pilot"
+      >
         <div className="relative mx-auto max-w-2xl px-6 text-center z-10">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-cran/30 bg-white px-2.5 py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#9A3228] mb-4 shadow-sm">
-            <Mail size={10} strokeWidth={1.5} aria-hidden /> Early Access
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-cran" aria-hidden />
+            Pilot
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
-            Ready to upgrade?
+            Interested in the pilot?
           </h2>
           <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-4 leading-relaxed max-w-lg mx-auto">
-            Cran is in an early partner phase. If your shelter may be a fit,{" "}
+            Cran is working with a small set of shelter and rescue partners.{" "}
             <a
               href={DEMO_URL}
               className="text-cran font-semibold underline underline-offset-4 hover:text-cran-hover"
@@ -305,18 +309,22 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             >
               {PILOT_CTA_LABEL}
             </a>{" "}
-            to start a conversation with the team.
-          </p>
-          <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
-            Want email updates only? Join the waitlist below; we&apos;ll keep you posted as we expand access.
+            to start a conversation, or use the form for pilot updates by email.
           </p>
 
-          <form onSubmit={handleJoinWaitlist} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6">
-            <label htmlFor="waitlist-email" className="sr-only">
-              Email for early access waitlist
+          <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
+            Add your work email and we&apos;ll follow up about the pilot when it makes sense for your org.
+          </p>
+
+          <form
+            onSubmit={handlePilotEmailSignup}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-sm mx-auto mb-6"
+          >
+            <label htmlFor="pilot-email" className="sr-only">
+              Email for pilot updates
             </label>
             <input
-              id="waitlist-email"
+              id="pilot-email"
               type="email"
               value={email}
               onChange={(e) => {
@@ -337,7 +345,11 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                   : "bg-cran-hover hover:bg-[#9A3228] shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5"
               }`}
             >
-              {status === "loading" ? "Joining..." : status === "success" ? "You're on the list!" : "Join Waitlist"}
+              {status === "loading"
+                ? "Sending…"
+                : status === "success"
+                  ? "Thanks! We will be in touch about the pilot."
+                  : "Get pilot updates"}
             </button>
           </form>
 
@@ -347,7 +359,16 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             </div>
           )}
 
-          <p className="mt-6 text-base text-charcoal/75 font-medium">
+          <a
+            href={DEMO_URL}
+            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-cran-hover px-8 text-[15px] font-bold text-white transition-all shadow-md shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5 hover:bg-[#9A3228] focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-[#F8F7F4]"
+            {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {PILOT_CTA_LABEL}
+            <ArrowRight size={16} className="shrink-0" aria-hidden />
+          </a>
+
+          <p className="mt-8 text-base text-charcoal/75 font-medium">
             Or email{" "}
             <a
               href={SUPPORT_PREFILLED_MAILTO}

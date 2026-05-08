@@ -11,7 +11,7 @@ type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string };
 
 const HomePageBelowFold = dynamic(() => import("@/components/HomePageBelowFold"), {
   loading: () => <div className="min-h-[200px] bg-[#FAFAF8]" aria-hidden />,
-  ssr: true, // Keep Trust, FAQ, Waitlist in HTML for SEO
+  ssr: true, // Keep Trust, FAQ, pilot CTA in HTML for SEO
 });
 
 export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForClient[] }) {
@@ -68,17 +68,14 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               Animal shelters deserve better. Equip your staff with tools that put the animals first.
             </p>
 
-            <div className="mt-10 flex flex-col items-stretch justify-center gap-2 sm:flex-row pb-12 w-full max-w-xs sm:max-w-none fade-up-d3">
+            <div className="mt-10 flex justify-center pb-12 w-full fade-up-d3">
               <a
                 href={DEMO_URL}
-                className="group flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
+                className="group inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
                 {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
                 {PILOT_CTA_LABEL}
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </a>
-              <a href="#waitlist" className="flex h-9 items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 text-sm font-medium text-white/85 transition-colors hover:border-white/30 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#08080A]">
-                Join waitlist
               </a>
             </div>
           </div>
@@ -123,7 +120,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
           </div>
         </section>
 
-        {/* Below-fold: Trust, Built For, Why, Blog, FAQ, Waitlist, Footer (separate JS chunk) */}
+        {/* Below-fold: Trust, Built For, Why, Blog, FAQ, pilot CTA, Footer (separate JS chunk) */}
         <HomePageBelowFold blogPosts={blogPosts} />
       </main>
     </div>

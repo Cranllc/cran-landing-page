@@ -52,7 +52,7 @@ export default function NewsletterModal() {
             <div className="px-6 py-5 border-b border-[#E5E5E0] flex items-center justify-between bg-[#FAFAF8] shrink-0">
               <div>
                 <h3 className="text-lg font-bold text-[#1a1a1a]">Send Newsletter Update</h3>
-                <p className="text-sm font-medium text-[#1a1a1a]/50 mt-0.5">Blast an email to everyone on the waitlist.</p>
+                <p className="text-sm font-medium text-[#1a1a1a]/50 mt-0.5">Blast an email to everyone who signed up for pilot updates.</p>
               </div>
               <button 
                 type="button"

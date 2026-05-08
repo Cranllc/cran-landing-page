@@ -47,7 +47,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Post images
             </Link>
             <Link href="/admin/waitlist" className="text-sm font-semibold text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors">
-              Waitlist
+              Pilot signups
             </Link>
           </nav>
         </div>
@@ -109,7 +109,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           className="flex flex-col items-center justify-center gap-0.5 py-2 min-h-[3.25rem] text-[#1a1a1a]/60 hover:text-cran active:text-cran flex-1 text-center min-w-0 touch-manipulation"
         >
           <ClipboardList strokeWidth={2.5} size={22} className="opacity-80 shrink-0" />
-          <span className="text-[10px] font-bold tracking-wide uppercase truncate w-full px-0.5">Waitlist</span>
+          <span className="text-[10px] font-bold tracking-wide uppercase truncate w-full px-0.5">Pilot</span>
         </Link>
       </nav>
     </div>
