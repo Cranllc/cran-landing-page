@@ -87,8 +87,8 @@ export default function SupportPage() {
               href={SUPPORT_PREFILLED_MAILTO}
               className="flex items-center gap-5 p-6 rounded-2xl border border-cran/15 bg-white shadow-sm hover:shadow-md hover:border-cran/35 hover:-translate-y-0.5 transition-all group focus:outline-none focus:ring-2 focus:ring-cran/35 focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
             >
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cran/12 to-cran/6 flex items-center justify-center shrink-0 ring-1 ring-cran/10 group-hover:from-cran/18 group-hover:to-cran/10 transition-colors">
-                <Mail size={26} className="text-cran" strokeWidth={1.75} aria-hidden />
+              <div className="w-14 h-14 rounded-xl bg-cran flex items-center justify-center shrink-0 text-white shadow-inner transition-transform group-hover:scale-[1.02]">
+                <Mail size={26} className="text-white" strokeWidth={1.75} aria-hidden />
               </div>
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold text-charcoal mb-1">Email us</h2>
