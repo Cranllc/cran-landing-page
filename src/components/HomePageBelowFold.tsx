@@ -34,19 +34,19 @@ const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Can we import from our current system?",
-    a: "Yes. Cran supports structured imports and mapping help so teams can migrate key records without manual re entry. Otherwise, we'll help migrate data for you.",
+    a: "Yes. We support structured imports and field mapping so you are not retyping everything. During pilot we work with you on the cleanest path from your current tools.",
   },
   {
     q: "What AI features are available now?",
-    a: "Berry can assist with intake, adoption bio, task, handoffs, and daily briefings.",
+    a: "AI is there to speed up intake, bios, care notes, and reporting-style drafts. What is turned on is agreed in pilot and can be adjusted as you go.",
   },
   {
     q: "What integrations are available?",
-    a: "Pilot supports practical integrations like Stripe Connect for payments and RescueGroups sync, and more coming soon.",
+    a: "Payments and public listings are in active pilot. We confirm what is available for your org when we talk, rather than promising a fixed catalog on the marketing site.",
   },
   {
     q: "Does Cran work on mobile?",
-    a: "Yes. It is designed for real shelter use, including mobile browser workflows.",
+    a: "Yes. It is built for floor use in the browser, and you can add it to your home screen on supported phones for a more app-like feel.",
   },
   {
     q: "How do we request early access?",

@@ -99,7 +99,7 @@ export default function SupportPage() {
             </a>
           </div>
 
-          <p className="mt-12 text-sm text-charcoal/55 leading-relaxed border-t border-charcoal/10 pt-10">
+          <p className="mt-12 text-sm text-charcoal/55 leading-relaxed border-t border-charcoal/10 pt-10 text-center max-w-xl mx-auto text-balance">
             Interested in the pilot?{" "}
             <a
               href={DEMO_URL}
@@ -108,10 +108,6 @@ export default function SupportPage() {
             >
               {PILOT_CTA_LABEL}
             </a>
-            . Prefer email-only updates?{" "}
-            <Link href="/#waitlist" className="text-cran font-semibold hover:text-cran-hover hover:underline underline-offset-4">
-              Sign up for the waitlist
-            </Link>
             .
           </p>
         </div>

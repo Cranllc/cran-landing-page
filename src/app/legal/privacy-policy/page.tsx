@@ -81,7 +81,7 @@ export default function PrivacyPolicyPage() {
       <section className="mb-10">
         <h2 className="text-xl font-semibold text-[#26251E] mb-4">5. Data Security</h2>
         <p className="text-[#26251E]/80 leading-relaxed mb-4">
-          We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Our platform uses encryption in transit (TLS) and at rest (AES-256) where applicable. However, no method of transmission over the Internet is 100% secure.
+          We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. We use encryption in transit and at rest where applicable, consistent with industry-standard protections from our hosting and service providers. However, no method of transmission over the Internet is 100% secure.
         </p>
       </section>
 
