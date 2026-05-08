@@ -5,7 +5,6 @@ import Image from "next/image";
 import { ArrowRight, Mail, ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { joinWaitlist } from "@/actions/waitlist";
-import ClaudeMark from "@/components/ClaudeMark";
 import SiteFooter from "@/components/SiteFooter";
 import type { PostPreview } from "@/lib/blog";
 import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAILTO } from "@/lib/site-config";
@@ -90,7 +89,8 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
 
   return (
     <>
-      {/* TRUST — Partners + Infrastructure */}
+      {/*
+      TRUST — Partners + Infrastructure (commented out: do not show stack / partner strip on site for now)
       <section id="learn-more" className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
@@ -110,9 +110,10 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           </div>
         </div>
       </section>
+      */}
 
       {/* BUILT FOR */}
-      <section className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
+      <section id="learn-more" className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
             <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
