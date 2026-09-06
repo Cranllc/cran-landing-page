@@ -68,15 +68,26 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               Animal shelters deserve better. Equip your staff with tools that put the animals first.
             </p>
 
-            <div className="mt-10 flex justify-center pb-12 w-full fade-up-d3">
-              <a
-                href={DEMO_URL}
-                className="group inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
-                {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {PILOT_CTA_LABEL}
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </a>
+            <div className="mt-10 flex flex-col items-center gap-4 pb-12 w-full fade-up-d3">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={DEMO_URL}
+                  className="group inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
+                  {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {PILOT_CTA_LABEL}
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </a>
+                <a
+                  href="#learn-more"
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold text-white/85 transition-all hover:bg-white/[0.08] hover:text-white hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
+                >
+                  See how it works
+                </a>
+              </div>
+              <p className="text-sm text-white/45 font-medium">
+                In pilot with shelter &amp; rescue partners
+              </p>
             </div>
           </div>
 
@@ -113,7 +124,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-48 bg-gradient-to-b from-transparent via-white/10 to-transparent -z-10"></div>
 
                 <div className="mt-10 text-white/50 text-[14px] sm:text-[15px] font-bold tracking-[0.2em] uppercase select-none">
-                  Core Management Engine
+                  Operations in one place
                 </div>
               </div>
             </div>

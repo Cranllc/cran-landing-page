@@ -113,7 +113,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       */}
 
       {/* BUILT FOR */}
-      <section id="learn-more" className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
+      <section id="learn-more" className="scroll-mt-20 py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
             <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
@@ -244,7 +244,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       )}
 
       {/* FAQ */}
-      <section className="py-16 md:py-20 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]" id="faq">
+      <section className="scroll-mt-20 py-16 md:py-20 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]" id="faq">
         <div className="mx-auto max-w-2xl px-6">
           <h2 className="text-lg font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-8 text-center">
             FAQ
@@ -288,7 +288,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
 
       {/* PILOT CTA */}
       <section
-        className="py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]"
+        className="scroll-mt-20 py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]"
         id="pilot"
       >
         <div className="relative mx-auto max-w-2xl px-6 text-center z-10">
