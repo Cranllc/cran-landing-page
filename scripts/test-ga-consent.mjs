@@ -55,7 +55,7 @@ try {
   await normal.page.goto(`${BASE_URL}?test_cookies=1`, { waitUntil: "networkidle", timeout: 15000 });
   await assert(normal.requests.length === 0, "Google Analytics requested before consent");
 
-  await normal.page.locator('button:has-text("Accept analytics")').click();
+  await normal.page.locator('button:has-text("Accept")').click();
   await normal.page.waitForTimeout(2500);
   await assert(
     normal.requests.some((r) => r.url.includes("googletagmanager.com/gtag/js")),
@@ -67,7 +67,7 @@ try {
   );
 
   await normal.page.locator('button:has-text("Your Privacy Choices")').click();
-  await normal.page.locator('button:has-text("Decline analytics")').click();
+  await normal.page.locator('button:has-text("Decline")').click();
   await assert(
     (await normal.page.evaluate((key) => localStorage.getItem(key), CONSENT_KEY)) === "denied",
     "Decline did not persist denied consent",
@@ -85,7 +85,7 @@ try {
   await gpc.page.waitForTimeout(1000);
   await assert(gpc.requests.length === 0, "GPC-enabled browser loaded Google Analytics");
   await assert(
-    await gpc.page.locator('button:has-text("Accept analytics")').isDisabled(),
+    await gpc.page.locator('button:has-text("Accept")').isDisabled(),
     "GPC-enabled browser could still accept analytics",
   );
   await gpc.context.close();

@@ -129,12 +129,12 @@ export default function CookieConsent() {
 
   const statusText =
     gpcEnabled
-      ? "Your browser's Global Privacy Control signal is on, so analytics stay off."
+      ? "Your browser's Global Privacy Control signal is on, so optional cookies stay off."
       : status === "accepted"
-        ? "Analytics are currently on. You can decline at any time."
+        ? "Optional cookies are currently on. You can decline at any time."
         : status === "denied"
-          ? "Analytics are currently off."
-          : "Choose whether Cran may use analytics cookies.";
+          ? "Optional cookies are currently off."
+          : "Choose whether Cran may use optional cookies.";
 
   if (!showBanner) return null;
 
@@ -160,7 +160,7 @@ export default function CookieConsent() {
             <div className="min-w-0">
               <h3 className="text-[13px] font-semibold text-charcoal mb-0.5">Cookie preferences</h3>
               <p className="text-[12px] text-charcoal/70 leading-relaxed font-sans">
-                We use optional cookies for analytics only. See our{" "}
+                We use optional cookies to understand site usage. See our{" "}
                 <Link href="/legal/privacy-policy" className="text-[#9A3228] font-medium hover:underline">Privacy Policy</Link>.
               </p>
               <p className="mt-2 text-[12px] text-charcoal/60 leading-relaxed font-sans">
@@ -174,7 +174,7 @@ export default function CookieConsent() {
               onClick={deny}
               className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2"
             >
-              Decline analytics
+              Decline
             </button>
             <button
               type="button"
@@ -182,7 +182,7 @@ export default function CookieConsent() {
               disabled={gpcEnabled}
               className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Accept analytics
+              Accept
             </button>
           </div>
         </div>
