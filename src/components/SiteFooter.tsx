@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { SHOW_COOKIE_PREFERENCES_EVENT } from "./CookieConsent";
+import { SHOW_COOKIE_PREFERENCES_EVENT } from "@/lib/ga";
 
 export default function SiteFooter() {
   return (
@@ -63,7 +63,7 @@ export default function SiteFooter() {
               className="text-charcoal/75 hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded"
               aria-label="Open cookie preferences"
             >
-              Manage Cookies
+              Your Privacy Choices
             </button>
             <Link href="/sitemap.xml" className="text-charcoal/75 hover:text-charcoal transition-colors focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-1 rounded">Sitemap</Link>
           </div>

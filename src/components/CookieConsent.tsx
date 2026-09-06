@@ -3,21 +3,34 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { PawPrint } from "lucide-react";
-import { COOKIE_CONSENT_KEY, grantConsent } from "@/lib/ga";
-
-export const SHOW_COOKIE_PREFERENCES_EVENT = "show-cookie-preferences";
-
-type ConsentStatus = "accepted" | "denied" | null;
+import {
+  type ConsentStatus,
+  denyConsent,
+  grantConsent,
+  hasGlobalPrivacyControl,
+  readStoredConsent,
+  SHOW_COOKIE_PREFERENCES_EVENT,
+} from "@/lib/ga";
 
 export default function CookieConsent() {
   const [status, setStatus] = useState<ConsentStatus>(null);
   const [showBanner, setShowBanner] = useState(false);
+  const [gpcEnabled, setGpcEnabled] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY) as ConsentStatus | null;
+    const stored = readStoredConsent();
+    const hasGpc = hasGlobalPrivacyControl();
     const forceTest = typeof window !== "undefined" && window.location.search.includes("test_cookies=1");
-    if (stored === "accepted" && !forceTest) {
+
+    setGpcEnabled(hasGpc);
+
+    if (hasGpc && !forceTest) {
+      denyConsent();
+      setStatus("denied");
+      setShowBanner(false);
+    } else if (stored === "accepted" && !forceTest) {
       setStatus("accepted");
       grantConsent();
       setShowBanner(false);
@@ -30,44 +43,95 @@ export default function CookieConsent() {
   }, []);
 
   useEffect(() => {
-    const handler = () => setShowBanner(true);
+    const handler = () => {
+      returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      setGpcEnabled(hasGlobalPrivacyControl());
+      setStatus(readStoredConsent());
+      setShowBanner(true);
+    };
     window.addEventListener(SHOW_COOKIE_PREFERENCES_EVENT, handler);
     return () => window.removeEventListener(SHOW_COOKIE_PREFERENCES_EVENT, handler);
   }, []);
 
-  // Focus first button when dialog opens; Escape to close
   useEffect(() => {
     if (!showBanner) return;
     const el = dialogRef.current;
-    const firstButton = el?.querySelector<HTMLButtonElement>('button[type="button"]');
+    const firstButton = el?.querySelector<HTMLButtonElement>('button[type="button"]:not(:disabled)');
     firstButton?.focus({ preventScroll: true });
+
+    const close = () => {
+      setShowBanner(false);
+      returnFocusRef.current?.focus({ preventScroll: true });
+      returnFocusRef.current = null;
+    };
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setShowBanner(false);
+        if (readStoredConsent() === null) {
+          deny();
+        } else {
+          close();
+        }
+        return;
+      }
+
+      if (e.key !== "Tab" || !el) return;
+
+      const focusable = Array.from(
+        el.querySelectorAll<HTMLElement>(
+          'a[href], button:not(:disabled), textarea, input, select, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
+
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [showBanner]);
 
-  const accept = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, "accepted");
-    setStatus("accepted");
+  const closeAndRestoreFocus = () => {
     setShowBanner(false);
+    returnFocusRef.current?.focus({ preventScroll: true });
+    returnFocusRef.current = null;
+  };
+
+  const accept = () => {
     grantConsent();
+    const nextStatus = hasGlobalPrivacyControl() ? "denied" : "accepted";
+    setStatus(nextStatus);
+    setGpcEnabled(hasGlobalPrivacyControl());
+    closeAndRestoreFocus();
   };
 
   const deny = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, "denied");
+    denyConsent();
     setStatus("denied");
-    setShowBanner(false);
+    closeAndRestoreFocus();
   };
+
+  const statusText =
+    gpcEnabled
+      ? "Your browser's Global Privacy Control signal is on, so analytics stay off."
+      : status === "accepted"
+        ? "Analytics are currently on. You can decline at any time."
+        : status === "denied"
+          ? "Analytics are currently off."
+          : "Choose whether Cran may use analytics cookies.";
 
   if (!showBanner) return null;
 
   return (
     <>
-      {/* Backdrop */}
       <div className="fixed inset-0 z-[99] bg-charcoal/10" aria-hidden />
       <div
         ref={dialogRef}
@@ -77,7 +141,6 @@ export default function CookieConsent() {
         aria-live="polite"
         className="fixed bottom-4 right-4 z-[100] w-full max-w-sm sm:max-w-[360px] rounded-xl border border-charcoal/8 bg-white shadow-[0_12px_32px_-8px_rgba(26,26,26,0.12)] overflow-hidden"
       >
-        {/* Decorative paw prints */}
         <div className="flex justify-center gap-3 pt-4 pb-1 opacity-[0.12]" aria-hidden>
           <PawPrint className="w-4 h-4 text-charcoal" strokeWidth={1} />
           <PawPrint className="w-3 h-3 text-charcoal -scale-x-100" strokeWidth={1} />
@@ -89,8 +152,11 @@ export default function CookieConsent() {
             <div className="min-w-0">
               <h3 className="text-[13px] font-semibold text-charcoal mb-0.5">Cookie preferences</h3>
               <p className="text-[12px] text-charcoal/70 leading-relaxed font-sans">
-                We use cookies for analytics. See our{" "}
+                We use optional cookies for analytics only. See our{" "}
                 <Link href="/legal/privacy-policy" className="text-[#9A3228] font-medium hover:underline">Privacy Policy</Link>.
+              </p>
+              <p className="mt-2 text-[12px] text-charcoal/60 leading-relaxed font-sans">
+                {statusText}
               </p>
             </div>
           </div>
@@ -100,14 +166,15 @@ export default function CookieConsent() {
               onClick={deny}
               className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2"
             >
-              Reject All
+              Decline analytics
             </button>
             <button
               type="button"
               onClick={accept}
-              className="flex-1 rounded-lg bg-cran-hover px-3 py-2 text-[12px] font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/20 font-sans focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-white"
+              disabled={gpcEnabled}
+              className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Accept All
+              Accept analytics
             </button>
           </div>
         </div>
