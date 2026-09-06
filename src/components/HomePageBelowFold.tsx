@@ -11,6 +11,48 @@ import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAI
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
+const WHAT_YOU_GET_ITEMS = [
+  {
+    label: "Intake",
+    desc: "Capture animals into shared profiles so the floor starts with the same record.",
+  },
+  {
+    label: "Roster & care",
+    desc: "Animal profiles, medical notes, and kennel context in one place.",
+  },
+  {
+    label: "Tasks & care plans",
+    desc: "Rounds, recurring care, and handoffs so the next shift knows what matters.",
+  },
+  {
+    label: "Adoptions",
+    desc: "Match animals with families and track outcomes without a separate spreadsheet.",
+  },
+  {
+    label: "Reporting",
+    desc: "Exports and reporting-style views for grants and partners, confirmed during onboarding.",
+  },
+  {
+    label: "Berry",
+    desc: "AI assistance for questions, priorities, photo-assisted suggestions, and bio drafts. Staff stay in control.",
+  },
+];
+
+const PILOT_STEPS = [
+  {
+    label: "Apply",
+    desc: "Share shelter type, team size, current tools, and biggest workflow pain points via the pilot CTA or email.",
+  },
+  {
+    label: "Fit check",
+    desc: "We confirm whether Cran is a good match and what is live today versus still refining.",
+  },
+  {
+    label: "Onboard",
+    desc: "Setup and role configuration, then go live on core workflows together.",
+  },
+];
+
 const FAQ_ITEMS: { q: string; a: ReactNode }[] = [
   {
     q: "What is Cran?",
@@ -112,8 +154,30 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
       </section>
       */}
 
+      {/* WHAT YOU GET */}
+      <section id="learn-more" className="scroll-mt-20 py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_520px]">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-14">
+            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
+              What you get
+            </h2>
+            <p className="text-xl text-charcoal/75 font-medium max-w-2xl mx-auto">
+              Core workflows live in pilot, built for floor use instead of another desktop silo.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {WHAT_YOU_GET_ITEMS.map((item) => (
+              <div key={item.label} className="p-6 rounded-2xl border border-charcoal/5 bg-white shadow-[0_8px_30px_-18px_rgba(0,0,0,0.12)]">
+                <h3 className="text-lg font-bold text-charcoal mb-2">{item.label}</h3>
+                <p className="text-base text-charcoal/75 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* BUILT FOR */}
-      <section id="learn-more" className="scroll-mt-20 py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
+      <section className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
             <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
@@ -282,6 +346,47 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW THE PILOT WORKS */}
+      <section id="how-pilot-works" className="scroll-mt-20 py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_420px]">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-14">
+            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
+              How the pilot works
+            </h2>
+            <p className="text-xl text-charcoal/75 font-medium max-w-2xl mx-auto">
+              A small partner program where we confirm fit before you go live.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PILOT_STEPS.map((step, i) => (
+              <div key={step.label} className="p-6 rounded-2xl border border-charcoal/5 bg-white">
+                <div className="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-full bg-cran/10 text-sm font-bold text-cran" aria-hidden>
+                  {i + 1}
+                </div>
+                <h3 className="text-lg font-bold text-charcoal mb-2">{step.label}</h3>
+                <p className="text-base text-charcoal/75 leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <a
+              href={DEMO_URL}
+              className="group inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
+              {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              {PILOT_CTA_LABEL}
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </a>
+            <Link
+              href="#pilot"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-charcoal/10 bg-white px-5 text-sm font-semibold text-charcoal/75 transition-all hover:border-cran/30 hover:text-cran focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
+            >
+              Get email updates
+            </Link>
           </div>
         </div>
       </section>

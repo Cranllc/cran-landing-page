@@ -65,7 +65,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               className="mt-8 text-lg lg:text-xl leading-relaxed text-white/70 font-normal max-w-2xl [text-wrap:balance] fade-up-d2"
               suppressHydrationWarning
             >
-              Animal shelters deserve better. Equip your staff with tools that put the animals first.
+              Mobile-first shelter workflows with Berry AI assistance for intake, care, tasks, adoptions, and reporting.
             </p>
 
             <div className="mt-10 flex flex-col items-center gap-4 pb-12 w-full fade-up-d3">
