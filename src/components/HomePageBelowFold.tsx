@@ -11,14 +11,19 @@ import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab, SUPPORT_PREFILLED_MAI
 
 type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string; dateString?: string };
 
+const TRUST_CHIPS = ["In active pilot", "Mobile-first", "AI-assisted drafts (Berry)"] as const;
+
+/** TODO: set when a partner has given permission to be named. Do not invent a shelter. */
+const NAMED_PILOT_PARTNER: string | null = null;
+
 const WHAT_YOU_GET_ITEMS = [
   {
     label: "Intake",
     desc: "Capture animals into shared profiles so the floor starts with the same record.",
   },
   {
-    label: "Roster & care",
-    desc: "Animal profiles, medical notes, and kennel context in one place.",
+    label: "Animal profiles",
+    desc: "Medical notes, kennel context, and history on one animal record the floor can actually use.",
   },
   {
     label: "Tasks & care plans",
@@ -33,8 +38,8 @@ const WHAT_YOU_GET_ITEMS = [
     desc: "Exports and reporting-style views for grants and partners, confirmed during onboarding.",
   },
   {
-    label: "Berry",
-    desc: "AI assistance for questions, priorities, photo-assisted suggestions, and bio drafts. Staff stay in control.",
+    label: "Berry AI",
+    desc: "Assists with questions, priorities, photo-assisted suggestions, and bio drafts. Staff stay in control.",
   },
 ];
 
@@ -131,31 +136,65 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
 
   return (
     <>
-      {/*
-      TRUST / Partners + Infrastructure (commented out: do not show stack / partner strip on site for now)
-      <section id="learn-more" className="py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5">
+      {/* EARLY TRUST — factual chips only; named partner stays unset until permission */}
+      <section
+        aria-label="Cran at a glance"
+        className="scroll-mt-20 py-8 md:py-10 relative bg-[#FAFAF8] border-t border-charcoal/5"
+      >
         <div className="mx-auto max-w-5xl px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-6">
-              Piloting with forward-thinking shelters
+          <ul className="flex flex-wrap items-center justify-center gap-2.5">
+            {TRUST_CHIPS.map((chip) => (
+              <li
+                key={chip}
+                className="inline-flex items-center rounded-full border border-charcoal/10 bg-white px-3.5 py-1.5 text-[13px] font-semibold text-charcoal/75"
+              >
+                {chip}
+              </li>
+            ))}
+            {NAMED_PILOT_PARTNER ? (
+              <li className="inline-flex items-center rounded-full border border-cran/20 bg-white px-3.5 py-1.5 text-[13px] font-semibold text-charcoal/80">
+                Pilot partner: {NAMED_PILOT_PARTNER}
+              </li>
+            ) : null}
+          </ul>
+        </div>
+      </section>
+
+      {/* BUILT FOR */}
+      <section
+        id="learn-more"
+        className="scroll-mt-20 py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]"
+      >
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-14">
+            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
+              Built for
             </h2>
-            <div className="text-3xl md:text-4xl font-black text-charcoal tracking-tighter opacity-80">Safe Harbor Animal Sanctuary</div>
+            <p className="text-xl text-charcoal/75 font-medium max-w-xl mx-auto">
+              Everyone who keeps a shelter running.
+            </p>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 pt-8 border-t border-charcoal/10">
-              <div className="text-[1.5rem] font-bold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors">▲ Vercel</div>
-              <div className="text-[1.75rem] font-bold tracking-tighter text-charcoal/75 hover:text-charcoal transition-colors">Stripe</div>
-              <div className="text-[1.5rem] font-bold tracking-wide text-charcoal/75 hover:text-charcoal transition-colors">AWS</div>
-              <div className="text-[1.25rem] font-semibold tracking-tight text-charcoal/75 hover:text-charcoal transition-colors flex items-center gap-1.5">
-                <ClaudeMark size={18} />
-                Claude
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { label: "Shelter directors", desc: "See the full picture and make better decisions." },
+              { label: "Operations staff", desc: "Intake, kennel cards, and daily workflows in one place." },
+              { label: "Adoption coordinators", desc: "Match animals with families and track outcomes." },
+              { label: "Medical & volunteers", desc: "Vaccinations, treatments, and notes where you need them." },
+            ].map((item) => (
+              <div key={item.label} className="text-center p-6 rounded-2xl border border-charcoal/5 bg-[#FAFAF8]/80">
+                <h3 className="text-lg font-bold text-charcoal mb-2">{item.label}</h3>
+                <p className="text-base text-charcoal/75 leading-relaxed">{item.desc}</p>
               </div>
+            ))}
           </div>
         </div>
       </section>
-      */}
 
       {/* WHAT YOU GET */}
-      <section id="learn-more" className="scroll-mt-20 py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_520px]">
+      <section
+        id="what-you-get"
+        className="scroll-mt-20 py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_520px]"
+      >
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
             <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
@@ -176,29 +215,46 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
         </div>
       </section>
 
-      {/* BUILT FOR */}
-      <section className="py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
+      {/* HOW THE PILOT WORKS */}
+      <section
+        id="how-pilot-works"
+        className="scroll-mt-20 py-20 md:py-24 relative bg-white border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_420px]"
+      >
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-14">
             <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
-              Built for
+              How the pilot works
             </h2>
-            <p className="text-xl text-charcoal/75 font-medium max-w-xl mx-auto">
-              Everyone who keeps a shelter running.
+            <p className="text-xl text-charcoal/75 font-medium max-w-2xl mx-auto">
+              A small partner program. We confirm fit before you go live.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { label: "Shelter directors", desc: "See the full picture and make better decisions." },
-              { label: "Operations staff", desc: "Intake, kennel cards, and daily workflows in one place." },
-              { label: "Adoption coordinators", desc: "Match animals with families and track outcomes." },
-              { label: "Medical & volunteers", desc: "Vaccinations, treatments, and notes where you need them." },
-            ].map((item, i) => (
-              <div key={i} className="text-center p-6 rounded-2xl border border-charcoal/5 bg-[#FAFAF8]/80">
-                <h3 className="text-lg font-bold text-charcoal mb-2">{item.label}</h3>
-                <p className="text-base text-charcoal/75 leading-relaxed">{item.desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PILOT_STEPS.map((step, i) => (
+              <div key={step.label} className="p-6 rounded-2xl border border-charcoal/5 bg-[#FAFAF8]">
+                <div className="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-full bg-cran/10 text-sm font-bold text-cran" aria-hidden>
+                  {i + 1}
+                </div>
+                <h3 className="text-lg font-bold text-charcoal mb-2">{step.label}</h3>
+                <p className="text-base text-charcoal/75 leading-relaxed">{step.desc}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <a
+              href={DEMO_URL}
+              className="group inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-white"
+              {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              {PILOT_CTA_LABEL}
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </a>
+            <Link
+              href="#pilot"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-charcoal/10 bg-white px-5 text-sm font-semibold text-charcoal/75 transition-all hover:border-cran/30 hover:text-cran focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 focus:ring-offset-white"
+            >
+              Get email updates
+            </Link>
           </div>
         </div>
       </section>
@@ -350,47 +406,6 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
         </div>
       </section>
 
-      {/* HOW THE PILOT WORKS */}
-      <section id="how-pilot-works" className="scroll-mt-20 py-20 md:py-24 relative bg-[#FAFAF8] border-t border-charcoal/5 [content-visibility:auto] [contain-intrinsic-size:auto_420px]">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-base font-semibold tracking-[0.15em] uppercase text-charcoal/75 mb-4">
-              How the pilot works
-            </h2>
-            <p className="text-xl text-charcoal/75 font-medium max-w-2xl mx-auto">
-              A small partner program where we confirm fit before you go live.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PILOT_STEPS.map((step, i) => (
-              <div key={step.label} className="p-6 rounded-2xl border border-charcoal/5 bg-white">
-                <div className="mb-5 inline-flex h-9 w-9 items-center justify-center rounded-full bg-cran/10 text-sm font-bold text-cran" aria-hidden>
-                  {i + 1}
-                </div>
-                <h3 className="text-lg font-bold text-charcoal mb-2">{step.label}</h3>
-                <p className="text-base text-charcoal/75 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
-            <a
-              href={DEMO_URL}
-              className="group inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/20 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-cran focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
-              {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            >
-              {PILOT_CTA_LABEL}
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
-            </a>
-            <Link
-              href="#pilot"
-              className="inline-flex h-10 items-center justify-center rounded-md border border-charcoal/10 bg-white px-5 text-sm font-semibold text-charcoal/75 transition-all hover:border-cran/30 hover:text-cran focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
-            >
-              Get email updates
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* PILOT CTA */}
       <section
         className="scroll-mt-20 py-20 md:py-24 relative overflow-hidden bg-[#F8F7F4] border-t border-charcoal/10 [content-visibility:auto] [contain-intrinsic-size:auto_500px]"
@@ -405,8 +420,11 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-charcoal leading-tight mb-3">
             Interested in the pilot?
           </h2>
+          <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-3 leading-relaxed max-w-lg mx-auto">
+            Who it&apos;s for: shelters and rescues that want intake, care, and adoptions in one mobile-first system, and can give product feedback while we improve.
+          </p>
           <p className="text-lg md:text-xl text-charcoal/75 font-medium mb-4 leading-relaxed max-w-lg mx-auto">
-            Cran is working with a small set of shelter and rescue partners.{" "}
+            We review every application for fit and follow up.{" "}
             <a
               href={DEMO_URL}
               className="text-cran font-semibold underline underline-offset-4 hover:text-cran-hover"
@@ -414,7 +432,7 @@ export default function HomePageBelowFold({ blogPosts = [] }: { blogPosts?: Blog
             >
               {PILOT_CTA_LABEL}
             </a>{" "}
-            to start a conversation, or use the form for pilot updates by email.
+            to start a conversation, or use the form for email updates.
           </p>
 
           <p className="text-base text-charcoal/70 font-medium mb-6 leading-relaxed max-w-lg mx-auto">
