@@ -1,6 +1,23 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-config";
 
+/** Training / bulk-scrape agents: official summary only, not the full site. */
+const TRAINING_CRAWLERS = [
+  "GPTBot",
+  "CCBot",
+  "anthropic-ai",
+  "ClaudeBot",
+  "Bytespider",
+  "Applebot-Extended",
+  "Google-Extended",
+  "Meta-ExternalAgent",
+  "FacebookBot",
+  "cohere-ai",
+  "Diffbot",
+  "Omgilibot",
+  "YouBot",
+];
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = SITE_URL;
 
@@ -26,42 +43,11 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Bingbot",
         allow: "/",
       },
-      {
-        userAgent: "GPTBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "ChatGPT-User",
-        disallow: "/",
-      },
-      {
-        userAgent: "CCBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "anthropic-ai",
-        disallow: "/",
-      },
-      {
-        userAgent: "ClaudeBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "Claude-Web",
-        disallow: "/",
-      },
-      {
-        userAgent: "Bytespider",
-        disallow: "/",
-      },
-      {
-        userAgent: "PerplexityBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "Applebot-Extended",
-        disallow: "/",
-      },
+      ...TRAINING_CRAWLERS.map((userAgent) => ({
+        userAgent,
+        allow: ["/llms.txt"],
+        disallow: ["/"],
+      })),
       {
         userAgent: "*",
         allow: "/",

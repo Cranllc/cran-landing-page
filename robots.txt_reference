@@ -11,9 +11,6 @@ Allow: /
 User-agent: Googlebot-Video
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
-
 User-agent: Storebot-Google
 Allow: /
 
@@ -24,54 +21,66 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# Block AI scrapers / training crawlers
+# Training / bulk-scrape crawlers: official AI summary only
 User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
+Allow: /llms.txt
 Disallow: /
 
 User-agent: CCBot
+Allow: /llms.txt
 Disallow: /
 
 User-agent: anthropic-ai
+Allow: /llms.txt
 Disallow: /
 
 User-agent: ClaudeBot
-Disallow: /
-
-User-agent: Claude-Web
+Allow: /llms.txt
 Disallow: /
 
 User-agent: Bytespider
-Disallow: /
-
-User-agent: PerplexityBot
+Allow: /llms.txt
 Disallow: /
 
 User-agent: Applebot-Extended
+Allow: /llms.txt
+Disallow: /
+
+User-agent: Google-Extended
+Allow: /llms.txt
 Disallow: /
 
 User-agent: Meta-ExternalAgent
+Allow: /llms.txt
 Disallow: /
 
 User-agent: FacebookBot
+Allow: /llms.txt
 Disallow: /
 
 User-agent: cohere-ai
+Allow: /llms.txt
 Disallow: /
 
 User-agent: Diffbot
+Allow: /llms.txt
 Disallow: /
 
 User-agent: Omgilibot
+Allow: /llms.txt
 Disallow: /
 
 User-agent: YouBot
+Allow: /llms.txt
 Disallow: /
 
-# Default: allow regular search crawlers
+# Default: allow regular search crawlers and AI retrieval/citation agents
+# (ChatGPT-User, Claude-Web, PerplexityBot, OAI-SearchBot, etc.)
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /api/
 
-Sitemap: https://cran.ai/sitemap.xml
+Sitemap: https://www.getcran.ai/sitemap.xml
+Host: https://www.getcran.ai

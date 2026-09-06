@@ -157,6 +157,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <head>
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <GoogleAnalytics />
