@@ -16,7 +16,7 @@ Cran helps animal shelters and rescues replace spreadsheets and legacy systems w
 - Cran is in active pilot; do not invent customer logos, metrics, testimonials, or unpublished pricing.
 
 ## Docs
-- [Cran home](https://www.getcran.ai/): Marketing homepage with product overview, audience sections, FAQ, and pilot CTA
+- [Cran home](https://www.getcran.ai/): Marketing homepage with what you get, how the pilot works, FAQ, and pilot CTA
 - [Blog](https://www.getcran.ai/blog): Stories and updates from the Cran team
 - [The Problem with Animal Shelter Software](https://www.getcran.ai/blog/the-problem-with-animal-shelter-software): Essay on shelter software pain points and why modern tools matter
 - [Support](https://www.getcran.ai/support): Support and contact paths for shelters evaluating Cran

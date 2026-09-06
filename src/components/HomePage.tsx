@@ -39,13 +39,12 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
         {/* HERO (dark, above fold, minimal deps) */}
         <section
           ref={heroRef}
-          className="hero-section relative overflow-hidden pt-28 lg:pt-40 pb-0 flex flex-col items-center min-h-[90vh] bg-[#08080A]"
+          className="hero-section relative overflow-hidden pt-28 lg:pt-36 pb-0 flex flex-col items-center bg-[#08080A]"
           {...(animationsPaused ? { "data-animations-paused": "true" } : {})}
         >
           <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at center 30%, transparent 10%, #08080A 80%)' }} />
-          <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full pointer-events-none glow-pulse" style={{ background: 'radial-gradient(ellipse, rgba(203,74,58,0.15) 0%, transparent 65%)' }} />
-          <div className="absolute top-60 left-1/4 w-[400px] h-[400px] rounded-full pointer-events-none opacity-20" style={{ background: 'radial-gradient(ellipse, rgba(167,139,250,0.1) 0%, transparent 70%)' }} />
+          <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[700px] h-[420px] rounded-full pointer-events-none glow-pulse" style={{ background: 'radial-gradient(ellipse, rgba(203,74,58,0.12) 0%, transparent 65%)' }} />
 
           <div className="relative mx-auto w-full max-w-4xl z-10 flex flex-col items-center text-center px-6">
             <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-cran/20 bg-cran/[0.06] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-cran select-none fade-up">
@@ -65,10 +64,10 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
               className="mt-8 text-lg lg:text-xl leading-relaxed text-white/70 font-normal max-w-2xl [text-wrap:balance] fade-up-d2"
               suppressHydrationWarning
             >
-              Mobile-first shelter workflows with Berry AI assistance for intake, care, tasks, adoptions, and reporting.
+              One mobile-first system for intake, care, adoptions, and reporting — built for shelter floor staff. Now in pilot.
             </p>
 
-            <div className="mt-10 flex flex-col items-center gap-4 pb-12 w-full fade-up-d3">
+            <div className="mt-10 flex flex-col items-center gap-4 pb-8 w-full fade-up-d3">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
                   href={DEMO_URL}
@@ -79,51 +78,48 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
                 </a>
                 <a
-                  href="#learn-more"
+                  href="#what-you-get"
                   className="inline-flex h-9 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold text-white/85 transition-all hover:bg-white/[0.08] hover:text-white hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
                 >
                   See how it works
                 </a>
               </div>
               <p className="text-sm text-white/45 font-medium">
-                In pilot with shelter &amp; rescue partners
+                We review each application for fit and follow up.
               </p>
             </div>
           </div>
 
-          {/* Abstract Product Preview */}
-          <div className="relative w-full max-w-[1050px] mx-auto px-4 sm:px-6 mt-4 md:mt-12 z-10">
-            <div className="absolute inset-x-12 inset-y-0 rounded-[3rem] pointer-events-none opacity-30" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(203,74,58,0.4) 0%, transparent 55%)' }} />
+          {/* Abstract Product Preview — no app screenshots until UI is ready to show */}
+          <div className="relative w-full max-w-[720px] mx-auto px-4 sm:px-6 mt-2 md:mt-6 z-10">
+            <div className="absolute inset-x-16 inset-y-0 rounded-[2rem] pointer-events-none opacity-20" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(203,74,58,0.35) 0%, transparent 55%)' }} />
             <div
-              className="relative w-full rounded-2xl md:rounded-[24px] overflow-hidden border border-white/[0.08] bg-[#0A0A0B] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5),_0_0_0_1px_rgba(255,255,255,0.05)] ring-1 ring-white/10 flex items-center justify-center p-8 md:p-12 mb-12"
-              style={{ height: '420px' }}
+              className="relative w-full rounded-xl md:rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0A0B] shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45),_0_0_0_1px_rgba(255,255,255,0.05)] ring-1 ring-white/10 flex items-center justify-center px-6 py-8 mb-8"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(203,74,58,0.05)_0%,transparent_70%)] pointer-events-none" />
-              <div className="relative w-full h-full flex flex-col items-center justify-center opacity-70">
-                <div className="flex items-center gap-6 mb-8">
-                  <div className="w-16 md:w-32 h-[1px] bg-gradient-to-r from-transparent to-cran/50 rounded-full"></div>
-                  <div className="w-12 h-12 rounded-2xl border border-white/10 bg-white/[0.02] flex items-center justify-center shadow-[0_0_30px_rgba(203,74,58,0.2)] glow-pulse">
-                    <div className="w-3 h-3 rounded-full bg-cran shadow-[0_0_15px_rgba(203,74,58,0.8)]"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(203,74,58,0.04)_0%,transparent_70%)] pointer-events-none" />
+              <div className="relative w-full flex flex-col items-center justify-center opacity-70">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-12 md:w-20 h-[1px] bg-gradient-to-r from-transparent to-cran/50 rounded-full"></div>
+                  <div className="w-8 h-8 rounded-xl border border-white/10 bg-white/[0.02] flex items-center justify-center shadow-[0_0_20px_rgba(203,74,58,0.18)] glow-pulse">
+                    <div className="w-2 h-2 rounded-full bg-cran shadow-[0_0_10px_rgba(203,74,58,0.8)]"></div>
                   </div>
-                  <div className="w-16 md:w-32 h-[1px] bg-gradient-to-l from-transparent to-cran/50 rounded-full"></div>
+                  <div className="w-12 md:w-20 h-[1px] bg-gradient-to-l from-transparent to-cran/50 rounded-full"></div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="hidden md:flex w-32 h-12 rounded-xl border border-white/5 bg-white/[0.01] items-center justify-center">
-                    <div className="w-12 h-1 bg-white/10 rounded-full"></div>
+                <div className="flex items-center gap-3">
+                  <div className="hidden md:flex w-24 h-9 rounded-lg border border-white/5 bg-white/[0.01] items-center justify-center">
+                    <div className="w-10 h-1 bg-white/10 rounded-full"></div>
                   </div>
-                  <div className="w-48 h-12 rounded-xl border border-cran/20 bg-cran/[0.05] flex items-center px-4 gap-3 shadow-[0_0_20px_rgba(203,74,58,0.1)]">
-                    <div className="w-2 h-2 rounded-full bg-cran animate-pulse"></div>
+                  <div className="w-40 h-9 rounded-lg border border-cran/20 bg-cran/[0.05] flex items-center px-3 gap-2 shadow-[0_0_16px_rgba(203,74,58,0.08)]">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cran animate-pulse"></div>
                     <div className="flex-1 h-1 bg-cran/40 rounded-full"></div>
                   </div>
-                  <div className="hidden md:flex w-24 h-12 rounded-xl border border-white/5 bg-white/[0.01] items-center justify-center">
-                    <div className="w-8 h-1 bg-white/10 rounded-full"></div>
+                  <div className="hidden md:flex w-16 h-9 rounded-lg border border-white/5 bg-white/[0.01] items-center justify-center">
+                    <div className="w-6 h-1 bg-white/10 rounded-full"></div>
                   </div>
                 </div>
 
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-48 bg-gradient-to-b from-transparent via-white/10 to-transparent -z-10"></div>
-
-                <div className="mt-10 text-white/50 text-[14px] sm:text-[15px] font-bold tracking-[0.2em] uppercase select-none">
+                <div className="mt-6 text-white/50 text-[12px] sm:text-[13px] font-bold tracking-[0.18em] uppercase select-none">
                   Operations in one place
                 </div>
               </div>
@@ -131,7 +127,7 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
           </div>
         </section>
 
-        {/* Below-fold: Trust, Built For, Why, Blog, FAQ, pilot CTA, Footer (separate JS chunk) */}
+        {/* Below-fold: Trust, Built for, What you get, How the pilot works, Why, Blog, FAQ, pilot CTA, Footer */}
         <HomePageBelowFold blogPosts={blogPosts} />
       </main>
     </div>
