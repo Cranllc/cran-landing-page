@@ -29,7 +29,15 @@ function installBrowserMocks(input: { gpc?: boolean; stored?: string | null } = 
     },
   };
 
-  const windowMock = {
+  const windowMock: {
+    dataLayer: unknown[];
+    localStorage: {
+      getItem: ReturnType<typeof vi.fn>;
+      setItem: ReturnType<typeof vi.fn>;
+    };
+    location: { hostname: string };
+    gtag?: ReturnType<typeof vi.fn>;
+  } = {
     dataLayer: [] as unknown[],
     localStorage: {
       getItem: vi.fn((key: string) => store.get(key) ?? null),

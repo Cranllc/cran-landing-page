@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { PawPrint } from "lucide-react";
 import {
@@ -12,33 +12,61 @@ import {
   SHOW_COOKIE_PREFERENCES_EVENT,
 } from "@/lib/ga";
 
+function isForcedCookieTest(): boolean {
+  return typeof window !== "undefined" && window.location.search.includes("test_cookies=1");
+}
+
+function getInitialCookieState(): {
+  status: ConsentStatus;
+  showBanner: boolean;
+  gpcEnabled: boolean;
+} {
+  const stored = readStoredConsent();
+  const gpcEnabled = hasGlobalPrivacyControl();
+  const forceTest = isForcedCookieTest();
+
+  if (gpcEnabled && !forceTest) {
+    return { status: "denied", showBanner: false, gpcEnabled };
+  }
+
+  if ((stored === "accepted" || stored === "denied") && !forceTest) {
+    return { status: stored, showBanner: false, gpcEnabled };
+  }
+
+  return { status: stored, showBanner: true, gpcEnabled };
+}
+
 export default function CookieConsent() {
-  const [status, setStatus] = useState<ConsentStatus>(null);
-  const [showBanner, setShowBanner] = useState(false);
-  const [gpcEnabled, setGpcEnabled] = useState(false);
+  const [initialCookieState] = useState(getInitialCookieState);
+  const [status, setStatus] = useState<ConsentStatus>(initialCookieState.status);
+  const [showBanner, setShowBanner] = useState(initialCookieState.showBanner);
+  const [gpcEnabled, setGpcEnabled] = useState(initialCookieState.gpcEnabled);
   const dialogRef = useRef<HTMLDivElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
+  const closeAndRestoreFocus = useCallback(() => {
+    setShowBanner(false);
+    returnFocusRef.current?.focus({ preventScroll: true });
+    returnFocusRef.current = null;
+  }, []);
+
+  const deny = useCallback(() => {
+    denyConsent();
+    setStatus("denied");
+    closeAndRestoreFocus();
+  }, [closeAndRestoreFocus]);
+
+  const accept = useCallback(() => {
+    grantConsent();
+    const nextStatus = hasGlobalPrivacyControl() ? "denied" : "accepted";
+    setStatus(nextStatus);
+    setGpcEnabled(hasGlobalPrivacyControl());
+    closeAndRestoreFocus();
+  }, [closeAndRestoreFocus]);
+
   useEffect(() => {
-    const stored = readStoredConsent();
-    const hasGpc = hasGlobalPrivacyControl();
-    const forceTest = typeof window !== "undefined" && window.location.search.includes("test_cookies=1");
-
-    setGpcEnabled(hasGpc);
-
-    if (hasGpc && !forceTest) {
+    if (hasGlobalPrivacyControl() && !isForcedCookieTest()) {
       denyConsent();
-      setStatus("denied");
-      setShowBanner(false);
-    } else if (stored === "accepted" && !forceTest) {
-      setStatus("accepted");
-      grantConsent();
-      setShowBanner(false);
-    } else if (stored === "denied" && !forceTest) {
-      setStatus("denied");
-      setShowBanner(false);
-    } else {
-      setShowBanner(true);
     }
   }, []);
 
@@ -97,27 +125,7 @@ export default function CookieConsent() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [showBanner]);
-
-  const closeAndRestoreFocus = () => {
-    setShowBanner(false);
-    returnFocusRef.current?.focus({ preventScroll: true });
-    returnFocusRef.current = null;
-  };
-
-  const accept = () => {
-    grantConsent();
-    const nextStatus = hasGlobalPrivacyControl() ? "denied" : "accepted";
-    setStatus(nextStatus);
-    setGpcEnabled(hasGlobalPrivacyControl());
-    closeAndRestoreFocus();
-  };
-
-  const deny = () => {
-    denyConsent();
-    setStatus("denied");
-    closeAndRestoreFocus();
-  };
+  }, [closeAndRestoreFocus, deny, showBanner]);
 
   const statusText =
     gpcEnabled
