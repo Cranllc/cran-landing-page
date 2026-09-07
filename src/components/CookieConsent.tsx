@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { PawPrint } from "lucide-react";
 import {
   type ConsentStatus,
   denyConsent,
@@ -139,54 +138,41 @@ export default function CookieConsent() {
   if (!showBanner) return null;
 
   return (
-    <>
-      <div className="fixed inset-0 z-[99] bg-charcoal/10" aria-hidden />
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-label="Cookie consent"
-        aria-modal="true"
-        aria-live="polite"
-        className="fixed bottom-4 right-4 z-[100] w-full max-w-sm sm:max-w-[360px] rounded-xl border border-charcoal/8 bg-white shadow-[0_12px_32px_-8px_rgba(26,26,26,0.12)] overflow-hidden"
-      >
-        <div className="flex justify-center gap-3 pt-4 pb-1 opacity-[0.12]" aria-hidden>
-          <PawPrint className="w-4 h-4 text-charcoal" strokeWidth={1} />
-          <PawPrint className="w-3 h-3 text-charcoal -scale-x-100" strokeWidth={1} />
-          <PawPrint className="w-4 h-4 text-charcoal" strokeWidth={1} />
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-label="Cookie consent"
+      aria-modal="true"
+      aria-live="polite"
+      className="fixed inset-x-0 bottom-0 z-[100] border-t border-charcoal/[0.08] bg-[#FAFAF8]/95 px-4 py-2.5 shadow-[0_-8px_24px_-12px_rgba(26,26,26,0.12)] backdrop-blur-md sm:px-6 sm:py-3"
+    >
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0 sm:pr-8">
+          <h3 className="text-[13px] font-semibold text-charcoal">Cookie preferences</h3>
+          <p className="mt-0.5 text-[12px] leading-relaxed text-charcoal/60">
+            We use optional cookies to understand site usage. See our{" "}
+            <Link href="/legal/privacy-policy" className="font-medium text-cran hover:underline">Privacy Policy</Link>.
+            {" "}{statusText}
+          </p>
         </div>
-
-        <div className="px-4 pb-4 pt-1">
-          <div className="mb-3">
-            <div className="min-w-0">
-              <h3 className="text-[13px] font-semibold text-charcoal mb-0.5">Cookie preferences</h3>
-              <p className="text-[12px] text-charcoal/70 leading-relaxed font-sans">
-                We use optional cookies to understand site usage. See our{" "}
-                <Link href="/legal/privacy-policy" className="text-[#9A3228] font-medium hover:underline">Privacy Policy</Link>.
-              </p>
-              <p className="mt-2 text-[12px] text-charcoal/60 leading-relaxed font-sans">
-                {statusText}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={deny}
-              className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2"
-            >
-              Decline
-            </button>
-            <button
-              type="button"
-              onClick={accept}
-              disabled={gpcEnabled}
-              className="flex-1 rounded-lg border border-charcoal/12 bg-white px-3 py-2 text-[12px] font-semibold text-charcoal transition-all hover:border-cran/30 hover:text-cran font-sans focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Accept
-            </button>
-          </div>
+        <div className="flex shrink-0 gap-2">
+          <button
+            type="button"
+            onClick={deny}
+            className="rounded-lg border border-charcoal/12 bg-white px-3.5 py-2 text-[12px] font-semibold text-charcoal transition-colors hover:border-charcoal/20 focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2"
+          >
+            Decline
+          </button>
+          <button
+            type="button"
+            onClick={accept}
+            disabled={gpcEnabled}
+            className="rounded-lg bg-cran px-3.5 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-cran-hover focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Accept
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
