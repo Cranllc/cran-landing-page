@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import type { PostPreview } from "@/lib/blog";
 import { DEMO_URL, PILOT_CTA_LABEL, pilotCtaOpensInNewTab } from "@/lib/site-config";
@@ -11,123 +10,89 @@ type BlogPostForClient = Omit<PostPreview, "createdAt"> & { createdAt: string };
 
 const HomePageBelowFold = dynamic(() => import("@/components/HomePageBelowFold"), {
   loading: () => <div className="min-h-[200px] bg-[#FAFAF8]" aria-hidden />,
-  ssr: true, // Keep Trust, FAQ, pilot CTA in HTML for SEO
+  ssr: true,
 });
 
+const WORKFLOWS = [
+  { step: "01", label: "Intake", hint: "Shared from the floor" },
+  { step: "02", label: "Care", hint: "Rounds and handoffs" },
+  { step: "03", label: "Adoptions", hint: "Match and outcomes" },
+  { step: "04", label: "Reporting", hint: "Grants and partners" },
+] as const;
+
 export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForClient[] }) {
-  const heroRef = useRef<HTMLElement>(null);
-  const [animationsPaused, setAnimationsPaused] = useState(false);
-
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setAnimationsPaused(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-10% 0px -10% 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-white text-charcoal selection:bg-cran selection:text-white font-sans overflow-x-hidden">
-
-      <SiteHeader />
+    <div className="min-h-screen bg-[#FAFAF8] text-charcoal selection:bg-cran/15 selection:text-charcoal font-sans overflow-x-hidden">
+      <SiteHeader forceLightMode />
 
       <main id="main-content" className="relative z-10 bg-[#FAFAF8]">
+        <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-40 lg:pb-24">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 90% 55% at 50% -15%, rgba(214,68,54,0.10) 0%, transparent 58%)",
+            }}
+          />
 
-        {/* HERO (dark, above fold, minimal deps) */}
-        <section
-          ref={heroRef}
-          className="hero-section relative overflow-hidden pt-28 lg:pt-36 pb-0 flex flex-col items-center bg-[#08080A]"
-          {...(animationsPaused ? { "data-animations-paused": "true" } : {})}
-        >
-          <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at center 30%, transparent 10%, #08080A 80%)' }} />
-          <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[700px] h-[420px] rounded-full pointer-events-none glow-pulse" style={{ background: 'radial-gradient(ellipse, rgba(203,74,58,0.12) 0%, transparent 65%)' }} />
-
-          <div className="relative mx-auto w-full max-w-4xl z-10 flex flex-col items-center text-center px-6">
-            <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-cran/20 bg-cran/[0.06] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-cran select-none fade-up">
-              <span className="w-1 h-1 rounded-full bg-cran animate-pulse"></span>
-              In pilot
-            </div>
-
-            <h1
-              className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-[-0.03em] text-white leading-[0.92] w-full fade-up-d1"
-              suppressHydrationWarning
-            >
-              Save time. <br className="hidden md:block"/>
-              <span className="bg-gradient-to-r from-cran via-[#E8614F] to-[#D4523F] bg-clip-text text-transparent">Put animals first.</span>
-            </h1>
-
-            <p
-              className="mt-8 text-lg lg:text-xl leading-relaxed text-white/70 font-normal max-w-2xl [text-wrap:balance] fade-up-d2"
-              suppressHydrationWarning
-            >
-              One mobile-first system for intake, care, adoptions, and reporting — built for shelter floor staff. Now in pilot.
+          <div className="relative mx-auto w-full max-w-3xl px-6 text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-charcoal/[0.08] bg-white/80 px-3 py-1 text-[13px] font-medium text-charcoal/70 shadow-[0_1px_2px_rgba(26,26,26,0.04)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-cran" aria-hidden />
+              Now in pilot
             </p>
 
-            <div className="mt-10 flex flex-col items-center gap-4 pb-8 w-full fade-up-d3">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href={DEMO_URL}
-                  className="group inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-cran-hover px-5 text-sm font-semibold text-white transition-all hover:bg-[#9A3228] shadow-md shadow-cran/25 hover:shadow-cran/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
-                  {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {PILOT_CTA_LABEL}
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
-                </a>
-                <a
-                  href="#what-you-get"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold text-white/85 transition-all hover:bg-white/[0.08] hover:text-white hover:border-white/25 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#08080A]"
-                >
-                  See how it works
-                </a>
-              </div>
-              <p className="text-sm text-white/45 font-medium">
-                We review each application for fit and follow up.
-              </p>
+            <h1 className="mt-8 text-[2.75rem] font-semibold tracking-[-0.04em] text-charcoal leading-[1.05] sm:text-6xl lg:text-[4.35rem]">
+              Save time.
+              <br />
+              <span className="text-cran">Put animals first.</span>
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-charcoal/60 sm:text-xl">
+              One mobile-first system for intake, care, adoptions, and reporting. Built for shelter floor staff.
+            </p>
+
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={DEMO_URL}
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-cran px-6 text-[15px] font-semibold text-white shadow-[0_1px_2px_rgba(26,26,26,0.08),0_8px_20px_-8px_rgba(214,68,54,0.55)] transition-colors hover:bg-cran-hover focus:outline-none focus:ring-2 focus:ring-cran/40 focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
+                {...(pilotCtaOpensInNewTab() ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {PILOT_CTA_LABEL}
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
+              </a>
+              <a
+                href="#what-you-get"
+                className="inline-flex h-12 items-center justify-center rounded-xl border border-charcoal/[0.12] bg-white px-6 text-[15px] font-semibold text-charcoal/80 shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:border-charcoal/20 hover:text-charcoal focus:outline-none focus:ring-2 focus:ring-cran/30 focus:ring-offset-2 focus:ring-offset-[#FAFAF8]"
+              >
+                See how it works
+              </a>
             </div>
+            <p className="mt-4 text-sm text-charcoal/45">
+              We review each application for fit and follow up.
+            </p>
           </div>
 
-          {/* Abstract Product Preview — no app screenshots until UI is ready to show */}
-          <div className="relative w-full max-w-[720px] mx-auto px-4 sm:px-6 mt-2 md:mt-6 z-10">
-            <div className="absolute inset-x-16 inset-y-0 rounded-[2rem] pointer-events-none opacity-20" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(203,74,58,0.35) 0%, transparent 55%)' }} />
-            <div
-              className="relative w-full rounded-xl md:rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0A0B] shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45),_0_0_0_1px_rgba(255,255,255,0.05)] ring-1 ring-white/10 flex items-center justify-center px-6 py-8 mb-8"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(203,74,58,0.04)_0%,transparent_70%)] pointer-events-none" />
-              <div className="relative w-full flex flex-col items-center justify-center opacity-70">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-12 md:w-20 h-[1px] bg-gradient-to-r from-transparent to-cran/50 rounded-full"></div>
-                  <div className="w-8 h-8 rounded-xl border border-white/10 bg-white/[0.02] flex items-center justify-center shadow-[0_0_20px_rgba(203,74,58,0.18)] glow-pulse">
-                    <div className="w-2 h-2 rounded-full bg-cran shadow-[0_0_10px_rgba(203,74,58,0.8)]"></div>
-                  </div>
-                  <div className="w-12 md:w-20 h-[1px] bg-gradient-to-l from-transparent to-cran/50 rounded-full"></div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="hidden md:flex w-24 h-9 rounded-lg border border-white/5 bg-white/[0.01] items-center justify-center">
-                    <div className="w-10 h-1 bg-white/10 rounded-full"></div>
-                  </div>
-                  <div className="w-40 h-9 rounded-lg border border-cran/20 bg-cran/[0.05] flex items-center px-3 gap-2 shadow-[0_0_16px_rgba(203,74,58,0.08)]">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cran animate-pulse"></div>
-                    <div className="flex-1 h-1 bg-cran/40 rounded-full"></div>
-                  </div>
-                  <div className="hidden md:flex w-16 h-9 rounded-lg border border-white/5 bg-white/[0.01] items-center justify-center">
-                    <div className="w-6 h-1 bg-white/10 rounded-full"></div>
-                  </div>
-                </div>
-
-                <div className="mt-6 text-white/50 text-[12px] sm:text-[13px] font-bold tracking-[0.18em] uppercase select-none">
-                  Operations in one place
-                </div>
-              </div>
+          <div className="relative mx-auto mt-14 w-full max-w-4xl px-6 lg:mt-16">
+            <div className="overflow-hidden rounded-2xl border border-charcoal/[0.08] bg-white shadow-[0_24px_80px_-32px_rgba(26,26,26,0.22)]">
+              <ul className="grid grid-cols-2 md:grid-cols-4">
+                {WORKFLOWS.map((item, i) => (
+                  <li
+                    key={item.label}
+                    className={`px-5 py-6 text-left md:px-7 md:py-8 ${i % 2 === 1 ? "border-l border-charcoal/[0.06]" : ""} ${i >= 2 ? "border-t border-charcoal/[0.06] md:border-t-0" : ""} ${i === 2 || i === 3 ? "md:border-l md:border-charcoal/[0.06]" : ""}`}
+                  >
+                    <p className="text-[11px] font-medium tabular-nums tracking-wide text-cran">{item.step}</p>
+                    <p className="mt-3 text-[15px] font-semibold tracking-tight text-charcoal">{item.label}</p>
+                    <p className="mt-1 text-[13px] leading-snug text-charcoal/50">{item.hint}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
+            <p className="mt-5 text-center text-[13px] text-charcoal/40">
+              Berry AI assists with drafts. Staff stay in control.
+            </p>
           </div>
         </section>
 
-        {/* Below-fold: Trust, Built for, What you get, How the pilot works, Why, Blog, FAQ, pilot CTA, Footer */}
         <HomePageBelowFold blogPosts={blogPosts} />
       </main>
     </div>
