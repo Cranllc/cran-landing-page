@@ -43,6 +43,12 @@ export default function SiteFooter() {
             </ul>
           </div>
         </div>
+
+        <div className="flex justify-center items-center w-full mb-8 select-none pointer-events-none min-h-[6rem]">
+          <span className="text-[clamp(4rem,20vw,16rem)] font-bold leading-none text-charcoal/[0.12]" style={{ letterSpacing: '0.12em', marginRight: '-0.12em' }} aria-hidden>
+            CRAN
+          </span>
+        </div>
         
         <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left border-t border-charcoal/[0.06]">
           <p className="text-[12px] text-charcoal/75" suppressHydrationWarning>&copy; {new Date().getFullYear()} Cran, LLC. All rights reserved.</p>
