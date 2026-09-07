@@ -36,8 +36,8 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
           />
 
           <div className="relative mx-auto w-full max-w-3xl px-6 text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-charcoal/[0.08] bg-white/80 px-3 py-1 text-[13px] font-medium text-charcoal/70 shadow-[0_1px_2px_rgba(26,26,26,0.04)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-cran" aria-hidden />
+            <p className="text-[13px] font-medium text-charcoal/50">
+              <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-cran align-middle" aria-hidden />
               Now in pilot
             </p>
 
@@ -72,22 +72,17 @@ export default function HomePage({ blogPosts = [] }: { blogPosts?: BlogPostForCl
             </p>
           </div>
 
-          <div className="relative mx-auto mt-14 w-full max-w-4xl px-6 lg:mt-16">
-            <div className="overflow-hidden rounded-2xl border border-charcoal/[0.08] bg-white shadow-[0_24px_80px_-32px_rgba(26,26,26,0.22)]">
-              <ul className="grid grid-cols-2 md:grid-cols-4">
-                {WORKFLOWS.map((item, i) => (
-                  <li
-                    key={item.label}
-                    className={`px-5 py-6 text-left md:px-7 md:py-8 ${i % 2 === 1 ? "border-l border-charcoal/[0.06]" : ""} ${i >= 2 ? "border-t border-charcoal/[0.06] md:border-t-0" : ""} ${i === 2 || i === 3 ? "md:border-l md:border-charcoal/[0.06]" : ""}`}
-                  >
-                    <p className="text-[11px] font-medium tabular-nums tracking-wide text-cran">{item.step}</p>
-                    <p className="mt-3 text-[15px] font-semibold tracking-tight text-charcoal">{item.label}</p>
-                    <p className="mt-1 text-[13px] leading-snug text-charcoal/50">{item.hint}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <p className="mt-5 text-center text-[13px] text-charcoal/40">
+          <div className="relative mx-auto mt-16 w-full max-w-3xl px-6">
+            <ul className="flex flex-wrap items-start justify-center gap-x-10 gap-y-8 sm:gap-x-14">
+              {WORKFLOWS.map((item) => (
+                <li key={item.label} className="min-w-[7.5rem] text-left">
+                  <p className="text-[11px] font-medium tabular-nums tracking-wide text-cran">{item.step}</p>
+                  <p className="mt-2 text-[15px] font-semibold tracking-tight text-charcoal">{item.label}</p>
+                  <p className="mt-1 text-[13px] leading-snug text-charcoal/45">{item.hint}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-10 text-center text-[13px] text-charcoal/40">
               Berry AI assists with drafts. Staff stay in control.
             </p>
           </div>
